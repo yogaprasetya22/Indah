@@ -34,7 +34,7 @@ const Header = ({ toggleSidebar, isSidebarOpen, user }) => {
     }, []);
 
     return (
-        <header className="bg-white px-5 md:px-16 shadow-md h-auto w-full flex flex-row justify-between items-center sticky top-0 z-50 ">
+        <header className="bg-white px-5 md:px-16 shadow-[8px_2px_5px_0px_#00000024] h-auto w-full flex flex-row justify-between items-center sticky top-0 z-50 ">
             <div className="w-auto flex h-16 md:h-20 gap-2">
                 <button
                     onClick={toggleSidebar}

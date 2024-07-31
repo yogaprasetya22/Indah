@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import ReactPaginate from "react-paginate";
 
-export default function Tabel({ dataUser: dataTabel }) {
+export default function Tabel({ data }) {
+    const [data, setData] = useState([]);
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
@@ -11,40 +12,46 @@ export default function Tabel({ dataUser: dataTabel }) {
     const [page, setPage] = useState(5);
 
     useEffect(() => {
-        setLoading(true);
-        // Fetch items from another resources.
-        // const endOffset = Math.min(itemOffset + page, dataTabel.length);
+        const data = Array.from({ length: 100 }, (_, i) => ({
+            id: i + 1,
+            name: `Name ${i + 1}`,
+            email: `email${i + 1}@gmail.com`,
+            role: {
+                name_role: `Role ${i + 1}`,
+            },
+            image: `https://picsum.photos/200?random=${i + 1}`,
+        }));
+        setData(data);
+    }, []);
 
+    useEffect(() => {
+        setLoading(true);
         const endOffset = parseInt(itemOffset) + parseInt(page);
-        // console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-        const sortData = dataTabel
+        const sortData = data
             .sort((a, b) => {
                 return a.id - b.id;
             })
             .slice(itemOffset, endOffset);
         setCurrentItems(sortData);
-        setPageCount(Math.ceil(dataTabel.length / page));
+        setPageCount(Math.ceil(data.length / page));
         setLoading(false);
-    }, [itemOffset, dataTabel, page]);
+    }, [itemOffset, data, page]);
 
-    // Invoke when user click to request another page.
     const handlePageClick = (event) => {
         window.scrollTo({
             top: 60,
             behavior: "smooth",
         });
 
-        const newOffset = (event.selected * page) % dataTabel.length;
+        const newOffset = (event.selected * page) % data.length;
 
         setItemOffset(newOffset);
     };
     return (
-        <div className="bg-white flex flex-col gap-10 rounded-xl my-10">
+        <div className="bg-white flex flex-col gap-10 rounded-xl">
             <div className="overflow-x-auto">
                 <div className="flex justify-between">
-                    {" "}
                     <div className="flex  px-5 py-3 gap-10">
-                        {/* count page */}
                         <div className="flex flex-row items-center justify-center gap-2">
                             <span className="font-bold ">show :</span>
                             <select
@@ -52,15 +59,14 @@ export default function Tabel({ dataUser: dataTabel }) {
                                 value={page}
                                 onChange={(e) => setPage(e.target.value)}
                             >
-                                {new Array(5).fill(0).map((item, index) => (
-                                    <option key={index} value={index + 1}>
-                                        {index + 1}
+                                {[5, 10, 15, 20].map((item, index) => (
+                                    <option key={index} value={item}>
+                                        {item}
                                     </option>
                                 ))}
                             </select>{" "}
                             <span className="font-bold ">entries</span>
                         </div>
-                        {/* search */}
                         <div className="flex flex-row items-center justify-center gap-2">
                             <input
                                 type="text"
@@ -72,25 +78,13 @@ export default function Tabel({ dataUser: dataTabel }) {
                             </button>
                         </div>
                     </div>
-                    {/* add member */}
                     <div className="flex items-center gap-2 px-5 py-3">
-                        <button className="btn bg-green-400">
+                        <button className="btn bg-green-400 text-white rounded-md">
                             <i className="fas fa-plus"></i> Add Member
                         </button>
                     </div>
-                </div>{" "}
-                {/* buatkan pesan penambahan data */}
-                <div className="flex flex-row gap-2 items-center justify-center px-5 py-3">
-                    <span className="font-bold text-lg">
-                        {dataTabel?.length} data
-                    </span>
-                    <span className="font-bold text-lg">|</span>
-                    <span className="font-bold text-lg">
-                        {currentItems?.length} data belum terdaftar
-                    </span>
                 </div>
                 <table className="table">
-                    {/* head */}
                     <thead>
                         <tr className="font-bold text-lg text-black">
                             <th>Id</th>
@@ -101,7 +95,6 @@ export default function Tabel({ dataUser: dataTabel }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* row 1 */}
                         {currentItems.map((item, index) => (
                             <tr key={index}>
                                 <th>{item?.id}</th>
@@ -144,7 +137,7 @@ export default function Tabel({ dataUser: dataTabel }) {
                                 </th>
                             </tr>
                         ))}
-                    </tbody>{" "}
+                    </tbody>
                 </table>
                 <div className="flex justify-normal items-center py-5">
                     <ReactPaginate
