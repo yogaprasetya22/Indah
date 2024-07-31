@@ -1,10 +1,10 @@
 import Layout from "@/Layouts/Layout";
 import React from "react";
 
-export default function Index() {
+export default function IdentifikasiWajah() {
     return (
         <Layout>
-            <h1>Client</h1>
+            <div>IdentifikasiWajah</div>
         </Layout>
     );
 }

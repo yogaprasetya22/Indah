@@ -18,8 +18,8 @@ const Sidebar = ({ isSidebarOpen, user }) => {
         >
             <div className="lg:w-full md:w-[40%] w-[75%] bg-white h-full ">
                 <div className="px-5 pt-5 flex flex-col justify-between h-full">
-                    <ul className="flex flex-col gap-3 w-full">
-                        <div className="w-full flex justify-center items-center flex-col gap-4 lg:mt-0 mt-12 mb-8">
+                    <ul className="flex flex-col gap-2 w-full">
+                        <div className="w-full flex justify-center items-center flex-col gap-4 lg:mt-0 mt-12 mb-6">
                             <h1 className="font-extrabold text-teal-800 text-4xl">
                                 INDAH
                             </h1>
@@ -41,7 +41,7 @@ const Sidebar = ({ isSidebarOpen, user }) => {
                                                 }`}
                                             >
                                                 <i
-                                                    className={`text-xl ${menu.icon}`}
+                                                    className={`text-md ${menu.icon}`}
                                                 ></i>
                                                 {menu.name}
                                             </li>
@@ -79,7 +79,7 @@ const Sidebar = ({ isSidebarOpen, user }) => {
                                             >
                                                 <p className=" flex gap-2 items-center  ">
                                                     <i
-                                                        className={`text-xl ${menu.icon}`}
+                                                        className={`text-md ${menu.icon}`}
                                                     ></i>
                                                     {menu.name}
                                                 </p>
@@ -91,7 +91,13 @@ const Sidebar = ({ isSidebarOpen, user }) => {
                                                     }`}
                                                 ></i>
                                             </li>
-                                            <ul className="pl-5">
+                                            <ul
+                                                className={` pl-3 transition-all duration-500 overflow-hidden ease-in-out ${
+                                                    OpenDropdown.dropdown1
+                                                        ? "max-h-96 border-t"
+                                                        : "max-h-0 "
+                                                }`}
+                                            >
                                                 {OpenDropdown.dropdown1 &&
                                                     menu.dropdown.map(
                                                         (menu, index) => (
@@ -111,9 +117,13 @@ const Sidebar = ({ isSidebarOpen, user }) => {
                                                                     }`}
                                                                 >
                                                                     <i
-                                                                        className={`text-xl ${menu.icon}`}
+                                                                        className={`text-md ${menu.icon}`}
                                                                     ></i>
-                                                                    {menu.name}
+                                                                    <p className="text-xs">
+                                                                        {
+                                                                            menu.name
+                                                                        }
+                                                                    </p>
                                                                 </li>
                                                                 <hr />
                                                             </Link>
@@ -125,10 +135,10 @@ const Sidebar = ({ isSidebarOpen, user }) => {
                                 </div>
                             ))}
                     </ul>
-                    <ul className="flex flex-col gap-3 w-full mb-5">
+                    <ul className="flex flex-col gap-1 w-full mb-4">
                         {/* Dropdown */}
                         <li
-                            className={`font-medium w-full cursor-pointer transition-all ease-in-out delay-75 flex justify-between rounded-md text-gray-700 px-2 gap-2 items-center select-none hover:text-black hover:bg-blue-gray-200`}
+                            className={`font-medium w-full cursor-pointer transition-all ease-in-out delay-75 flex justify-between rounded-md text-gray-700 px-2 items-center select-none hover:text-black hover:bg-blue-gray-200`}
                             onClick={() =>
                                 setOpenDropdown((prevState) => ({
                                     ...prevState,
@@ -137,7 +147,7 @@ const Sidebar = ({ isSidebarOpen, user }) => {
                             }
                         >
                             <p className="flex gap-2 items-center">
-                                <i className={`text-xl fas fa-cog`}></i>
+                                <i className={`text-md fas fa-cog`}></i>
                                 Settings
                             </p>
                             <i
@@ -158,7 +168,7 @@ const Sidebar = ({ isSidebarOpen, user }) => {
                                         className="cursor-pointer"
                                     >
                                         <li
-                                            className={`font-medium w-full rounded-md text-gray-700 p-2 flex gap-2 items-center select-none ${
+                                            className={`font-medium w-full rounded-md text-gray-700 p-1 flex gap-2 items-center select-none ${
                                                 route("profile.edit").slice(
                                                     21
                                                 ) === window.location.pathname
@@ -167,7 +177,7 @@ const Sidebar = ({ isSidebarOpen, user }) => {
                                             }`}
                                         >
                                             <i
-                                                className={`text-xl fas fa-user`}
+                                                className={`text-md fas fa-user`}
                                             ></i>
                                             Profile
                                         </li>
@@ -179,10 +189,10 @@ const Sidebar = ({ isSidebarOpen, user }) => {
                                         className="cursor-pointer"
                                     >
                                         <li
-                                            className={`font-medium w-full rounded-md text-gray-700 p-2 flex gap-2 items-center hover:text-black hover:bg-blue-gray-200`}
+                                            className={`font-medium w-full rounded-md text-gray-700 p-1 flex gap-2 items-center hover:text-black hover:bg-blue-gray-200`}
                                         >
                                             <i
-                                                className={`text-xl fas fa-sign-out-alt`}
+                                                className={`text-md fas fa-sign-out-alt`}
                                             ></i>
                                             Logout
                                         </li>

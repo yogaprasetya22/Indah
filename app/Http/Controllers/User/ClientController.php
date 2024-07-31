@@ -5,9 +5,10 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class PoldaController extends Controller
+class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +17,22 @@ class PoldaController extends Controller
     {
         $user = User::with(['role'])->latest()->get();
         return Inertia::render('client/Index', [
-            'title' => 'User',
+            'title' => Auth::user()->role->name_role,
             'data' => $user,
+        ]);
+    }
+
+    public function IdentifikasiWajah()
+    {
+        return Inertia::render('client/IdentifikasiWajah', [
+            'title' => 'Identifikasi Wajah',
+        ]);
+    }
+
+    public function Tersangka()
+    {
+        return Inertia::render('client/Tersangka', [
+            'title' => 'Tersangka',
         ]);
     }
 

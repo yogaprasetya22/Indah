@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('s_o_p_s', function (Blueprint $table) {
             $table->id();
-            $table->string('judul');
-            $table->text('deskripsi');
-            $table->text('file_path');
+            $table->text('SOP_Pemotretan_TKP');
+            $table->text('SOP_Pemotretan_Barang_Bukti');
+            $table->text('SOP_Pemotretan_TSK');
+            $table->text('SOP_Identifikasi_Wajah');
+            $table->text('SOP_Rekontruksi_Wajah');
             $table->timestamps();
         });
     }

@@ -1,9 +1,10 @@
 import Header from "@/Components/Header";
 import Sidebar from "@/Components/Sidebar";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import { useState } from "react";
 
-export default function Layout({ user, children, title }) {
+export default function Layout({ children }) {
+    const { auth, title } = usePage().props;
     const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     const toggleSidebar = () => {
@@ -14,10 +15,10 @@ export default function Layout({ user, children, title }) {
             {title && <Head title={title} />}
             <div className="h-screen w-full overflow-hidden">
                 <div className="w-full h-full pb-20 flex">
-                    <Sidebar isSidebarOpen={isSidebarOpen} user={user} />
+                    <Sidebar isSidebarOpen={isSidebarOpen} user={auth.user} />
                     <div className="w-full">
                         <Header
-                            user={user}
+                            user={auth.user}
                             toggleSidebar={toggleSidebar}
                             isSidebarOpen={isSidebarOpen}
                         />

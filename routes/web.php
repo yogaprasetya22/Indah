@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\User\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\User\ClientController;
 use App\Http\Controllers\User\PoldaController;
 use App\Http\Controllers\User\PusinafisController;
 use Illuminate\Support\Facades\Auth;
@@ -49,15 +50,21 @@ Route::get('/', function () {
 
 
 Route::prefix('/pusinafis')->middleware(['auth', 'role:2', 'verified'])->group(function () {
-    Route::get('/', [PusinafisController::class, 'index'])->name('pusinafis');
+    Route::get('/', [ClientController::class, 'index'])->name('pusinafis');
+    Route::get('/identifikasi-wajah', [ClientController::class, 'IdentifikasiWajah'])->name('pusinafis.identifikasi-wajah');
+    Route::get('/tersangka', [ClientController::class, 'Tersangka'])->name('pusinafis.tersangka');
 });
 
 Route::prefix('/polda')->middleware(['auth', 'role:3', 'verified'])->group(function () {
-    Route::get('/', [PoldaController::class, 'index'])->name('polda');
+    Route::get('/', [ClientController::class, 'index'])->name('polda');
+    Route::get('/identifikasi-wajah', [ClientController::class, 'IdentifikasiWajah'])->name('polda.identifikasi-wajah');
+    Route::get('/tersangka', [ClientController::class, 'Tersangka'])->name('polda.tersangka');
 });
 
 Route::prefix('/polres')->middleware(['auth', 'role:4', 'verified'])->group(function () {
-    Route::get('/', [PoldaController::class, 'index'])->name('polres');
+    Route::get('/', [ClientController::class, 'index'])->name('polres');
+    Route::get('/identifikasi-wajah', [ClientController::class, 'IdentifikasiWajah'])->name('polres.identifikasi-wajah');
+    Route::get('/tersangka', [ClientController::class, 'Tersangka'])->name('polres.tersangka');
 });
 
 Route::prefix('admin')->middleware(['auth', 'role:1', 'verified'])->group(function () {

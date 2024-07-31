@@ -46,8 +46,14 @@ const Header = ({ toggleSidebar, isSidebarOpen, user }) => {
                         }`}
                     ></i>
                 </button>
-                <div className="flex flex-row items-center text-xl gap-2 ">
-                    <span className="font-semibold">{page.props.title}</span>
+                <div className="flex flex-row  items-center -ml-10">
+                    <p className="flex flex-row items-center ">
+                        <i class="text-md fas fa-angle-right"></i>
+                        <i class="text-md fas fa-angle-right"></i>
+                        <span className="text-xl font-semibold pb-1 pl-2">
+                            {page.props.title}
+                        </span>
+                    </p>
                 </div>
             </div>
 
