@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\SOPIdentifikasiWajah;
+use App\Models\SOPPemotretanBarangBukti;
+use App\Models\SOPPemotretanTKP;
+use App\Models\SOPPemotretanTSK;
+use App\Models\SOPRekontruksiWajah;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +38,47 @@ class ClientController extends Controller
     {
         return Inertia::render('client/Tersangka', [
             'title' => 'Tersangka',
+        ]);
+    }
+
+    public function SOP_Pemotretan_TKP()
+    {
+        $data = SOPPemotretanTKP::first();
+        return Inertia::render('client/SOP/SOPPemotretanTKP', [
+            'title' => 'SOP Pemotretan TKP',
+            'data' => $data,
+        ]);
+    }
+    public function SOP_Pemotretan_Barang_Bukti()
+    {
+        $data = SOPPemotretanBarangBukti::first();
+        return Inertia::render('client/SOP/SOPPemotretanBarangBukti', [
+            'title' => 'SOP Pemotretan Barang Bukti',
+            'data' => $data,
+        ]);
+    }
+    public function SOP_Pemotretan_TSK()
+    {
+        $data = SOPPemotretanTSK::first();
+        return Inertia::render('client/SOP/SOPPemotretanTSK', [
+            'title' => 'SOP Pemotretan TSK',
+            'data' => $data,
+        ]);
+    }
+    public function SOP_Identifikasi_Wajah()
+    {
+        $data = SOPIdentifikasiWajah::first();
+        return Inertia::render('client/SOP/SOPIdentifikasiWajah', [
+            'title' => 'SOP Identifikasi Wajah',
+            'data' => $data,
+        ]);
+    }
+    public function SOP_Rekontruksi_Wajah()
+    {
+        $data = SOPRekontruksiWajah::first();
+        return Inertia::render('client/SOP/SOPRekontruksiWajah', [
+            'title' => 'SOP Rekontruksi Wajah',
+            'data' => $data,
         ]);
     }
 

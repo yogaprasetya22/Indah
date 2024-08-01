@@ -22,7 +22,11 @@
     },
     "dependencies": {
         "chart.js": "^4.4.0",
+        "html-react-parser": "^5.1.12",
+        "quill-blot-formatter": "^1.0.5",
+        "quill-image-resize-module-react": "^3.0.0",
         "react-chartjs-2": "^5.2.0",
-        "react-paginate": "^8.2.0"
+        "react-paginate": "^8.2.0",
+        "react-quill": "^2.0.0"
     }
 }

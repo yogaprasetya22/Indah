@@ -34,7 +34,7 @@ const Header = ({ toggleSidebar, isSidebarOpen, user }) => {
     }, []);
 
     return (
-        <header className="bg-white px-5 md:px-16 shadow-[8px_2px_5px_0px_#00000024] h-auto w-full flex flex-row justify-between items-center sticky top-0 z-50 ">
+        <header className="bg-white px-5 md:px-16 md:shadow-[8px_2px_15px_0px_#00000024] h-auto w-full flex flex-row justify-between items-center sticky top-0 z-50 ">
             <div className="w-auto flex h-16 md:h-20 gap-2">
                 <button
                     onClick={toggleSidebar}
@@ -46,11 +46,11 @@ const Header = ({ toggleSidebar, isSidebarOpen, user }) => {
                         }`}
                     ></i>
                 </button>
-                <div className="flex flex-row  items-center -ml-10">
+                <div className="flex flex-row  items-center lg:-ml-10">
                     <p className="flex flex-row items-center ">
-                        <i class="text-md fas fa-angle-right"></i>
-                        <i class="text-md fas fa-angle-right"></i>
-                        <span className="text-xl font-semibold pb-1 pl-2">
+                        <i className="text-md fas fa-angle-right"></i>
+                        <i className="text-md fas fa-angle-right"></i>
+                        <span className="text-xl font-semibold pl-2">
                             {page.props.title}
                         </span>
                     </p>

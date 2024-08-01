@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('s_o_p_s', function (Blueprint $table) {
+        Schema::create('s_o_p_pemotretan_t_k_p_s', function (Blueprint $table) {
             $table->id();
-            $table->text('SOP_Pemotretan_TKP');
-            $table->text('SOP_Pemotretan_Barang_Bukti');
-            $table->text('SOP_Pemotretan_TSK');
-            $table->text('SOP_Identifikasi_Wajah');
-            $table->text('SOP_Rekontruksi_Wajah');
+            $table->longText('deskripsi');
             $table->timestamps();
         });
     }
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('s_o_p_s');
+        Schema::dropIfExists('s_o_p_pemotretan_t_k_p_s');
     }
 };

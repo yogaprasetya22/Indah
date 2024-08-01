@@ -7,6 +7,43 @@ export const MenuDashboardValidate = (user) => {
             url: `/${validateRole(user?.role_id)}`,
             icon: "fas fa-th-large",
         },
+        {
+            name: "SOP",
+            dropdown: [
+                {
+                    name: "SOP Pemotretan TKP",
+                    url: `/${validateRole(user?.role_id)}/sop-pemotretan-tkp`,
+                    icon: "fas fa-file-alt",
+                },
+                {
+                    name: "SOP Pemotretan Barang Bukti",
+                    url: `/${validateRole(
+                        user?.role_id
+                    )}/sop-pemotretan-barang-bukti`,
+                    icon: "fas fa-file-alt",
+                },
+                {
+                    name: "SOP Pemotretan TSK",
+                    url: `/${validateRole(user?.role_id)}/sop-pemotretan-tsk`,
+                    icon: "fas fa-file-alt",
+                },
+                {
+                    name: "SOP Identifikasi Wajah",
+                    url: `/${validateRole(
+                        user?.role_id
+                    )}/sop-identifikasi-wajah`,
+                    icon: "fas fa-file-alt",
+                },
+                {
+                    name: "SOP Rekontruksi Wajah",
+                    url: `/${validateRole(
+                        user?.role_id
+                    )}/sop-rekontruksi-wajah`,
+                    icon: "fas fa-file-alt",
+                },
+            ],
+            icon: "fas fa-file-alt",
+        },
     ];
 
     const MenuPusinafis = [
