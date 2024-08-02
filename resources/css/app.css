@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer components {
     .overflow::-webkit-scrollbar {
         width: 0px;
@@ -17,5 +18,24 @@
     .overflow_type::-webkit-scrollbar-thumb {
         background   : #52d35a;
         border-radius: 10px;
+    }
+
+    .overflow-x-auto {
+        overflow-x: auto;
+    }
+
+    .overflow-table::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .overflow-table::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        width     : 5px;
+    }
+
+    .overflow-table::-webkit-scrollbar-thumb {
+        background   : #83b31b;
+        border-radius: 10px;
+        width        : 5px;
     }
 }

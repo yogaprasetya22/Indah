@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\IdentifikasiWajah;
 use App\Models\SOPIdentifikasiWajah;
 use App\Models\SOPPemotretanBarangBukti;
 use App\Models\SOPPemotretanTKP;
 use App\Models\SOPPemotretanTSK;
 use App\Models\SOPRekontruksiWajah;
+use App\Models\Tersangka;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -20,6 +22,24 @@ class AdminController extends Controller
         return Inertia::render('admin/Admin', [
             'title' => 'Admin',
             'data' => $user,
+        ]);
+    }
+
+    public function Identifikasiwajah()
+    {
+        $data = IdentifikasiWajah::with(['user'])->latest()->get();
+        return Inertia::render('admin/IdentifikasiWajah', [
+            'title' => 'Identifikasi Wajah',
+            'data' => $data,
+        ]);
+    }
+
+    public function Tersangka()
+    {
+        $data = Tersangka::with(['user'])->latest()->get();
+        return Inertia::render('admin/Tersangka', [
+            'title' => 'Tersangka',
+            'data' => $data,
         ]);
     }
 

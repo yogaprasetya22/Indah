@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('identifikasi_wajahs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->date('tanggal_proses');
             $table->string('ident_polda_res');
             $table->string('operator');

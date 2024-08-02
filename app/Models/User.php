@@ -52,4 +52,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function identifikasiWajah()
+    {
+        return $this->hasMany(IdentifikasiWajah::class);
+    }
+
+    public function tersangka()
+    {
+        return $this->hasMany(Tersangka::class);
+    }
 }

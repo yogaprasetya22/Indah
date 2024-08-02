@@ -1,34 +1,14 @@
-import Add from "@/Components/modal/IdentifikasiWajah/Add";
+import Add from "@/Components/modal/Tersangka/Add";
 import Layout from "@/Layouts/Layout";
 import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
-import Delete from "./modal/IdentifikasiWajah/Delete";
 
-export default function Tersangka() {
-    const [data, setData] = useState([]);
+export default function Tersangka({ data }) {
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [Loading, setLoading] = useState(false);
     const [page, setPage] = useState(5);
-
-    useEffect(() => {
-        const data = Array.from({ length: 100 }, (_, i) => ({
-            id: i + 1,
-            foto_depan: `https://picsum.photos/200?random=${i + 1}`,
-            foto_kanan: `https://picsum.photos/200?random=${
-                i + Math.random() + 1
-            }`,
-            foto_kiri: `https://picsum.photos/200?random=${
-                i + Math.random() + 2
-            }`,
-            nama: `Nama ${i + 1}`,
-            ttl: `01-01-1990`,
-            alamat: `Alamat ${i + 1}`,
-            perkara: `Perkara ${i + 1}`,
-        }));
-        setData(data);
-    }, []);
 
     useEffect(() => {
         setLoading(true);
@@ -85,11 +65,8 @@ export default function Tersangka() {
                         </div>
                     </div>
                     <div className="flex items-center gap-2 px-5 py-3">
-                        <button
-                            className="btn bg-green-400 text-white rounded-md"
-                            onClick={() => window.my_modal_1.show()}
-                        >
-                            <i className="fas fa-plus"></i> Add Tersangka
+                        <button className="btn bg-green-400 text-white rounded-md">
+                            <i className="fas fa-plus"></i> REKAP
                         </button>
                     </div>
                 </div>
@@ -124,51 +101,49 @@ export default function Tersangka() {
                             {currentItems.map((item, index) => (
                                 <tr key={index}>
                                     <th>{item?.id}</th>
-                                    <td>
+                                    <td className="text-center">
                                         <img
-                                            src={
-                                                item?.foto_depan
-                                                    ? item?.foto_depan
-                                                    : "https://picsum.photos/200"
-                                            }
+                                            src={route("file.get", {
+                                                direktori: "tersangka",
+                                                disk: "foto-depan",
+                                                filename: item?.foto_depan,
+                                            })}
                                             alt="Foto Depan"
-                                            className="h-[4rem] w-[4rem] rounded"
+                                            className="w-[8rem] bg-cover rounded mx-auto"
                                         />
                                     </td>
-                                    <td>
+                                    <td className="text-center">
                                         <img
-                                            src={
-                                                item?.foto_kanan
-                                                    ? item?.foto_kanan
-                                                    : "https://picsum.photos/200"
-                                            }
+                                            src={route("file.get", {
+                                                direktori: "tersangka",
+                                                disk: "foto-kanan",
+                                                filename: item?.foto_kanan,
+                                            })}
                                             alt="Foto Kanan"
-                                            className="h-[4rem] w-[4rem] rounded"
+                                            className="w-[8rem] bg-cover rounded mx-auto"
                                         />
                                     </td>
-                                    <td>
+                                    <td className="text-center">
                                         <img
-                                            src={
-                                                item?.foto_kiri
-                                                    ? item?.foto_kiri
-                                                    : "https://picsum.photos/200"
-                                            }
+                                            src={route("file.get", {
+                                                direktori: "tersangka",
+                                                disk: "foto-kiri",
+                                                filename: item?.foto_kiri,
+                                            })}
                                             alt="Foto Kiri"
-                                            className="h-[4rem] w-[4rem] rounded"
+                                            className="w-[8rem] bg-cover rounded mx-auto"
                                         />
                                     </td>
-                                    <td>{item?.nama}</td>
-                                    <td>{item?.ttl}</td>
-                                    <td>{item?.alamat}</td>
-                                    <td>{item?.perkara}</td>
-                                    <th className="flex gap-2">
-                                        <button className="btn btn-ghost btn-md">
-                                            <i className="text-green-500 text-xl fas fa-edit"></i>
-                                        </button>
-                                        <button className="btn btn-ghost btn-md">
-                                            <i className="text-red-500 text-xl fas fa-trash-alt"></i>
-                                        </button>
-                                    </th>
+                                    <td className="text-center">
+                                        {item?.nama}
+                                    </td>
+                                    <td className="text-center">{item?.ttl}</td>
+                                    <td className="text-center">
+                                        {item?.alamat}
+                                    </td>
+                                    <td className="text-center">
+                                        {item?.perkara}
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -198,8 +173,6 @@ export default function Tersangka() {
                     </div>
                 </div>
             </div>
-            <Add title={"Add Identifikasi Wajah"} />
-            <Delete title={"Delete Identifikasi Wajah"} />
         </Layout>
     );
 }

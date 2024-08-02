@@ -23,7 +23,7 @@ export default function Layout({ children }) {
                             isSidebarOpen={isSidebarOpen}
                         />
                         <main
-                            className={`  h-full pb-20 overflow-auto bg-blue-gray-50 w-full p-4 md:p-8  ${
+                            className={` h-full pb-20 overflow-auto bg-blue-gray-50 w-full p-4 md:p-8 ${
                                 isSidebarOpen ? "blur-sm  brightness-50 " : ""
                             }`}
                         >

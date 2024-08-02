@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\User\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\ClientController;
@@ -84,6 +85,8 @@ Route::prefix('/polres')->middleware(['auth', 'role:4', 'verified'])->group(func
 
 Route::prefix('admin')->middleware(['auth', 'role:1', 'verified'])->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin');
+    Route::get('/identifikasi-wajah', [AdminController::class, 'Identifikasiwajah'])->name('admin.identifikasi-wajah');
+    Route::get('/tersangka', [AdminController::class, 'Tersangka'])->name('admin.tersangka');
     Route::get('/sop-pemotretan-barang-bukti', [AdminController::class, 'SOP_Pemotretan_Barang_Bukti'])->name('admin.sop-pemotretan-bb');
     Route::post('/sop-pemotretan-barang-bukti', [AdminController::class, 'createSOP_Pemotretan_Barang_Bukti'])->name('admin.create-sop-pemotretan-bb');
     Route::get('/sop-pemotretan-tkp', [AdminController::class, 'SOP_Pemotretan_TKP'])->name('admin.sop-pemotretan-tkp');
@@ -101,6 +104,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/file/{direktori}/{disk}/{filename}', [FileController::class, 'getFile'])->name('file.get');
 });
 
 require __DIR__ . '/auth.php';

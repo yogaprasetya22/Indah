@@ -1,25 +1,9 @@
+import { validateHrefinRole } from "@/Components/Example";
 import { Link } from "@inertiajs/react";
 import React from "react";
 
 export default function Fail({ auth }) {
-    const validateHrefinRole = (role) => {
-        switch (role) {
-            case 1:
-                return "/admin";
-            case 5:
-                return "/bkal";
-            case 4:
-                return "/kaprodi";
-            case 6:
-                return "/warek";
-            case 3:
-                return "/dosen-pa";
-            case 2:
-                return "/mahasiswa";
-            default:
-                return "/";
-        }
-    };
+    
     return (
         <div className="min-h-screen flex items-center justify-center">
             <div className="text-center">

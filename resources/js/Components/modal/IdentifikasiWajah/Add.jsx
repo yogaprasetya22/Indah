@@ -1,0 +1,353 @@
+import InputError from "@/Components/ui/InputError";
+import InputLabel from "@/Components/ui/InputLabel";
+import TextInput from "@/Components/ui/TextInput";
+import React from "react";
+import { useForm, usePage } from "@inertiajs/react";
+import { useState } from "react";
+
+export default function Add({ title }) {
+    const { props } = usePage();
+    const { data, setData, post, processing, errors, reset } = useForm({
+        tanggal_proses: "",
+        ident_polda_res: "",
+        operator: "",
+        perkara: "",
+        foto_target: "",
+        foto_hasil_fr: "",
+        nama: "",
+        nik: "",
+        ttl: "",
+        alamat: "",
+    });
+    const [fotoTargetPreview, setFotoTargetPreview] = useState(null);
+    const [fotoHasilFrPreview, setFotoHasilFrPreview] = useState(null);
+
+    const handleAddRecord = (e) => {
+        e.preventDefault();
+        post(route("create-identifikasi-wajah.store"), {
+            onSuccess: () => window.my_modal_1.close(),
+            onError: (e) => {
+                console.log(e);
+            },
+        });
+    };
+
+    const handleFotoTargetChange = (e) => {
+        const file = e.target.files[0];
+        setData("foto_target", file);
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => setFotoTargetPreview(e.target.result);
+            reader.readAsDataURL(file);
+        } else {
+            setFotoTargetPreview(null);
+        }
+    };
+
+    const handleFotoHasilFrChange = (e) => {
+        const file = e.target.files[0];
+        setData("foto_hasil_fr", file);
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => setFotoHasilFrPreview(e.target.result);
+            reader.readAsDataURL(file);
+        } else {
+            setFotoHasilFrPreview(null);
+        }
+    };
+
+    return (
+        <dialog
+            id="my_modal_1"
+            className="modal backdrop-blur-sm backdrop-brightness-75"
+        >
+            <div className="modal-box w-full max-w-5xl overflow">
+                <div className="w-full flex flex-col gap-5">
+                    <div className="w-full flex flex-row justify-between items-center z-10">
+                        <h1 className="text-2xl font-bold text-gray-500">
+                            {title}
+                        </h1>
+                        <button
+                            onClick={() => {
+                                window.my_modal_1.close();
+                            }}
+                            className="text-2xl hover:text-gray-400 select-none"
+                            aria-label="close modal"
+                        >
+                            <i className="fas fa-times text-sm"></i>
+                        </button>
+                    </div>
+                    <div className="w-full flex flex-col gap-5">
+                        <form
+                            className="flex flex-col gap-5"
+                            onSubmit={handleAddRecord}
+                        >
+                            <div className="flex flex-col gap-5">
+                                <div className="flex flex-row gap-5">
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <InputLabel
+                                            htmlFor="tanggal_proses"
+                                            value="Tanggal Proses"
+                                        />
+                                        <TextInput
+                                            id="tanggal_proses"
+                                            type="date"
+                                            name="tanggal_proses"
+                                            value={data.tanggal_proses}
+                                            className="mt-1 block w-full"
+                                            autoComplete="tanggal_proses"
+                                            isFocused={true}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "tanggal_proses",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            message={errors.tanggal_proses}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <InputLabel
+                                            htmlFor="ident_polda_res"
+                                            value="Ident Polda Res"
+                                        />
+                                        <TextInput
+                                            id="ident_polda_res"
+                                            type="text"
+                                            name="ident_polda_res"
+                                            value={data.ident_polda_res}
+                                            className="mt-1 block w-full"
+                                            autoComplete="ident_polda_res"
+                                            isFocused={true}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "ident_polda_res",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            message={errors.ident_polda_res}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex flex-row gap-5">
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <InputLabel
+                                            htmlFor="operator"
+                                            value="Operator"
+                                        />
+                                        <TextInput
+                                            id="operator"
+                                            type="text"
+                                            name="operator"
+                                            value={data.operator}
+                                            className="mt-1 block w-full"
+                                            autoComplete="operator"
+                                            isFocused={true}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "operator",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            message={errors.operator}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <InputLabel
+                                            htmlFor="perkara"
+                                            value="Perkara"
+                                        />
+                                        <TextInput
+                                            id="perkara"
+                                            type="text"
+                                            name="perkara"
+                                            value={data.perkara}
+                                            className="mt-1 block w-full"
+                                            autoComplete="perkara"
+                                            isFocused={true}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "perkara",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            message={errors.perkara}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-row gap-5">
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <InputLabel
+                                            htmlFor="nama"
+                                            value="Nama"
+                                        />
+                                        <TextInput
+                                            id="nama"
+                                            type="text"
+                                            name="nama"
+                                            value={data.nama}
+                                            className="mt-1 block w-full"
+                                            autoComplete="nama"
+                                            isFocused={true}
+                                            onChange={(e) =>
+                                                setData("nama", e.target.value)
+                                            }
+                                        />
+                                        <InputError
+                                            message={errors.nama}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <InputLabel htmlFor="nik" value="NIK" />
+                                        <TextInput
+                                            id="nik"
+                                            type="text"
+                                            name="nik"
+                                            value={data.nik}
+                                            className="mt-1 block w-full"
+                                            autoComplete="nik"
+                                            isFocused={true}
+                                            onChange={(e) =>
+                                                setData("nik", e.target.value)
+                                            }
+                                        />
+                                        <InputError
+                                            message={errors.nik}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex flex-row gap-5">
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <InputLabel
+                                            htmlFor="ttl"
+                                            value="Tempat/Tanggal Lahir"
+                                        />
+                                        <TextInput
+                                            id="ttl"
+                                            type="text"
+                                            name="ttl"
+                                            value={data.ttl}
+                                            className="mt-1 block w-full"
+                                            autoComplete="ttl"
+                                            isFocused={true}
+                                            onChange={(e) =>
+                                                setData("ttl", e.target.value)
+                                            }
+                                        />
+                                        <InputError
+                                            message={errors.ttl}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <InputLabel
+                                            htmlFor="alamat"
+                                            value="Alamat"
+                                        />
+                                        <TextInput
+                                            id="alamat"
+                                            type="text"
+                                            name="alamat"
+                                            value={data.alamat}
+                                            className="mt-1 block w-full"
+                                            autoComplete="alamat"
+                                            isFocused={true}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "alamat",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            message={errors.alamat}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex flex-row gap-5">
+                                <div className="flex flex-col gap-2 w-full">
+                                    <InputLabel
+                                        htmlFor="foto_target"
+                                        value="Foto Target"
+                                    />
+                                    <input
+                                        id="foto_target"
+                                        type="file"
+                                        accept="image/*"
+                                        name="foto_target"
+                                        className="mt-1 block w-full"
+                                        onChange={handleFotoTargetChange}
+                                    />
+                                    {fotoTargetPreview && (
+                                        <img
+                                            src={fotoTargetPreview}
+                                            alt="Foto Target Preview"
+                                            className="mt-2 bg-cover"
+                                        />
+                                    )}
+                                    <InputError
+                                        message={errors.foto_target}
+                                        className="mt-2"
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-2 w-full">
+                                    <InputLabel
+                                        htmlFor="foto_hasil_fr"
+                                        value="Foto Hasil FR"
+                                    />
+                                    <input
+                                        id="foto_hasil_fr"
+                                        type="file"
+                                        accept="image/*"
+                                        name="foto_hasil_fr"
+                                        className="mt-1 block w-full"
+                                        onChange={handleFotoHasilFrChange}
+                                    />
+                                    {fotoHasilFrPreview && (
+                                        <img
+                                            src={fotoHasilFrPreview}
+                                            alt="Foto Hasil FR Preview"
+                                            className="mt-2 bg-cover"
+                                        />
+                                    )}
+                                    <InputError
+                                        message={errors.foto_hasil_fr}
+                                        className="mt-2"
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex justify-end">
+                                <button
+                                    type="submit"
+                                    className="btn bg-violet-600/80 text-white"
+                                    disabled={processing}
+                                >
+                                    Add
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </dialog>
+    );
+}

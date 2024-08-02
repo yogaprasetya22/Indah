@@ -4,9 +4,10 @@ import parse from "html-react-parser";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import EditorToolbar, { modules, formats } from "@/Components/EditorToolbar";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 
 export default function SOPPemotretanTSK({ data }) {
+    const { title } = usePage().props;
     const [value, setValue] = React.useState(data?.deskripsi || "");
     const handleSumbit = () => {
         router.post(route("admin.create-sop-pemotretan-tsk"), { value });
@@ -59,7 +60,11 @@ export default function SOPPemotretanTSK({ data }) {
 
             <div className="w-full bg-white rounded-md p-2">
                 <div className="ql-editor ql">
-                    {parse(data?.deskripsi || "")}
+                    {data?.deskripsi
+                        ? parse(data?.deskripsi)
+                        : parse(
+                              `<p className="text-center text-xl font-semibold">${title} belum di edit</p>`
+                          )}
                 </div>
             </div>
         </Layout>
