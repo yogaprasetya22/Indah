@@ -74,25 +74,25 @@ export default function Tersangka({ data }) {
                     <table className="table lg:table-xs 2xl:table-md ">
                         <thead>
                             <tr className="font-bold text-lg text-black">
-                                <th className="lowercase text-center">Id</th>
-                                <th className="lowercase text-center">
+                                <th className="uppercase text-sm text-center">Id</th>
+                                <th className="uppercase text-sm text-center">
                                     Foto Depan
                                 </th>
-                                <th className="lowercase text-center">
+                                <th className="uppercase text-sm text-center">
                                     Foto Kanan
                                 </th>
-                                <th className="lowercase text-center">
+                                <th className="uppercase text-sm text-center">
                                     Foto Kiri
                                 </th>
-                                <th className="lowercase text-center">Nama</th>
-                                <th className="lowercase text-center">TTL</th>
-                                <th className="lowercase text-center">
+                                <th className="uppercase text-sm text-center">Nama</th>
+                                <th className="uppercase text-sm text-center">TTL</th>
+                                <th className="uppercase text-sm text-center">
                                     Alamat
                                 </th>
-                                <th className="lowercase text-center">
+                                <th className="uppercase text-sm text-center">
                                     Perkara
                                 </th>
-                                <th className="lowercase text-center">
+                                <th className="uppercase text-sm text-center">
                                     Action
                                 </th>
                             </tr>
