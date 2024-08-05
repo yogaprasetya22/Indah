@@ -26,7 +26,7 @@ class ClientController extends Controller
     {
         $user = User::with(['role'])->latest()->get();
         return Inertia::render('client/Index', [
-            'title' => Auth::user()->role->name_role,
+            'title' => "Dashboard",
             'data' => $user,
         ]);
     }
@@ -34,7 +34,10 @@ class ClientController extends Controller
     // Identifikasi Wajah
     public function IdentifikasiWajah()
     {
-        $data = IdentifikasiWajah::with(['user'])->where('user_id', Auth::id())->latest()->get();
+        $data = IdentifikasiWajah::with(['wilayah'])->where(
+            'wilayah_id',
+            Auth::user()->wilayah_id
+        )->latest()->get();
         return Inertia::render('client/IdentifikasiWajah', [
             'title' => 'Identifikasi Wajah',
             'data' => $data,
@@ -45,24 +48,26 @@ class ClientController extends Controller
     {
         $request->validate([
             'tanggal_proses' => 'required',
+            'dasar_rujukan' => 'required',
             'ident_polda_res' => 'required',
             'operator' => 'required',
             'perkara' => 'required',
-            'foto_target' => 'required|file|max:5120', // 5 MB
-            'foto_hasil_fr' => 'required|file|max:5120', // 5 MB
+            'foto_target' => 'required|file|max:2048', // 2 MB
+            'foto_hasil_fr' => 'required|file|max:2048', // 2 MB
             'nama' => 'required',
             'nik' => 'required',
             'ttl' => 'required',
             'alamat' => 'required',
         ], [
             'tanggal_proses.required' => 'Tanggal Proses harus diisi',
+            'dasar_rujukan.required' => 'Dasar Rujukan harus diisi',
             'ident_polda_res.required' => 'Ident Polda Res harus diisi',
             'operator.required' => 'Operator harus diisi',
             'perkara.required' => 'Perkara harus diisi',
             'foto_target.required' => 'Foto Target harus diisi',
-            'foto_target.max' => 'Ukuran Foto Target maksimal 5 MB',
+            'foto_target.max' => 'Ukuran Foto Target maksimal 2 MB',
             'foto_hasil_fr.required' => 'Foto Hasil FR harus diisi',
-            'foto_hasil_fr.max' => 'Ukuran Foto Hasil FR maksimal 5 MB',
+            'foto_hasil_fr.max' => 'Ukuran Foto Hasil FR maksimal 2 MB',
             'nama.required' => 'Nama harus diisi',
             'nik.required' => 'NIK harus diisi',
             'ttl.required' => 'TTL harus diisi',
@@ -81,8 +86,10 @@ class ClientController extends Controller
         $foto_hasil_fr->storeAs('private/identifikasi-wajah/foto-hasil-fr', $foto_hasil_fr_name);
 
         $data = [
-            'user_id' => Auth::id(),
+            'uuid' => str()->uuid(),
+            'wilayah_id' => Auth::user()->wilayah_id,
             'tanggal_proses' => date('Y-m-d', strtotime($request->tanggal_proses)),
+            'dasar_rujukan' => $request->dasar_rujukan,
             'ident_polda_res' => $request->ident_polda_res,
             'operator' => $request->operator,
             'perkara' => $request->perkara,
@@ -102,7 +109,10 @@ class ClientController extends Controller
     // Tersangka
     public function Tersangka()
     {
-        $data = Tersangka::with(['user'])->where('user_id', Auth::id())->latest()->get();
+        $data = Tersangka::with(['wilayah'])->where(
+            'wilayah_id',
+            Auth::user()->wilayah_id
+        )->latest()->get();
         return Inertia::render('client/Tersangka', [
             'title' => 'Tersangka',
             'data' => $data,
@@ -112,20 +122,20 @@ class ClientController extends Controller
     public function createTersangka(Request $request)
     {
         $request->validate([
-            'foto_depan' => 'required|file|max:5120', // 5 MB
-            'foto_kanan' => 'required|file|max:5120', // 5 MB
-            'foto_kiri' => 'required|file|max:5120',  // 5 MB
+            'foto_depan' => 'required|file|max:2048', // 2 MB
+            'foto_kanan' => 'required|file|max:2048', // 2 MB
+            'foto_kiri' => 'required|file|max:2048',  // 2 MB
             'nama' => 'required',
             'ttl' => 'required',
             'alamat' => 'required',
             'perkara' => 'required',
         ], [
             'foto_depan.required' => 'Foto Depan harus diisi',
-            'foto_depan.max' => 'Ukuran Foto Depan maksimal 5 MB',
+            'foto_depan.max' => 'Ukuran Foto Depan maksimal 2 MB',
             'foto_kanan.required' => 'Foto Kanan harus diisi',
-            'foto_kanan.max' => 'Ukuran Foto Kanan maksimal 5 MB',
+            'foto_kanan.max' => 'Ukuran Foto Kanan maksimal 2 MB',
             'foto_kiri.required' => 'Foto Kiri harus diisi',
-            'foto_kiri.max' => 'Ukuran Foto Kiri maksimal 5 MB',
+            'foto_kiri.max' => 'Ukuran Foto Kiri maksimal 2 MB',
             'nama.required' => 'Nama harus diisi',
             'ttl.required' => 'TTL harus diisi',
             'alamat.required' => 'Alamat harus diisi',
@@ -147,7 +157,8 @@ class ClientController extends Controller
         $foto_kiri->storeAs('private/tersangka/foto-kiri', $foto_kiri_name);
 
         $data = [
-            'user_id' => Auth::id(),
+            'uuid' => str()->uuid(),
+            'wilayah_id' => Auth::user()->wilayah_id,
             'foto_depan' => $foto_depan_name,
             'foto_kanan' => $foto_kanan_name,
             'foto_kiri' => $foto_kiri_name,
@@ -225,7 +236,32 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validate request
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
+            'role_id' => 'required',
+            'wilayah_id' => 'required',
+        ], [
+            'name.required' => 'Nama harus diisi',
+            'email.required' => 'Email harus diisi',
+            'email.email' => 'Email tidak valid',
+            'password.required' => 'Password harus diisi',
+            'role_id.required' => 'Role harus diisi',
+            'wilayah_id.required' => 'Wilayah harus diisi',
+        ]);
+
+        // create user
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role_id' => (int)$request->role_id,
+            'wilayah_id' => (int)$request->wilayah_id,
+        ]);
+
+        return redirect()->back()->with('success', 'User berhasil ditambahkan');
     }
 
     /**
@@ -247,9 +283,31 @@ class ClientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        // validate request
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'role_id' => 'required',
+            'wilayah_id' => 'required',
+        ], [
+            'name.required' => 'Nama harus diisi',
+            'email.required' => 'Email harus diisi',
+            'email.email' => 'Email tidak valid',
+            'role_id.required' => 'Role harus diisi',
+            'wilayah_id.required' => 'Wilayah harus diisi',
+        ]);
+
+        // update user
+        User::where('id', $request->id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'role_id' => (int)$request->role_id,
+            'wilayah_id' => (int)$request->wilayah_id,
+        ]);
+
+        return redirect()->back()->with('success', 'User berhasil diupdate');
     }
 
     /**
@@ -257,6 +315,8 @@ class ClientController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // delete user
+        User::where('id', $id)->delete();
+        return redirect()->back()->with('success', 'User berhasil dihapus');
     }
 }

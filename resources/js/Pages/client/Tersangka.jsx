@@ -77,7 +77,6 @@ export default function Tersangka({ data }) {
                     <table className="table lg:table-xs 2xl:table-md ">
                         <thead>
                             <tr className="font-bold text-lg text-black">
-                                <th className="uppercase text-sm text-center">Id</th>
                                 <th className="uppercase text-sm text-center">
                                     Foto Depan
                                 </th>
@@ -103,7 +102,6 @@ export default function Tersangka({ data }) {
                         <tbody className="border-b">
                             {currentItems.map((item, index) => (
                                 <tr key={index}>
-                                    <th>{item?.id}</th>
                                     <td className="text-center">
                                         <img
                                             src={route("file.get", {

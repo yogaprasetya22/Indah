@@ -74,32 +74,34 @@ export default function IdentifikasiWajah({ data }) {
                     <table className="table lg:table-xs 2xl:table-md ">
                         <thead>
                             <tr className="font-bold text-lg text-black">
-                                <th className=" uppercase text-sm text-center">Id</th>
-                                <th className=" uppercase text-sm text-center">
+                                <th className=" uppercase text-xs text-center">
                                     Tgl Proses
                                 </th>
-                                <th className=" uppercase text-sm text-center">
+                                <th className=" uppercase text-xs text-center">
+                                    Dasar Rujukan
+                                </th>
+                                <th className=" uppercase text-xs text-center">
                                     Polda Res
                                 </th>
-                                <th className=" uppercase text-sm text-center">
+                                <th className=" uppercase text-xs text-center">
                                     Operator
                                 </th>
-                                <th className=" uppercase text-sm text-center">
+                                <th className=" uppercase text-xs text-center">
                                     Perkara
                                 </th>
-                                <th className=" uppercase text-sm text-center">
+                                <th className=" uppercase text-xs text-center">
                                     Target
                                 </th>
-                                <th className=" uppercase text-sm text-center">
+                                <th className=" uppercase text-xs text-center">
                                     Hasil FR
                                 </th>
-                                <th className=" uppercase text-sm text-center">Nama</th>
-                                <th className=" uppercase text-sm text-center">NIK</th>
-                                <th className=" uppercase text-sm text-center">TTL</th>
-                                <th className=" uppercase text-sm text-center">
+                                <th className=" uppercase text-xs text-center">Nama</th>
+                                <th className=" uppercase text-xs text-center">NIK</th>
+                                <th className=" uppercase text-xs text-center">TTL</th>
+                                <th className=" uppercase text-xs text-center">
                                     Alamat
                                 </th>
-                                <th className=" uppercase text-sm text-center">
+                                <th className=" uppercase text-xs text-center">
                                     Action
                                 </th>
                             </tr>
@@ -107,9 +109,11 @@ export default function IdentifikasiWajah({ data }) {
                         <tbody className="border-b">
                             {currentItems.map((item, index) => (
                                 <tr key={index}>
-                                    <th>{item?.id}</th>
                                     <td className="text-center">
                                         {item?.tanggal_proses}
+                                    </td>
+                                    <td className="text-center">
+                                        {item?.dasar_rujukan}
                                     </td>
                                     <td className="text-center">
                                         {item?.ident_polda_res}

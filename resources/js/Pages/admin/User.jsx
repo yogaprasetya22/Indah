@@ -1,9 +1,9 @@
-import Add from "@/Components/modal/IdentifikasiWajah/Add";
+import Add from "@/Components/modal/User/Add";
 import Layout from "@/Layouts/Layout";
 import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 
-export default function IdentifikasiWajah({ data }) {
+export default function User({ data }) {
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
@@ -33,6 +33,8 @@ export default function IdentifikasiWajah({ data }) {
 
         setItemOffset(newOffset);
     };
+
+    console.log(currentItems);
 
     return (
         <Layout>
@@ -74,43 +76,25 @@ export default function IdentifikasiWajah({ data }) {
                     </div>
                 </div>
                 <div className="overflow-x-auto overflow-table ">
-                    <table className="table lg:table-xs 2xl:table-md ">
+                    <table className="table lg:table-xs 2xl:table-md">
                         <thead>
                             <tr className="font-bold text-lg text-black">
-                                <th className=" uppercase text-xs text-center">
-                                    Tgl Proses
+                                <th className="uppercase text-sm text-center">
+                                    Id
                                 </th>
-                                <th className=" uppercase text-xs text-center">
-                                    Dasar Rujukan
+                                <th className="uppercase text-sm text-center">
+                                    Name
                                 </th>
-                                <th className=" uppercase text-xs text-center">
-                                    Polda Res
+                                <th className="uppercase text-sm text-center">
+                                    Email
                                 </th>
-                                <th className=" uppercase text-xs text-center">
-                                    Operator
+                                <th className="uppercase text-sm text-center">
+                                    Role
                                 </th>
-                                <th className=" uppercase text-xs text-center">
-                                    Perkara
+                                <th className="uppercase text-sm text-center">
+                                    Wilayah
                                 </th>
-                                <th className=" uppercase text-xs text-center">
-                                    Target
-                                </th>
-                                <th className=" uppercase text-xs text-center">
-                                    Hasil FR
-                                </th>
-                                <th className=" uppercase text-xs text-center">
-                                    Nama
-                                </th>
-                                <th className=" uppercase text-xs text-center">
-                                    NIK
-                                </th>
-                                <th className=" uppercase text-xs text-center">
-                                    TTL
-                                </th>
-                                <th className=" uppercase text-xs text-center">
-                                    Alamat
-                                </th>
-                                <th className=" uppercase text-xs text-center">
+                                <th className="uppercase text-sm text-center">
                                     Action
                                 </th>
                             </tr>
@@ -118,52 +102,20 @@ export default function IdentifikasiWajah({ data }) {
                         <tbody className="border-b">
                             {currentItems.map((item, index) => (
                                 <tr key={index}>
+                                    <th className="text-center">{item?.id}</th>
                                     <td className="text-center">
-                                        {item?.tanggal_proses}
+                                        {item?.name}
                                     </td>
                                     <td className="text-center">
-                                        {item?.dasar_rujukan}
+                                        {item?.email}
                                     </td>
                                     <td className="text-center">
-                                        {item?.ident_polda_res}
+                                        {item?.role?.name_role}
                                     </td>
                                     <td className="text-center">
-                                        {item?.operator}
+                                        {item?.wilayah?.nama}
                                     </td>
-                                    <td className="text-center">
-                                        {item?.perkara}
-                                    </td>
-                                    <td className="text-center">
-                                        <img
-                                            src={route("file.get", {
-                                                direktori: "identifikasi-wajah",
-                                                disk: "foto-target",
-                                                filename: item?.foto_target,
-                                            })}
-                                            alt="Foto Target"
-                                            className="w-[8rem] bg-cover rounded mx-auto"
-                                        />
-                                    </td>
-                                    <td className="text-center">
-                                        <img
-                                            src={route("file.get", {
-                                                direktori: "identifikasi-wajah",
-                                                disk: "foto-hasil-fr",
-                                                filename: item?.foto_hasil_fr,
-                                            })}
-                                            alt="Foto Hasil FR"
-                                            className="w-[8rem] bg-cover rounded mx-auto"
-                                        />
-                                    </td>
-                                    <td className="text-center">
-                                        {item?.nama}
-                                    </td>
-                                    <td className="text-center">{item?.nik}</td>
-                                    <td className="text-center">{item?.ttl}</td>
-                                    <td className="text-center">
-                                        {item?.alamat}
-                                    </td>
-                                    <th className="flex gap-2">
+                                    <th className="flex justify-center gap-2">
                                         <button className="btn btn-ghost btn-md">
                                             <i className="text-green-500 text-xl fas fa-edit"></i>
                                         </button>

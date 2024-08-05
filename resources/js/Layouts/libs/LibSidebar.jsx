@@ -8,6 +8,11 @@ export const MenuDashboardValidate = (user) => {
             icon: "fas fa-th-large",
         },
         {
+            name: "User",
+            url: `/${validateRole(user?.role_id)}/user`,
+            icon: "fas fa-users",
+        },
+        {
             name: "Identifikasi Wajah",
             url: `/${validateRole(user?.role_id)}/identifikasi-wajah`,
             icon: "fas fa-camera-retro",

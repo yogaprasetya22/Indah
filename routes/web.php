@@ -85,6 +85,7 @@ Route::prefix('/polres')->middleware(['auth', 'role:4', 'verified'])->group(func
 
 Route::prefix('admin')->middleware(['auth', 'role:1', 'verified'])->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin');
+    Route::get('/user', [AdminController::class, 'User'])->name('admin.user');
     Route::get('/identifikasi-wajah', [AdminController::class, 'Identifikasiwajah'])->name('admin.identifikasi-wajah');
     Route::get('/tersangka', [AdminController::class, 'Tersangka'])->name('admin.tersangka');
     Route::get('/sop-pemotretan-barang-bukti', [AdminController::class, 'SOP_Pemotretan_Barang_Bukti'])->name('admin.sop-pemotretan-bb');

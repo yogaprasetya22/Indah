@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email', 'password', 'role',
+        'name', 'email', 'password', 'role_id', 'wilayah_id',
     ];
 
 
@@ -53,13 +53,8 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function identifikasiWajah()
+    public function wilayah()
     {
-        return $this->hasMany(IdentifikasiWajah::class);
-    }
-
-    public function tersangka()
-    {
-        return $this->hasMany(Tersangka::class);
+        return $this->belongsTo(Wilayah::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\IdentifikasiWajah;
+use App\Models\Role;
 use App\Models\SOPIdentifikasiWajah;
 use App\Models\SOPPemotretanBarangBukti;
 use App\Models\SOPPemotretanTKP;
@@ -11,6 +12,7 @@ use App\Models\SOPPemotretanTSK;
 use App\Models\SOPRekontruksiWajah;
 use App\Models\Tersangka;
 use App\Models\User;
+use App\Models\Wilayah;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -18,16 +20,30 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $user = User::with(['role'])->latest()->get();
+        $identifikasi_wajah = IdentifikasiWajah::with(['wilayah.user'])->latest()->get();
+        $tersangka = Tersangka::with(['wilayah.user'])->latest()->get();
         return Inertia::render('admin/Admin', [
-            'title' => 'Admin',
+            'title' => 'Dashboard',
+            'identifikasi_wajah' => $identifikasi_wajah,
+            'tersangka' => $tersangka,
+        ]);
+    }
+    public function User()
+    {
+        $user = User::with(['role', 'wilayah'])->where('role_id', '!=', 1)->latest()->get();
+        $role = Role::all();
+        $wilayah = Wilayah::all();
+        return Inertia::render('admin/User', [
+            'title' => 'Kelola User',
             'data' => $user,
+            'wilayah' => $wilayah,
+            'role' => $role,
         ]);
     }
 
     public function Identifikasiwajah()
     {
-        $data = IdentifikasiWajah::with(['user'])->latest()->get();
+        $data = IdentifikasiWajah::with(['wilayah.user'])->latest()->get();
         return Inertia::render('admin/IdentifikasiWajah', [
             'title' => 'Identifikasi Wajah',
             'data' => $data,
@@ -36,7 +52,7 @@ class AdminController extends Controller
 
     public function Tersangka()
     {
-        $data = Tersangka::with(['user'])->latest()->get();
+        $data = Tersangka::with(['wilayah.user'])->latest()->get();
         return Inertia::render('admin/Tersangka', [
             'title' => 'Tersangka',
             'data' => $data,

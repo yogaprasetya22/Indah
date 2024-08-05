@@ -54,6 +54,14 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 
+    // User
+    Route::post('create-user', [ClientController::class, 'store'])
+        ->name('create-user.store');
+    Route::post('update-user', [ClientController::class, 'update'])
+        ->name('update-user.update');
+    Route::delete('delete-user', [ClientController::class, 'destroy'])
+        ->name('delete-user.destroy');
+
     // create Identifikasi Wajah
     Route::post('create-identifikasi-wajah', [ClientController::class, 'createIdentifikasiWajah'])
         ->name('create-identifikasi-wajah.store');

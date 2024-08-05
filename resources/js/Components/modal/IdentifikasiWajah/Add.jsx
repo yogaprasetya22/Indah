@@ -9,6 +9,7 @@ export default function Add({ title }) {
     const { props } = usePage();
     const { data, setData, post, processing, errors, reset } = useForm({
         tanggal_proses: "",
+        dasar_rujukan: "",
         ident_polda_res: "",
         operator: "",
         perkara: "",
@@ -108,6 +109,31 @@ export default function Add({ title }) {
                                         />
                                         <InputError
                                             message={errors.tanggal_proses}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <InputLabel
+                                            htmlFor="dasar_rujukan"
+                                            value="Dasar Rujukan"
+                                        />
+                                        <TextInput
+                                            id="dasar_rujukan"
+                                            type="text"
+                                            name="dasar_rujukan"
+                                            value={data.dasar_rujukan}
+                                            className="mt-1 block w-full"
+                                            autoComplete="dasar_rujukan"
+                                            isFocused={true}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "dasar_rujukan",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            message={errors.dasar_rujukan}
                                             className="mt-2"
                                         />
                                     </div>

@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Tersangka extends Model
 {
     use HasFactory;
-    protected $guarded = ['id'];
+    protected $guarded = ['uuid'];
     protected $fillable = [
-        'user_id',
+        'uuid',
+        'wilayah_id',
         'foto_depan',
         'foto_kanan',
         'foto_kiri',
@@ -20,8 +21,8 @@ class Tersangka extends Model
         'perkara',
     ];
 
-    public function user()
+    public function wilayah()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Wilayah::class);
     }
 }
