@@ -2,6 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
+.tooltip {
+    --tooltip-text-color: #fff;
+    --tooltip-color     : #52d35a;
+}
+.tooltip:before {
+    width        : 8rem;
+    /* Set fixed width */
+    border-radius: 0.25rem
+        /* 4px */
+    ;
+    padding-left: 0.5rem
+        /* 8px */
+    ;
+    padding-right: 0.5rem
+        /* 8px */
+    ;
+    padding-top: 0.25rem
+        /* 4px */
+    ;
+    padding-bottom: 0.25rem
+        /* 4px */
+    ;
+    font-size: 0.975rem
+        /* 14px */
+    ;
+    line-height: 1.25rem
+        /* 20px */
+    ;
+    background-color: var(--tooltip-color);
+    color           : var(--tooltip-text-color);
+    white-space     : normal;
+    /* Allow text to wrap to the next line */
+
+}
+
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+@layer base {
+    .font-outline-2 {
+        -webkit-text-stroke: 1px black;
+    }
+
+    .font-outline-4 {
+        -webkit-text-stroke: 4px black;
+    }
+}
+
 @layer components {
     .overflow::-webkit-scrollbar {
         width: 0px;

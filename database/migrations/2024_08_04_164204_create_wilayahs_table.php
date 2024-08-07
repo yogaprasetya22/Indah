@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('wilayah_hukum');
             $table->string('markas');
+            $table->longText('gambar');
         });
     }
 

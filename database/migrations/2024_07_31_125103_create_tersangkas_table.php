@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tersangkas', function (Blueprint $table) {
             $table->uuid('uuid')->primary();
-            $table->foreignId('wilayah_id');
+            $table->foreignId('user_id');
             $table->text('foto_depan');
             $table->text('foto_kanan');
             $table->text('foto_kiri');

@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class IdentifikasiWajah extends Model
 {
     use HasFactory;
-    protected $guarded = ['uuid'];
+    protected $primaryKey = 'uuid';
+    protected $keyType = 'string';
+    public $incrementing = false;
     protected $fillable = [
         'uuid',
-        'wilayah_id',
+        'user_id',
         'tanggal_proses',
         'dasar_rujukan',
         'ident_polda_res',
@@ -25,8 +27,8 @@ class IdentifikasiWajah extends Model
         'alamat',
     ];
 
-    public function wilayah()
+    public function user()
     {
-        return $this->belongsTo(Wilayah::class);
+        return $this->belongsTo(User::class);
     }
 }

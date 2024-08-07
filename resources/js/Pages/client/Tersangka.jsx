@@ -1,27 +1,31 @@
+import React, { useState, useEffect } from "react";
 import Add from "@/Components/modal/Tersangka/Add";
 import Layout from "@/Layouts/Layout";
-import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
+import { PhotoView } from "react-photo-view";
 
-export default function Tersangka({ data }) {
+export default function Tersangka({ data, auth }) {
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
-    const [Loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(5);
+    const [filterByUser, setFilterByUser] = useState(false);
 
     useEffect(() => {
         setLoading(true);
+        const filteredData = filterByUser
+            ? data.filter((item) => item.user.id === auth.user.id)
+            : data;
         const endOffset = parseInt(itemOffset) + parseInt(page);
-        const sortData = data
-            .sort((a, b) => {
-                return a.id - b.id;
-            })
+        const sortData = filteredData
+            .sort((a, b) => a.id - b.id)
             .slice(itemOffset, endOffset);
+
         setCurrentItems(sortData);
-        setPageCount(Math.ceil(data.length / page));
+        setPageCount(Math.ceil(filteredData.length / page));
         setLoading(false);
-    }, [itemOffset, data, page]);
+    }, [itemOffset, data, page, filterByUser, auth.user.id]);
 
     const handlePageClick = (event) => {
         window.scrollTo({
@@ -30,7 +34,6 @@ export default function Tersangka({ data }) {
         });
 
         const newOffset = (event.selected * page) % data.length;
-
         setItemOffset(newOffset);
     };
 
@@ -63,6 +66,17 @@ export default function Tersangka({ data }) {
                                 <i className="fas fa-search"></i>
                             </button>
                         </div>
+                        <div
+                            className="flex flex-row items-center justify-center gap-2 tooltip  tooltip-info tooltip-right"
+                            data-tip="Filter hanya berdasarkan anda upload"
+                        >
+                            <button
+                                className="btn btn-ghost"
+                                onClick={() => setFilterByUser(!filterByUser)}
+                            >
+                                <i className="fas fa-filter"></i>
+                            </button>
+                        </div>
                     </div>
                     <div className="flex items-center gap-2 px-5 py-3">
                         <button
@@ -86,8 +100,12 @@ export default function Tersangka({ data }) {
                                 <th className="uppercase text-sm text-center">
                                     Foto Kiri
                                 </th>
-                                <th className="uppercase text-sm text-center">Nama</th>
-                                <th className="uppercase text-sm text-center">TTL</th>
+                                <th className="uppercase text-sm text-center">
+                                    Nama
+                                </th>
+                                <th className="uppercase text-sm text-center">
+                                    TTL
+                                </th>
                                 <th className="uppercase text-sm text-center">
                                     Alamat
                                 </th>
@@ -103,37 +121,79 @@ export default function Tersangka({ data }) {
                             {currentItems.map((item, index) => (
                                 <tr key={index}>
                                     <td className="text-center">
-                                        <img
+                                        <PhotoView
+                                            speed={() => 800}
+                                            easing={(type) =>
+                                                type === 2
+                                                    ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+                                                    : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+                                            }
                                             src={route("file.get", {
                                                 direktori: "tersangka",
                                                 disk: "foto-depan",
                                                 filename: item?.foto_depan,
                                             })}
-                                            alt="Foto Depan"
-                                            className="w-[8rem] bg-cover rounded mx-auto"
-                                        />
+                                        >
+                                            <img
+                                                src={route("file.get", {
+                                                    direktori: "tersangka",
+                                                    disk: "foto-depan",
+                                                    filename: item?.foto_depan,
+                                                })}
+                                                alt="Foto Depan"
+                                                className="w-[8rem] bg-cover rounded mx-auto"
+                                            />
+                                        </PhotoView>
                                     </td>
                                     <td className="text-center">
-                                        <img
+                                        <PhotoView
+                                            speed={() => 800}
+                                            easing={(type) =>
+                                                type === 2
+                                                    ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+                                                    : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+                                            }
                                             src={route("file.get", {
                                                 direktori: "tersangka",
                                                 disk: "foto-kanan",
                                                 filename: item?.foto_kanan,
                                             })}
-                                            alt="Foto Kanan"
-                                            className="w-[8rem] bg-cover rounded mx-auto"
-                                        />
+                                        >
+                                            <img
+                                                src={route("file.get", {
+                                                    direktori: "tersangka",
+                                                    disk: "foto-kanan",
+                                                    filename: item?.foto_kanan,
+                                                })}
+                                                alt="Foto Kanan"
+                                                className="w-[8rem] bg-cover rounded mx-auto"
+                                            />
+                                        </PhotoView>
                                     </td>
                                     <td className="text-center">
-                                        <img
+                                        <PhotoView
+                                            speed={() => 800}
+                                            easing={(type) =>
+                                                type === 2
+                                                    ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+                                                    : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+                                            }
                                             src={route("file.get", {
                                                 direktori: "tersangka",
                                                 disk: "foto-kiri",
                                                 filename: item?.foto_kiri,
                                             })}
-                                            alt="Foto Kiri"
-                                            className="w-[8rem] bg-cover rounded mx-auto"
-                                        />
+                                        >
+                                            <img
+                                                src={route("file.get", {
+                                                    direktori: "tersangka",
+                                                    disk: "foto-kiri",
+                                                    filename: item?.foto_kiri,
+                                                })}
+                                                alt="Foto Kiri"
+                                                className="w-[8rem] bg-cover rounded mx-auto"
+                                            />
+                                        </PhotoView>
                                     </td>
                                     <td className="text-center">
                                         {item?.nama}
@@ -145,14 +205,14 @@ export default function Tersangka({ data }) {
                                     <td className="text-center">
                                         {item?.perkara}
                                     </td>
-                                    <th className="flex gap-2">
+                                    <td>
                                         <button className="btn btn-ghost btn-md">
                                             <i className="text-green-500 text-xl fas fa-edit"></i>
                                         </button>
                                         <button className="btn btn-ghost btn-md">
                                             <i className="text-red-500 text-xl fas fa-trash-alt"></i>
                                         </button>
-                                    </th>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -182,7 +242,7 @@ export default function Tersangka({ data }) {
                     </div>
                 </div>
             </div>
-            <Add title={"Add Tersangka"} />
+            <Add />
         </Layout>
     );
 }

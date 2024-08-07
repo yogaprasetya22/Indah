@@ -3,6 +3,7 @@ import InputLabel from "@/Components/ui/InputLabel";
 import TextInput from "@/Components/ui/TextInput";
 import React, { useState } from "react";
 import { useForm, usePage } from "@inertiajs/react";
+import { PhotoView } from "react-photo-view";
 
 export default function Add({ title }) {
     const { props } = usePage();
@@ -211,11 +212,13 @@ export default function Add({ title }) {
                                         }
                                     />
                                     {fotoDepanPreview && (
-                                        <img
-                                            src={fotoDepanPreview}
-                                            alt="Foto Depan Preview"
-                                            className="mt-2 bg-cover"
-                                        />
+                                        <PhotoView src={fotoDepanPreview}>
+                                            <img
+                                                src={fotoDepanPreview}
+                                                alt="Foto Depan Preview"
+                                                  className="mt-2 w-[15rem] object-cover"
+                                            />
+                                        </PhotoView>
                                     )}
                                     <InputError
                                         message={errors.foto_depan}
@@ -238,11 +241,13 @@ export default function Add({ title }) {
                                         }
                                     />
                                     {fotoKananPreview && (
-                                        <img
-                                            src={fotoKananPreview}
-                                            alt="Foto Kanan Preview"
-                                            className="mt-2 bg-cover"
-                                        />
+                                        <PhotoView src={fotoKananPreview}>
+                                            <img
+                                                src={fotoKananPreview}
+                                                alt="Foto Kanan Preview"
+                                                  className="mt-2 w-[15rem] object-cover"
+                                            />
+                                        </PhotoView>
                                     )}
                                     <InputError
                                         message={errors.foto_kanan}
@@ -265,11 +270,13 @@ export default function Add({ title }) {
                                         }
                                     />
                                     {fotoKiriPreview && (
-                                        <img
-                                            src={fotoKiriPreview}
-                                            alt="Foto Kiri Preview"
-                                            className="mt-2 bg-cover"
-                                        />
+                                        <PhotoView src={fotoKiriPreview}>
+                                            <img
+                                                src={fotoKiriPreview}
+                                                alt="Foto Kiri Preview"
+                                                  className="mt-2 w-[15rem] object-cover"
+                                            />
+                                        </PhotoView>
                                     )}
                                     <InputError
                                         message={errors.foto_kiri}

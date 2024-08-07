@@ -20,8 +20,8 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $identifikasi_wajah = IdentifikasiWajah::with(['wilayah.user'])->latest()->get();
-        $tersangka = Tersangka::with(['wilayah.user'])->latest()->get();
+        $identifikasi_wajah = IdentifikasiWajah::with(['user.wilayah'])->latest()->get();
+        $tersangka = Tersangka::with(['user.wilayah'])->latest()->get();
         return Inertia::render('admin/Admin', [
             'title' => 'Dashboard',
             'identifikasi_wajah' => $identifikasi_wajah,
@@ -43,7 +43,7 @@ class AdminController extends Controller
 
     public function Identifikasiwajah()
     {
-        $data = IdentifikasiWajah::with(['wilayah.user'])->latest()->get();
+        $data = IdentifikasiWajah::with(['user.wilayah'])->latest()->get();
         return Inertia::render('admin/IdentifikasiWajah', [
             'title' => 'Identifikasi Wajah',
             'data' => $data,
@@ -52,7 +52,7 @@ class AdminController extends Controller
 
     public function Tersangka()
     {
-        $data = Tersangka::with(['wilayah.user'])->latest()->get();
+        $data = Tersangka::with(['user.wilayah'])->latest()->get();
         return Inertia::render('admin/Tersangka', [
             'title' => 'Tersangka',
             'data' => $data,

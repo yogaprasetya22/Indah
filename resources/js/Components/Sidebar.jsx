@@ -19,7 +19,7 @@ const Sidebar = ({ isSidebarOpen, user }) => {
             <div className="lg:w-full md:w-[40%] w-[75%] bg-white h-full ">
                 <div className="pt-5 flex flex-col justify-between h-full">
                     <div className="w-full flex justify-center items-center flex-col gap-4 lg:mt-0 mt-12 mb-6">
-                        <h1 className="font-extrabold text-teal-800 text-4xl">
+                        <h1 className="font-extrabold text-white text-4xl text-shadow">
                             INDAH
                         </h1>
                     </div>

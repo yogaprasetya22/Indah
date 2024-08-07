@@ -89,6 +89,9 @@ export default function User({ data }) {
                                     Email
                                 </th>
                                 <th className="uppercase text-sm text-center">
+                                    Image
+                                </th>
+                                <th className="uppercase text-sm text-center">
                                     Role
                                 </th>
                                 <th className="uppercase text-sm text-center">
@@ -108,6 +111,14 @@ export default function User({ data }) {
                                     </td>
                                     <td className="text-center">
                                         {item?.email}
+                                    </td>
+                                    <td className="text-center ">
+                                        <img
+                                            className="w-10 h-10 mx-auto rounded-full object-fill"
+                                            src={item?.wilayah.gambar}
+                                            alt={item?.wilayah.nama}
+                                            srcset=""
+                                        />
                                     </td>
                                     <td className="text-center">
                                         {item?.role?.name_role}

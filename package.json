@@ -28,6 +28,7 @@
         "quill-image-resize-module-react": "^3.0.0",
         "react-chartjs-2": "^5.2.0",
         "react-paginate": "^8.2.0",
+        "react-photo-view": "^1.2.6",
         "react-quill": "^2.0.0"
     }
 }

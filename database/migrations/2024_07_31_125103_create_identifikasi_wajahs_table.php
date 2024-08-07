@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('identifikasi_wajahs', function (Blueprint $table) {
             $table->uuid('uuid')->primary();
-            $table->foreignId('wilayah_id');
+            $table->foreignId('user_id');
             $table->date('tanggal_proses');
             $table->string('dasar_rujukan');
             $table->string('ident_polda_res');

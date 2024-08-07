@@ -21,13 +21,5 @@ class Wilayah extends Model
         return $this->hasOne(User::class);
     }
 
-    public function identifikasiWajah()
-    {
-        return $this->hasMany(IdentifikasiWajah::class);
-    }
-
-    public function tersangka()
-    {
-        return $this->hasMany(Tersangka::class);
-    }
+   
 }

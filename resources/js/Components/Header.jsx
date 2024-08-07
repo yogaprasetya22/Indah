@@ -1,6 +1,5 @@
 import { Link, usePage } from "@inertiajs/react";
 import Dropdown from "@/Components/ui/Dropdown";
-// import NavLink from "@/Components/ui/NavLink";
 import React, { useState, useEffect, useRef } from "react";
 import { validateHeader, validateRole } from "./Example";
 
@@ -67,9 +66,12 @@ const Header = ({ toggleSidebar, isSidebarOpen, user }) => {
                                     className="inline-flex gap-2 items-center px-3  border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                 >
                                     <img
-                                        src="https://picsum.photos/200"
+                                        src={
+                                            user?.wilayah?.gambar ||
+                                            "https://cdn-icons-png.flaticon.com/128/149/149071.png"
+                                        }
                                         alt=""
-                                        className=" rounded-full w-6 h-6 border border-gray-300"
+                                        className="rounded-full border border-gray-300 w-8 h-8 object-cover object-center"
                                     />
                                     <div className="flex flex-col pl-2 justify-end items-start mt-3 pb-1">
                                         <p className="text-md font-extrabold">

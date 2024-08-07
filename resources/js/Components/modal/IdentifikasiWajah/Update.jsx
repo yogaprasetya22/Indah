@@ -4,11 +4,13 @@ import TextInput from "@/Components/ui/TextInput";
 import React from "react";
 import { useForm, usePage } from "@inertiajs/react";
 import { useState } from "react";
+import { useEffect } from "react";
 import { PhotoView } from "react-photo-view";
 
-export default function Add({ title }) {
+export default function Update({ result, title }) {
     const { auth } = usePage().props;
     const { data, setData, post, processing, errors, reset } = useForm({
+        uuid: result.uuid,
         tanggal_proses: "",
         dasar_rujukan: "",
         ident_polda_res: auth.user.wilayah.wilayah_hukum,
@@ -24,10 +26,52 @@ export default function Add({ title }) {
     const [fotoTargetPreview, setFotoTargetPreview] = useState(null);
     const [fotoHasilFrPreview, setFotoHasilFrPreview] = useState(null);
 
+    useEffect(() => {
+        if (result) {
+            setData({
+                uuid: result.uuid,
+                tanggal_proses: result.tanggal_proses,
+                dasar_rujukan: result.dasar_rujukan,
+                ident_polda_res: result.ident_polda_res,
+                operator: result.operator,
+                perkara: result.perkara,
+                foto_target: null,
+                foto_hasil_fr: null,
+                nama: result.nama,
+                nik: result.nik,
+                ttl: result.ttl,
+                alamat: result.alamat,
+            });
+            if (result.foto_target) {
+                setFotoTargetPreview(
+                    route("file.get", {
+                        direktori: "identifikasi-wajah",
+                        disk: "foto-target",
+                        filename: result.foto_target, // gunakan result.foto_target
+                    })
+                );
+            } else {
+                setFotoTargetPreview(null);
+            }
+
+            if (result.foto_hasil_fr) {
+                setFotoHasilFrPreview(
+                    route("file.get", {
+                        direktori: "identifikasi-wajah",
+                        disk: "foto-hasil-fr",
+                        filename: result.foto_hasil_fr, // gunakan result.foto_hasil_fr
+                    })
+                );
+            } else {
+                setFotoHasilFrPreview(null);
+            }
+        }
+    }, [result]);
+
     const handleAddRecord = (e) => {
         e.preventDefault();
-        post(route("create-identifikasi-wajah.store"), {
-            onSuccess: () => window.my_modal_1.close(),
+        post(route("update-identifikasi-wajah.update"), {
+            onSuccess: () => window.my_modal_2.close(),
             onError: (e) => {
                 console.log(e);
             },
@@ -62,7 +106,7 @@ export default function Add({ title }) {
 
     return (
         <dialog
-            id="my_modal_1"
+            id="my_modal_2"
             className="modal backdrop-blur-sm backdrop-brightness-75"
         >
             <div className="modal-box w-full max-w-5xl overflow">
@@ -73,7 +117,7 @@ export default function Add({ title }) {
                         </h1>
                         <button
                             onClick={() => {
-                                window.my_modal_1.close();
+                                window.my_modal_2.close();
                             }}
                             className="text-2xl hover:text-gray-400 select-none"
                             aria-label="close modal"
@@ -90,11 +134,11 @@ export default function Add({ title }) {
                                 <div className="flex flex-row gap-5">
                                     <div className="flex flex-col gap-2 w-full">
                                         <InputLabel
-                                            htmlFor="tanggal_proses"
+                                            htmlFor="update_tanggal_proses"
                                             value="Tanggal Proses"
                                         />
                                         <TextInput
-                                            id="tanggal_proses"
+                                            id="update_tanggal_proses"
                                             type="date"
                                             name="tanggal_proses"
                                             value={data.tanggal_proses}
@@ -115,11 +159,11 @@ export default function Add({ title }) {
                                     </div>
                                     <div className="flex flex-col gap-2 w-full">
                                         <InputLabel
-                                            htmlFor="dasar_rujukan"
+                                            htmlFor="update_dasar_rujukan"
                                             value="Dasar Rujukan"
                                         />
                                         <TextInput
-                                            id="dasar_rujukan"
+                                            id="update_dasar_rujukan"
                                             type="text"
                                             name="dasar_rujukan"
                                             value={data.dasar_rujukan}
@@ -140,18 +184,18 @@ export default function Add({ title }) {
                                     </div>
                                     <div className="flex flex-col gap-2 w-full">
                                         <InputLabel
-                                            htmlFor="ident_polda_res"
+                                            htmlFor="update_ident_polda_res"
                                             value="Ident Polda Res"
                                         />
                                         <TextInput
-                                            id="ident_polda_res"
+                                            id="update_ident_polda_res"
                                             type="text"
                                             name="ident_polda_res"
                                             value={data.ident_polda_res}
                                             className="mt-1 block w-full"
                                             autoComplete="ident_polda_res"
-                                            readOnly
                                             isFocused={true}
+                                            readOnly
                                             onChange={(e) =>
                                                 setData(
                                                     "ident_polda_res",
@@ -168,11 +212,11 @@ export default function Add({ title }) {
                                 <div className="flex flex-row gap-5">
                                     <div className="flex flex-col gap-2 w-full">
                                         <InputLabel
-                                            htmlFor="operator"
+                                            htmlFor="update_operator"
                                             value="Operator"
                                         />
                                         <TextInput
-                                            id="operator"
+                                            id="update_operator"
                                             type="text"
                                             name="operator"
                                             value={data.operator}
@@ -193,11 +237,11 @@ export default function Add({ title }) {
                                     </div>
                                     <div className="flex flex-col gap-2 w-full">
                                         <InputLabel
-                                            htmlFor="perkara"
+                                            htmlFor="update_perkara"
                                             value="Perkara"
                                         />
                                         <TextInput
-                                            id="perkara"
+                                            id="update_perkara"
                                             type="text"
                                             name="perkara"
                                             value={data.perkara}
@@ -221,11 +265,11 @@ export default function Add({ title }) {
                                 <div className="flex flex-row gap-5">
                                     <div className="flex flex-col gap-2 w-full">
                                         <InputLabel
-                                            htmlFor="nama"
+                                            htmlFor="update_nama"
                                             value="Nama"
                                         />
                                         <TextInput
-                                            id="nama"
+                                            id="update_nama"
                                             type="text"
                                             name="nama"
                                             value={data.nama}
@@ -244,7 +288,7 @@ export default function Add({ title }) {
                                     <div className="flex flex-col gap-2 w-full">
                                         <InputLabel htmlFor="nik" value="NIK" />
                                         <TextInput
-                                            id="nik"
+                                            id="update_nik"
                                             type="text"
                                             name="nik"
                                             value={data.nik}
@@ -264,11 +308,11 @@ export default function Add({ title }) {
                                 <div className="flex flex-row gap-5">
                                     <div className="flex flex-col gap-2 w-full">
                                         <InputLabel
-                                            htmlFor="ttl"
+                                            htmlFor="update_ttl"
                                             value="Tempat/Tanggal Lahir"
                                         />
                                         <TextInput
-                                            id="ttl"
+                                            id="update_ttl"
                                             type="text"
                                             name="ttl"
                                             value={data.ttl}
@@ -286,11 +330,11 @@ export default function Add({ title }) {
                                     </div>
                                     <div className="flex flex-col gap-2 w-full">
                                         <InputLabel
-                                            htmlFor="alamat"
+                                            htmlFor="update_alamat"
                                             value="Alamat"
                                         />
                                         <TextInput
-                                            id="alamat"
+                                            id="update_alamat"
                                             type="text"
                                             name="alamat"
                                             value={data.alamat}
@@ -330,7 +374,7 @@ export default function Add({ title }) {
                                             <img
                                                 src={fotoTargetPreview}
                                                 alt="Foto Target Preview"
-                                               className="mt-2 w-[15rem] object-cover"
+                                                className="mt-2 w-[15rem] object-cover"
                                             />
                                         </PhotoView>
                                     )}
@@ -357,7 +401,7 @@ export default function Add({ title }) {
                                             <img
                                                 src={fotoHasilFrPreview}
                                                 alt="Foto Hasil FR Preview"
-                                               className="mt-2 w-[15rem] object-cover"
+                                                className="mt-2 w-[15rem] object-cover"
                                             />
                                         </PhotoView>
                                     )}
@@ -373,7 +417,7 @@ export default function Add({ title }) {
                                     className="btn bg-green-600/80 text-white"
                                     disabled={processing}
                                 >
-                                    Add
+                                    Update
                                 </button>
                             </div>
                         </form>

@@ -65,7 +65,15 @@ Route::middleware('auth')->group(function () {
     // create Identifikasi Wajah
     Route::post('create-identifikasi-wajah', [ClientController::class, 'createIdentifikasiWajah'])
         ->name('create-identifikasi-wajah.store');
+    Route::post('update-identifikasi-wajah', [ClientController::class, 'updateIdentifikasiWajah'])
+        ->name('update-identifikasi-wajah.update');
+    Route::delete('delete-identifikasi-wajah', [ClientController::class, 'deleteIdentifikasiWajah'])
+        ->name('delete-identifikasi-wajah.destroy');
     // create Tersangka
     Route::post('create-tersangka', [ClientController::class, 'createTersangka'])
         ->name('create-tersangka.store');
+    Route::post('update-tersangka', [ClientController::class, 'updateTersangka'])
+        ->name('update-tersangka.update');
+    Route::delete('delete-tersangka', [ClientController::class, 'deleteTersangka'])
+        ->name('delete-tersangka.destroy');
 });

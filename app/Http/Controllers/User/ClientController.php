@@ -34,10 +34,9 @@ class ClientController extends Controller
     // Identifikasi Wajah
     public function IdentifikasiWajah()
     {
-        $data = IdentifikasiWajah::with(['wilayah'])->where(
-            'wilayah_id',
-            Auth::user()->wilayah_id
-        )->latest()->get();
+        $data = IdentifikasiWajah::with(['user.wilayah'])->whereHas('user', function ($query) {
+            $query->where('wilayah_id', Auth::user()->wilayah_id);
+        })->latest()->get();
         return Inertia::render('client/IdentifikasiWajah', [
             'title' => 'Identifikasi Wajah',
             'data' => $data,
@@ -106,13 +105,84 @@ class ClientController extends Controller
         return redirect()->back()->with('success', 'Data Identifikasi Wajah berhasil ditambahkan');
     }
 
+    public function updateIdentifikasiWajah(Request $request)
+    {
+        $request->validate([
+            'tanggal_proses' => 'required',
+            'dasar_rujukan' => 'required',
+            'ident_polda_res' => 'required',
+            'operator' => 'required',
+            'perkara' => 'required',
+            'nama' => 'required',
+            'nik' => 'required',
+            'ttl' => 'required',
+            'alamat' => 'required',
+        ], [
+            'tanggal_proses.required' => 'Tanggal Proses harus diisi',
+            'dasar_rujukan.required' => 'Dasar Rujukan harus diisi',
+            'ident_polda_res.required' => 'Ident Polda Res harus diisi',
+            'operator.required' => 'Operator harus diisi',
+            'perkara.required' => 'Perkara harus diisi',
+            'nama.required' => 'Nama harus diisi',
+            'nik.required' => 'NIK harus diisi',
+            'ttl.required' => 'TTL harus diisi',
+            'alamat.required' => 'Alamat harus diisi',
+        ]);
+
+        // Temukan data yang akan diupdate
+        $data = IdentifikasiWajah::where('uuid', $request->uuid)->firstOrFail();
+
+        // Update foto_target jika ada file baru
+        if ($request->hasFile('foto_target') && $request->file('foto_target')->isValid()) {
+            // Hapus file lama jika ada
+            if ($data->foto_target) {
+                Storage::delete('private/identifikasi-wajah/foto-target/' . $data->foto_target);
+            }
+
+            // Upload file baru
+            $foto_target = $request->file('foto_target');
+            $foto_target_name = Uuid::uuid4()->toString() . '_' . $foto_target->getClientOriginalName();
+            $foto_target->storeAs('private/identifikasi-wajah/foto-target', $foto_target_name);
+            $data->foto_target = $foto_target_name;
+        }
+
+        // Update foto_hasil_fr jika ada file baru
+        if ($request->hasFile('foto_hasil_fr') && $request->file('foto_hasil_fr')->isValid()) {
+            // Hapus file lama jika ada
+            if ($data->foto_hasil_fr) {
+                Storage::delete('private/identifikasi-wajah/foto-hasil-fr/' . $data->foto_hasil_fr);
+            }
+
+            // Upload file baru
+            $foto_hasil_fr = $request->file('foto_hasil_fr');
+            $foto_hasil_fr_name = Uuid::uuid4()->toString() . '_' . $foto_hasil_fr->getClientOriginalName();
+            $foto_hasil_fr->storeAs('private/identifikasi-wajah/foto-hasil-fr', $foto_hasil_fr_name);
+            $data->foto_hasil_fr = $foto_hasil_fr_name;
+        }
+
+        // Update data lainnya
+        $data->tanggal_proses = date('Y-m-d', strtotime($request->tanggal_proses));
+        $data->dasar_rujukan = $request->dasar_rujukan;
+        $data->ident_polda_res = $request->ident_polda_res;
+        $data->operator = $request->operator;
+        $data->perkara = $request->perkara;
+        $data->nama = $request->nama;
+        $data->nik = $request->nik;
+        $data->ttl = $request->ttl;
+        $data->alamat = $request->alamat;
+        $data->save();
+
+        return redirect()->back()->with('success', 'Data Identifikasi Wajah berhasil diupdate');
+    }
+
+
+
     // Tersangka
     public function Tersangka()
     {
-        $data = Tersangka::with(['wilayah'])->where(
-            'wilayah_id',
-            Auth::user()->wilayah_id
-        )->latest()->get();
+        $data = Tersangka::with(['user.wilayah'])->whereHas('user', function ($query) {
+            $query->where('wilayah_id', Auth::user()->wilayah_id);
+        })->latest()->get();
         return Inertia::render('client/Tersangka', [
             'title' => 'Tersangka',
             'data' => $data,
@@ -171,6 +241,75 @@ class ClientController extends Controller
         Tersangka::create($data);
 
         return redirect()->back()->with('success', 'Data Tersangka berhasil ditambahkan');
+    }
+
+    public function updateTersangka(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required',
+            'ttl' => 'required',
+            'alamat' => 'required',
+            'perkara' => 'required',
+        ], [
+            'nama.required' => 'Nama harus diisi',
+            'ttl.required' => 'TTL harus diisi',
+            'alamat.required' => 'Alamat harus diisi',
+            'perkara.required' => 'Perkara harus diisi',
+        ]);
+
+        // Temukan data yang akan diupdate
+        $data = Tersangka::where('uuid', $request->uuid)->firstOrFail();
+
+        // Update foto_depan jika ada file baru
+        if ($request->hasFile('foto_depan') && $request->file('foto_depan')->isValid()) {
+            // Hapus file lama jika ada
+            if ($data->foto_depan) {
+                Storage::delete('private/tersangka/foto-depan/' . $data->foto_depan);
+            }
+
+            // Upload file baru
+            $foto_depan = $request->file('foto_depan');
+            $foto_depan_name = Uuid::uuid4()->toString() . '_' . $foto_depan->getClientOriginalName();
+            $foto_depan->storeAs('private/tersangka/foto-depan', $foto_depan_name);
+            $data->foto_depan = $foto_depan_name;
+        }
+
+        // Update foto_kanan jika ada file baru
+        if ($request->hasFile('foto_kanan') && $request->file('foto_kanan')->isValid()) {
+            // Hapus file lama jika ada
+            if ($data->foto_kanan) {
+                Storage::delete('private/tersangka/foto-kanan/' . $data->foto_kanan);
+            }
+
+            // Upload file baru
+            $foto_kanan = $request->file('foto_kanan');
+            $foto_kanan_name = Uuid::uuid4()->toString() . '_' . $foto_kanan->getClientOriginalName();
+            $foto_kanan->storeAs('private/tersangka/foto-kanan', $foto_kanan_name);
+            $data->foto_kanan = $foto_kanan_name;
+        }
+
+        // Update foto_kiri jika ada file baru
+        if ($request->hasFile('foto_kiri') && $request->file('foto_kiri')->isValid()) {
+            // Hapus file lama jika ada
+            if ($data->foto_kiri) {
+                Storage::delete('private/tersangka/foto-kiri/' . $data->foto_kiri);
+            }
+
+            // Upload file baru
+            $foto_kiri = $request->file('foto_kiri');
+            $foto_kiri_name = Uuid::uuid4()->toString() . '_' . $foto_kiri->getClientOriginalName();
+            $foto_kiri->storeAs('private/tersangka/foto-kiri', $foto_kiri_name);
+            $data->foto_kiri = $foto_kiri_name;
+        }
+
+        // Update data lainnya
+        $data->nama = $request->nama;
+        $data->ttl = $request->ttl;
+        $data->alamat = $request->alamat;
+        $data->perkara = $request->perkara;
+        $data->save();
+
+        return redirect()->back()->with('success', 'Data Tersangka berhasil diupdate');
     }
 
     // SOP Pemotretan TKP
