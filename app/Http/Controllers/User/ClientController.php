@@ -86,7 +86,7 @@ class ClientController extends Controller
 
         $data = [
             'uuid' => str()->uuid(),
-            'wilayah_id' => Auth::user()->wilayah_id,
+            'user_id' => Auth::user()->id,
             'tanggal_proses' => date('Y-m-d', strtotime($request->tanggal_proses)),
             'dasar_rujukan' => $request->dasar_rujukan,
             'ident_polda_res' => $request->ident_polda_res,
@@ -228,7 +228,7 @@ class ClientController extends Controller
 
         $data = [
             'uuid' => str()->uuid(),
-            'wilayah_id' => Auth::user()->wilayah_id,
+            'user_id' => Auth::user()->id,
             'foto_depan' => $foto_depan_name,
             'foto_kanan' => $foto_kanan_name,
             'foto_kiri' => $foto_kiri_name,
