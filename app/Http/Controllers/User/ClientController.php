@@ -175,7 +175,24 @@ class ClientController extends Controller
         return redirect()->back()->with('success', 'Data Identifikasi Wajah berhasil diupdate');
     }
 
+    public function deleteIdentifikasiWajah(Request $request)
+    {
+        $data = IdentifikasiWajah::where('uuid', $request->uuid)->first();
 
+        // Hapus file foto_target jika ada
+        if ($data->foto_target) {
+            Storage::delete('private/identifikasi-wajah/foto-target/' . $data->foto_target);
+        }
+
+        // Hapus file foto_hasil_fr jika ada
+        if ($data->foto_hasil_fr) {
+            Storage::delete('private/identifikasi-wajah/foto-hasil-fr/' . $data->foto_hasil_fr);
+        }
+
+        $data->delete();
+
+        return redirect()->back()->with('success', 'Data Identifikasi Wajah berhasil dihapus');
+    }
 
     // Tersangka
     public function Tersangka()
@@ -312,6 +329,30 @@ class ClientController extends Controller
         return redirect()->back()->with('success', 'Data Tersangka berhasil diupdate');
     }
 
+    public function deleteTersangka(Request $request)
+    {
+        $data = Tersangka::where('uuid', $request->uuid)->first();
+
+        // Hapus file foto_depan jika ada
+        if ($data->foto_depan) {
+            Storage::delete('private/tersangka/foto-depan/' . $data->foto_depan);
+        }
+
+        // Hapus file foto_kanan jika ada
+        if ($data->foto_kanan) {
+            Storage::delete('private/tersangka/foto-kanan/' . $data->foto_kanan);
+        }
+
+        // Hapus file foto_kiri jika ada
+        if ($data->foto_kiri) {
+            Storage::delete('private/tersangka/foto-kiri/' . $data->foto_kiri);
+        }
+
+        $data->delete();
+
+        return redirect()->back()->with('success', 'Data Tersangka berhasil dihapus');
+    }
+
     // SOP Pemotretan TKP
     public function SOP_Pemotretan_TKP()
     {
@@ -437,7 +478,6 @@ class ClientController extends Controller
             'role_id.required' => 'Role harus diisi',
             'wilayah_id.required' => 'Wilayah harus diisi',
         ]);
-
         // update user
         User::where('id', $request->id)->update([
             'name' => $request->name,
@@ -452,10 +492,10 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         // delete user
-        User::where('id', $id)->delete();
+        User::where('id', $request->id)->delete();
         return redirect()->back()->with('success', 'User berhasil dihapus');
     }
 }

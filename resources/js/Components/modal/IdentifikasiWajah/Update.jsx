@@ -10,10 +10,10 @@ import { PhotoView } from "react-photo-view";
 export default function Update({ result, title }) {
     const { auth } = usePage().props;
     const { data, setData, post, processing, errors, reset } = useForm({
-        uuid: result.uuid,
+        uuid: result?.uuid,
         tanggal_proses: "",
         dasar_rujukan: "",
-        ident_polda_res: auth.user.wilayah.wilayah_hukum,
+        ident_polda_res: "",
         operator: "",
         perkara: "",
         foto_target: "",
@@ -414,7 +414,7 @@ export default function Update({ result, title }) {
                             <div className="flex justify-end">
                                 <button
                                     type="submit"
-                                    className="btn bg-green-600/80 text-white"
+                                    className="btn bg-indigo-600/80 text-white"
                                     disabled={processing}
                                 >
                                     Update

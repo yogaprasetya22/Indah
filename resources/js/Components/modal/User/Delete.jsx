@@ -2,7 +2,7 @@ import { useForm } from "@inertiajs/react";
 import React from "react";
 import { useEffect } from "react";
 
-export default function Delete({ title, result }) {
+export default function Delete({ title, results }) {
     const {
         data,
         setData,
@@ -10,17 +10,17 @@ export default function Delete({ title, result }) {
         processing,
         errors,
     } = useForm({
-        uuid: result?.uuid,
+        id: results?.id,
     });
     useEffect(() => {
         setData({
-            uuid: result?.uuid,
+            id: results?.id,
         });
-    }, [result]);
+    }, [results]);
 
     const submit = (e) => {
         e.preventDefault();
-        destroy(route("delete-identifikasi-wajah.destroy"), {
+        destroy(route("delete-user.destroy"), {
             onSuccess: () => {
                 window.my_modal_3.close();
             },

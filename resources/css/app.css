@@ -4,7 +4,7 @@
 
 .tooltip {
     --tooltip-text-color: #fff;
-    --tooltip-color     : #52d35a;
+    --tooltip-color     : rgb(59 130 246 / 90%);
 }
 .tooltip:before {
     width        : 8rem;

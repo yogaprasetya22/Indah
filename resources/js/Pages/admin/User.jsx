@@ -1,4 +1,6 @@
 import Add from "@/Components/modal/User/Add";
+import Delete from "@/Components/modal/User/Delete";
+import UpdateUser from "@/Components/modal/User/Update";
 import Layout from "@/Layouts/Layout";
 import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
@@ -9,6 +11,8 @@ export default function User({ data }) {
     const [pageCount, setPageCount] = useState(0);
     const [Loading, setLoading] = useState(false);
     const [page, setPage] = useState(5);
+    const [results, setResults] = useState({});
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         setLoading(true);
@@ -34,7 +38,27 @@ export default function User({ data }) {
         setItemOffset(newOffset);
     };
 
-    console.log(currentItems);
+    const handleSearch = () => {
+        if (search) {
+            const searchItem = data.filter((item) => {
+                return (
+                    item.name.toLowerCase().includes(search.toLowerCase()) ||
+                    item.email.toLowerCase().includes(search.toLowerCase()) ||
+                    item.role.name_role
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
+                    item.wilayah.nama
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
+                );
+            });
+            setCurrentItems(searchItem);
+            setPageCount(Math.ceil(searchItem.length / page));
+        } else {
+            setCurrentItems(data);
+            setPageCount(Math.ceil(data.length / page));
+        }
+    };
 
     return (
         <Layout>
@@ -60,15 +84,17 @@ export default function User({ data }) {
                                 type="text"
                                 className="input input-bordered"
                                 placeholder="Search"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
                             />
-                            <button className="btn">
+                            <button className="btn" onClick={handleSearch}>
                                 <i className="fas fa-search"></i>
                             </button>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 px-5 py-3">
                         <button
-                            className="btn bg-green-400 text-white rounded-md"
+                            className="btn bg-indigo-400 text-white rounded-md"
                             onClick={() => window.my_modal_1.show()}
                         >
                             <i className="fas fa-plus"></i> Add Identifikasi
@@ -127,10 +153,22 @@ export default function User({ data }) {
                                         {item?.wilayah?.nama}
                                     </td>
                                     <th className="flex justify-center gap-2">
-                                        <button className="btn btn-ghost btn-md">
-                                            <i className="text-green-500 text-xl fas fa-edit"></i>
+                                        <button
+                                            className="btn btn-ghost btn-md"
+                                            onClick={() => {
+                                                setResults(item);
+                                                window.my_modal_2.show();
+                                            }}
+                                        >
+                                            <i className="text-indigo-500 text-xl fas fa-edit"></i>
                                         </button>
-                                        <button className="btn btn-ghost btn-md">
+                                        <button
+                                            className="btn btn-ghost btn-md"
+                                            onClick={() => {
+                                                setResults(item);
+                                                window.my_modal_3.show();
+                                            }}
+                                        >
                                             <i className="text-red-500 text-xl fas fa-trash-alt"></i>
                                         </button>
                                     </th>
@@ -157,13 +195,15 @@ export default function User({ data }) {
                             breakClassName="p-2 rounded-md text-black"
                             breakLinkClassName="text-xl font-semibold font-roboto"
                             containerClassName="pagination"
-                            activeClassName="bg-green-400 text-white"
+                            activeClassName="bg-indigo-400 text-white"
                             renderOnZeroPageCount={null}
                         />
                     </div>
                 </div>
             </div>
             <Add title={"Add Identifikasi Wajah"} />
+            <UpdateUser title={"Update Identifikasi Wajah"} results={results} />
+            <Delete title={"Delete Identifikasi Wajah"} results={results} />
         </Layout>
     );
 }

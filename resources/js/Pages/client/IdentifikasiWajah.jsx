@@ -4,6 +4,10 @@ import Update from "@/Components/modal/IdentifikasiWajah/Update";
 import Layout from "@/Layouts/Layout";
 import ReactPaginate from "react-paginate";
 import { PhotoView } from "react-photo-view";
+import moment from "moment/moment";
+moment.locale("id");
+import "moment/locale/id";
+import Delete from "@/Components/modal/IdentifikasiWajah/Delete";
 
 export default function IdentifikasiWajah({ data, auth }) {
     const [itemOffset, setItemOffset] = useState(0);
@@ -13,6 +17,7 @@ export default function IdentifikasiWajah({ data, auth }) {
     const [page, setPage] = useState(5);
     const [resultModal, setResultModal] = useState([]);
     const [filterByUser, setFilterByUser] = useState(false); // State for filtering
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         setLoading(true);
@@ -36,6 +41,30 @@ export default function IdentifikasiWajah({ data, auth }) {
         });
         const newOffset = (event.selected * page) % data.length;
         setItemOffset(newOffset);
+    };
+
+    const handleSearch = () => {
+        const filteredData = filterByUser
+            ? data.filter((item) => item.user.id === auth.user.id)
+            : data;
+        const searchResult = filteredData.filter(
+            (item) =>
+                item.nama.toLowerCase().includes(search.toLowerCase()) ||
+                item.nik.toLowerCase().includes(search.toLowerCase()) ||
+                item.ttl.toLowerCase().includes(search.toLowerCase()) ||
+                item.alamat.toLowerCase().includes(search.toLowerCase()) ||
+                item.perkara.toLowerCase().includes(search.toLowerCase()) ||
+                item.dasar_rujukan
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                item.operator.toLowerCase().includes(search.toLowerCase()) ||
+                moment(item.tanggal_proses)
+                    .format("LL")
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
+        );
+        setCurrentItems(searchResult);
+        setPageCount(Math.ceil(searchResult.length / page));
     };
 
     return (
@@ -62,8 +91,10 @@ export default function IdentifikasiWajah({ data, auth }) {
                                 type="text"
                                 className="input input-bordered"
                                 placeholder="Search"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
                             />
-                            <button className="btn">
+                            <button className="btn" onClick={handleSearch}>
                                 <i className="fas fa-search"></i>
                             </button>
                         </div>
@@ -81,7 +112,7 @@ export default function IdentifikasiWajah({ data, auth }) {
                     </div>
                     <div className="flex items-center gap-2 px-5 py-3">
                         <button
-                            className="btn bg-green-400 text-white rounded-md "
+                            className="btn bg-indigo-400 text-white rounded-md "
                             onClick={() => window.my_modal_1.show()}
                         >
                             <i className="fas fa-plus"></i> Add Identifikasi
@@ -134,9 +165,11 @@ export default function IdentifikasiWajah({ data, auth }) {
                             {currentItems.map((item, index) => (
                                 <tr key={index}>
                                     <td className="text-center">
-                                        {item?.tanggal_proses}
+                                        {moment(item?.tanggal_proses).format(
+                                            "LL"
+                                        )}
                                     </td>
-                                    <td className="text-center max-w-[6rem] break-words">
+                                    <td className="text-center max-w-[6rem] max-h-[6rem] break-words">
                                         {item?.dasar_rujukan}
                                     </td>
                                     <td className="text-center">
@@ -170,7 +203,7 @@ export default function IdentifikasiWajah({ data, auth }) {
                                                     filename: item?.foto_target,
                                                 })}
                                                 alt="Foto Target"
-                                                className="w-[6rem] object-cover rounded mx-auto"
+                                                className="w-[6rem] max-h-[6rem] object-cover rounded mx-auto"
                                             />
                                         </PhotoView>
                                     </td>
@@ -197,11 +230,11 @@ export default function IdentifikasiWajah({ data, auth }) {
                                                         item?.foto_hasil_fr,
                                                 })}
                                                 alt="Foto Hasil FR"
-                                                className="w-[6rem] object-cover rounded mx-auto"
+                                                className="w-[6rem] max-h-[6rem] object-cover rounded mx-auto"
                                             />
                                         </PhotoView>
                                     </td>
-                                    <td className="text-center max-w-[6rem] break-words">
+                                    <td className="text-center max-w-[6rem] max-h-[6rem] break-words">
                                         {item?.nama}
                                     </td>
                                     <td className="text-center">{item?.nik}</td>
@@ -217,9 +250,15 @@ export default function IdentifikasiWajah({ data, auth }) {
                                                 window.my_modal_2.show();
                                             }}
                                         >
-                                            <i className="text-green-500 text-xl fas fa-edit"></i>
+                                            <i className="text-indigo-500 text-xl fas fa-edit"></i>
                                         </button>
-                                        <button className="btn btn-ghost btn-md">
+                                        <button
+                                            className="btn btn-ghost btn-md"
+                                            onClick={() => {
+                                                setResultModal(item);
+                                                window.my_modal_3.show();
+                                            }}
+                                        >
                                             <i className="text-red-500 text-xl fas fa-trash-alt"></i>
                                         </button>
                                     </td>
@@ -246,7 +285,7 @@ export default function IdentifikasiWajah({ data, auth }) {
                             breakClassName="p-2 rounded-md text-black"
                             breakLinkClassName="text-xl font-semibold font-roboto"
                             containerClassName="pagination"
-                            activeClassName="bg-green-400 text-white"
+                            activeClassName="bg-indigo-400 text-white"
                             renderOnZeroPageCount={null}
                         />
                     </div>
@@ -254,6 +293,7 @@ export default function IdentifikasiWajah({ data, auth }) {
             </div>
             <Add title={"Add Identifikasi Wajah"} />
             <Update title={"Update Identifikasi Wajah"} result={resultModal} />
+            <Delete title={"Delete Identifikasi Wajah"} result={resultModal} />
         </Layout>
     );
 }

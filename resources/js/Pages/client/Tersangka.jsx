@@ -3,6 +3,8 @@ import Add from "@/Components/modal/Tersangka/Add";
 import Layout from "@/Layouts/Layout";
 import ReactPaginate from "react-paginate";
 import { PhotoView } from "react-photo-view";
+import UpdateTersangka from "@/Components/modal/Tersangka/Update";
+import Delete from "@/Components/modal/Tersangka/Delete";
 
 export default function Tersangka({ data, auth }) {
     const [itemOffset, setItemOffset] = useState(0);
@@ -11,6 +13,8 @@ export default function Tersangka({ data, auth }) {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(5);
     const [filterByUser, setFilterByUser] = useState(false);
+    const [resultModal, setResultModal] = useState([]);
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         setLoading(true);
@@ -37,6 +41,21 @@ export default function Tersangka({ data, auth }) {
         setItemOffset(newOffset);
     };
 
+    const handleSearch = () => {
+        const filteredData = filterByUser
+            ? data.filter((item) => item.user.id === auth.user.id)
+            : data;
+        const searchResult = filteredData.filter(
+            (item) =>
+                item.nama.toLowerCase().includes(search.toLowerCase()) ||
+                item.ttl.toLowerCase().includes(search.toLowerCase()) ||
+                item.alamat.toLowerCase().includes(search.toLowerCase()) ||
+                item.perkara.toLowerCase().includes(search.toLowerCase())
+        );
+        setCurrentItems(searchResult);
+        setPageCount(Math.ceil(searchResult.length / page));
+    };
+
     return (
         <Layout>
             <div className="bg-white flex flex-col gap-5 rounded-xl">
@@ -61,8 +80,10 @@ export default function Tersangka({ data, auth }) {
                                 type="text"
                                 className="input input-bordered"
                                 placeholder="Search"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
                             />
-                            <button className="btn">
+                            <button className="btn" onClick={handleSearch}>
                                 <i className="fas fa-search"></i>
                             </button>
                         </div>
@@ -80,7 +101,7 @@ export default function Tersangka({ data, auth }) {
                     </div>
                     <div className="flex items-center gap-2 px-5 py-3">
                         <button
-                            className="btn bg-green-400 text-white rounded-md"
+                            className="btn bg-indigo-400 text-white rounded-md"
                             onClick={() => window.my_modal_1.show()}
                         >
                             <i className="fas fa-plus"></i> Add Tersangka
@@ -141,7 +162,7 @@ export default function Tersangka({ data, auth }) {
                                                     filename: item?.foto_depan,
                                                 })}
                                                 alt="Foto Depan"
-                                                className="w-[8rem] bg-cover rounded mx-auto"
+                                                className="w-[8rem] h-[8rem] bg-cover rounded mx-auto"
                                             />
                                         </PhotoView>
                                     </td>
@@ -166,7 +187,7 @@ export default function Tersangka({ data, auth }) {
                                                     filename: item?.foto_kanan,
                                                 })}
                                                 alt="Foto Kanan"
-                                                className="w-[8rem] bg-cover rounded mx-auto"
+                                                className="w-[8rem] h-[8rem] bg-cover rounded mx-auto"
                                             />
                                         </PhotoView>
                                     </td>
@@ -191,7 +212,7 @@ export default function Tersangka({ data, auth }) {
                                                     filename: item?.foto_kiri,
                                                 })}
                                                 alt="Foto Kiri"
-                                                className="w-[8rem] bg-cover rounded mx-auto"
+                                                className="w-[8rem] h-[8rem] bg-cover rounded mx-auto"
                                             />
                                         </PhotoView>
                                     </td>
@@ -206,10 +227,22 @@ export default function Tersangka({ data, auth }) {
                                         {item?.perkara}
                                     </td>
                                     <td>
-                                        <button className="btn btn-ghost btn-md">
-                                            <i className="text-green-500 text-xl fas fa-edit"></i>
+                                        <button
+                                            className="btn btn-ghost btn-md"
+                                            onClick={() => {
+                                                setResultModal(item);
+                                                window.my_modal_2.show();
+                                            }}
+                                        >
+                                            <i className="text-indigo-500 text-xl fas fa-edit"></i>
                                         </button>
-                                        <button className="btn btn-ghost btn-md">
+                                        <button
+                                            className="btn btn-ghost btn-md"
+                                            onClick={() => {
+                                                setResultModal(item);
+                                                window.my_modal_3.show();
+                                            }}
+                                        >
                                             <i className="text-red-500 text-xl fas fa-trash-alt"></i>
                                         </button>
                                     </td>
@@ -236,13 +269,15 @@ export default function Tersangka({ data, auth }) {
                             breakClassName="p-2 rounded-md text-black"
                             breakLinkClassName="text-xl font-semibold font-roboto"
                             containerClassName="pagination"
-                            activeClassName="bg-green-400 text-white"
+                            activeClassName="bg-indigo-400 text-white"
                             renderOnZeroPageCount={null}
                         />
                     </div>
                 </div>
             </div>
-            <Add />
+            <Add title={"Add Tersangka"} />
+            <UpdateTersangka result={resultModal} title={"Update Tersangka"} />
+            <Delete result={resultModal} title={"Delete Tersangka"} />
         </Layout>
     );
 }

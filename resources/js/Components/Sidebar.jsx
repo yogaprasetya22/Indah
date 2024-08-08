@@ -19,7 +19,7 @@ const Sidebar = ({ isSidebarOpen, user }) => {
             <div className="lg:w-full md:w-[40%] w-[75%] bg-white h-full ">
                 <div className="pt-5 flex flex-col justify-between h-full">
                     <div className="w-full flex justify-center items-center flex-col gap-4 lg:mt-0 mt-12 mb-6">
-                        <h1 className="font-extrabold text-white text-4xl text-shadow">
+                        <h1 className="font-extrabold text-indigo-400 text-4xl text-shadow">
                             INDAH
                         </h1>
                     </div>
@@ -37,7 +37,7 @@ const Sidebar = ({ isSidebarOpen, user }) => {
                                                     className={`font-medium w-full rounded-md text-gray-700 p-2 flex gap-2 items-center select-none ${
                                                         menu.url ===
                                                         window.location.pathname
-                                                            ? "text-white  bg-green-500"
+                                                            ? "text-white  bg-indigo-500"
                                                             : "hover:text-black hover:bg-blue-gray-200"
                                                     }`}
                                                 >
@@ -120,7 +120,7 @@ const Sidebar = ({ isSidebarOpen, user }) => {
                                                                             window
                                                                                 .location
                                                                                 .pathname
-                                                                                ? "text-white  bg-green-500"
+                                                                                ? "text-white  bg-indigo-500"
                                                                                 : "hover:text-black hover:bg-blue-gray-200"
                                                                         }`}
                                                                     >
@@ -183,7 +183,7 @@ const Sidebar = ({ isSidebarOpen, user }) => {
                                                         21
                                                     ) ===
                                                     window.location.pathname
-                                                        ? "text-white bg-green-500"
+                                                        ? "text-white bg-indigo-500"
                                                         : "hover:text-black hover:bg-blue-gray-200"
                                                 }`}
                                             >

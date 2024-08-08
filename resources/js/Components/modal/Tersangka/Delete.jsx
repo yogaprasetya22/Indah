@@ -2,7 +2,7 @@ import { useForm } from "@inertiajs/react";
 import React from "react";
 import { useEffect } from "react";
 
-export default function Delete({ title, value }) {
+export default function Delete({ title, result }) {
     const {
         data,
         setData,
@@ -10,23 +10,21 @@ export default function Delete({ title, value }) {
         processing,
         errors,
     } = useForm({
-        id: value?.id,
+        uuid: result?.uuid,
     });
     useEffect(() => {
         setData({
-            id: value?.id,
+            uuid: result?.uuid,
         });
-    }, [value]);
+    }, [result]);
 
     const submit = (e) => {
         e.preventDefault();
-        destroy(
-            route("kurikulum.destroy", {
-                onSuccess: () => {
-                    window.my_modal_3.close();
-                },
-            })
-        );
+        destroy(route("delete-tersangka.destroy"), {
+            onSuccess: () => {
+                window.my_modal_3.close();
+            },
+        });
     };
     return (
         <dialog

@@ -216,7 +216,7 @@ export default function Add({ title }) {
                                             <img
                                                 src={fotoDepanPreview}
                                                 alt="Foto Depan Preview"
-                                                  className="mt-2 w-[15rem] object-cover"
+                                                className="mt-2 w-[15rem] object-cover"
                                             />
                                         </PhotoView>
                                     )}
@@ -245,7 +245,7 @@ export default function Add({ title }) {
                                             <img
                                                 src={fotoKananPreview}
                                                 alt="Foto Kanan Preview"
-                                                  className="mt-2 w-[15rem] object-cover"
+                                                className="mt-2 w-[15rem] object-cover"
                                             />
                                         </PhotoView>
                                     )}
@@ -274,7 +274,7 @@ export default function Add({ title }) {
                                             <img
                                                 src={fotoKiriPreview}
                                                 alt="Foto Kiri Preview"
-                                                  className="mt-2 w-[15rem] object-cover"
+                                                className="mt-2 w-[15rem] object-cover"
                                             />
                                         </PhotoView>
                                     )}
@@ -287,7 +287,7 @@ export default function Add({ title }) {
                             <div className="flex justify-end">
                                 <button
                                     type="submit"
-                                    className="btn bg-violet-600/80 text-white"
+                                    className="btn bg-indigo-600/80 text-white"
                                     disabled={processing}
                                 >
                                     Add

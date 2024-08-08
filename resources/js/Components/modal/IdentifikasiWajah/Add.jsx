@@ -370,7 +370,7 @@ export default function Add({ title }) {
                             <div className="flex justify-end">
                                 <button
                                     type="submit"
-                                    className="btn bg-green-600/80 text-white"
+                                    className="btn bg-indigo-600/80 text-white"
                                     disabled={processing}
                                 >
                                     Add
