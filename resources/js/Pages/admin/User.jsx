@@ -97,7 +97,7 @@ export default function User({ data }) {
                             className="btn bg-indigo-400 text-white rounded-md"
                             onClick={() => window.my_modal_1.show()}
                         >
-                            <i className="fas fa-plus"></i> Add Identifikasi
+                            <i className="fas fa-plus"></i> Add User
                         </button>
                     </div>
                 </div>
@@ -201,9 +201,9 @@ export default function User({ data }) {
                     </div>
                 </div>
             </div>
-            <Add title={"Add Identifikasi Wajah"} />
-            <UpdateUser title={"Update Identifikasi Wajah"} results={results} />
-            <Delete title={"Delete Identifikasi Wajah"} results={results} />
+            <Add title={"Add User"} />
+            <UpdateUser title={"Update User"} results={results} />
+            <Delete title={"Delete User"} results={results} />
         </Layout>
     );
 }

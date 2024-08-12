@@ -13,6 +13,7 @@ use App\Models\SOPRekontruksiWajah;
 use App\Models\Tersangka;
 use App\Models\User;
 use App\Models\Wilayah;
+use Faker\Core\Number;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -49,11 +50,28 @@ class AdminController extends Controller
             'data' => $data,
         ]);
     }
+    public function DhasboardIdentifikasiwajah($tahun)
+    {
+        $data = IdentifikasiWajah::with(['user.wilayah'])->where('created_at', 'like', '%' . $tahun . '%')->latest()->get();
+        return Inertia::render('admin/detail/DashboardIdentifikasiWajah', [
+            'title' => 'Identifikasi Wajah',
+            'data' => $data,
+        ]);
+    }
 
     public function Tersangka()
     {
         $data = Tersangka::with(['user.wilayah'])->latest()->get();
         return Inertia::render('admin/Tersangka', [
+            'title' => 'Tersangka',
+            'data' => $data,
+        ]);
+    }
+
+    public function DhasboardTersangka($tahun)
+    {
+        $data = Tersangka::with(['user.wilayah'])->where('created_at', 'like', '%' . $tahun . '%')->latest()->get();
+        return Inertia::render('admin/detail/DashboardTersangka', [
             'title' => 'Tersangka',
             'data' => $data,
         ]);

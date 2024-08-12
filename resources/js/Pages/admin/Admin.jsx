@@ -4,6 +4,7 @@ import "moment/locale/id";
 moment.locale("id");
 import React from "react";
 import { useEffect } from "react";
+import { Link } from "@inertiajs/react";
 
 export default function Admin({ identifikasi_wajah, tersangka }) {
     const bulan = [
@@ -27,7 +28,7 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
     const tahun_trakhir_identifikasi_wajah = Math.max(
         ...tahun_identifikasi_wajah
     );
-    
+
     const tahun_tersangka = tersangka
         .map((data) => moment(data.created_at).format("YYYY"))
         .filter((value, index, self) => self.indexOf(value) === index);
@@ -38,6 +39,8 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
     const [selectedTahunTersangka, setSelectedTahunTersangka] = React.useState(
         tahun_trakhir_tersangka.toString()
     );
+
+    
     const [currentTahunIdentifikasiWajah, setCurrentTahunIdentifikasiWajah] =
         React.useState([]);
     const [currentTahunTersangka, setCurrentTahunTersangka] = React.useState(
@@ -124,7 +127,11 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
                                 {currentIdentifikasiWajah?.length}
                             </h2>
                             <p className=" drop-shadow-xl text-sm">
-                                Pada senin, 12 Juli 2021
+                                Pada{" "}
+                                <span className=" underline">
+                                    {selectedBulanIdentifikasiWajah}
+                                </span>{" "}
+                                kini
                             </p>
                         </div>
                     </div>
@@ -153,21 +160,26 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
                                     {currentTahunIdentifikasiWajah?.length}
                                 </h2>
                                 <p className=" drop-shadow-xl text-md">
-                                    Total Identifikasi Wajah pada tahun 2021
+                                    Total Identifikasi Wajah pada tahun{" "}
+                                    {selectedTahunIdentifikasiWajah}
                                 </p>
                             </div>
                             <div className="w-1/2 p-2 flex items-center justify-center">
                                 <i className="fas fa-camera-retro text-[5rem] text-white text-opacity-60"></i>
                             </div>
                         </div>
-                        <div className="w-full p-2 bg-green-500 rounded-b-md justify-center flex items-center">
+                        <Link
+                            href={`/admin/identifikasi-wajah/${selectedTahunIdentifikasiWajah}`}
+                            className="w-full p-2 bg-green-500 rounded-b-md justify-center flex items-center"
+                        >
                             <p className=" drop-shadow-xl text-sm text-white">
-                                Detail pada tahun 2021
+                                Detail pada tahun{" "}
+                                {selectedTahunIdentifikasiWajah}
                             </p>
                             <div className="bg-white p-1 px-2 rounded-full ml-2 flex items-center justify-center">
                                 <i className="fas fa-arrow-right text-xs text-gray-400 "></i>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                 </div>
                 <div className="w-full p-2 flex flex-col gap-5">
@@ -199,7 +211,11 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
                                 {currentTersangka?.length}
                             </h2>
                             <p className=" drop-shadow-xl text-sm">
-                                Pada senin, 12 Juli 2021
+                                Pada{" "}
+                                <span className=" underline">
+                                    {selectedBulanTersangka}
+                                </span>{" "}
+                                kini
                             </p>
                         </div>
                     </div>
@@ -226,21 +242,25 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
                                     {currentTahunTersangka?.length}
                                 </h2>
                                 <p className=" drop-shadow-xl text-md">
-                                    Total Identifikasi Wajah pada tahun 2021
+                                    Total Identifikasi Wajah pada tahun{" "}
+                                    {selectedTahunTersangka}
                                 </p>
                             </div>
                             <div className="w-1/2 p-2 flex items-center justify-center">
                                 <i className="fas fa-user-tie text-[5rem] text-white text-opacity-60"></i>
                             </div>
                         </div>
-                        <div className="w-full p-2 bg-yellow-500 rounded-b-md justify-center flex items-center">
+                        <Link
+                            href={`/admin/tersangka/${selectedTahunTersangka}`}
+                            className="w-full p-2 bg-yellow-500 rounded-b-md justify-center flex items-center"
+                        >
                             <p className=" drop-shadow-xl text-sm text-white">
-                                Detail pada tahun 2021
+                                Detail pada tahun {selectedTahunTersangka}
                             </p>
                             <div className="bg-white p-1 px-2 rounded-full ml-2 flex items-center justify-center">
                                 <i className="fas fa-arrow-right text-xs text-gray-400 "></i>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                 </div>
             </div>

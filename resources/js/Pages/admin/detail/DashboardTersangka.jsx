@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from "react";
-import Update from "@/Components/modal/IdentifikasiWajah/Update";
 import Layout from "@/Layouts/Layout";
 import ReactPaginate from "react-paginate";
 import { PhotoView } from "react-photo-view";
 import moment from "moment/moment";
 moment.locale("id");
 import "moment/locale/id";
-import Delete from "@/Components/modal/IdentifikasiWajah/Delete";
 
-export default function IdentifikasiWajah({ data, auth }) {
+export default function DashboardTersangka({ data, auth }) {
+    const bulan = [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember",
+    ];
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
@@ -16,10 +28,20 @@ export default function IdentifikasiWajah({ data, auth }) {
     const [page, setPage] = useState(5);
     const [resultModal, setResultModal] = useState([]);
     const [search, setSearch] = useState("");
+    const [selectedMonth, setSelectedMonth] = useState(""); // State for month filter
 
     useEffect(() => {
         setLoading(true);
-        const filteredData = data;
+        let filteredData = data;
+
+        // Filter data by selected month
+        if (selectedMonth) {
+            filteredData = filteredData.filter(
+                (item) =>
+                    moment(item.created_at).format("MMMM") === selectedMonth
+            );
+        }
+
         const endOffset = parseInt(itemOffset) + parseInt(page);
         const sortData = filteredData
             .sort((a, b) => a.id - b.id)
@@ -28,52 +50,82 @@ export default function IdentifikasiWajah({ data, auth }) {
         setCurrentItems(sortData);
         setPageCount(Math.ceil(filteredData.length / page));
         setLoading(false);
-    }, [itemOffset, data, page, auth.user.id]);
+    }, [itemOffset, data, page, selectedMonth, auth.user.id]);
 
     const handlePageClick = (event) => {
         window.scrollTo({
             top: 60,
             behavior: "smooth",
         });
+
         const newOffset = (event.selected * page) % data.length;
         setItemOffset(newOffset);
     };
 
     const handleSearch = () => {
-        const filteredData = data;
+        let filteredData = data;
+
+        // Apply search filtering
         const searchResult = filteredData.filter(
             (item) =>
                 item.nama.toLowerCase().includes(search.toLowerCase()) ||
-                item.nik.toLowerCase().includes(search.toLowerCase()) ||
                 item.ttl.toLowerCase().includes(search.toLowerCase()) ||
                 item.alamat.toLowerCase().includes(search.toLowerCase()) ||
                 item.perkara.toLowerCase().includes(search.toLowerCase()) ||
-                item.dasar_rujukan
-                    .toLowerCase()
-                    .includes(search.toLowerCase()) ||
-                item.operator.toLowerCase().includes(search.toLowerCase()) ||
-                moment(item.tanggal_proses)
+                moment(item.created_at)
                     .format("LL")
                     .toLowerCase()
                     .includes(search.toLowerCase())
         );
-        setCurrentItems(searchResult);
-        setPageCount(Math.ceil(searchResult.length / page));
+
+        // Update filtered data with search results
+        filteredData = searchResult;
+
+        // Apply month filter on search results
+        if (selectedMonth) {
+            filteredData = filteredData.filter(
+                (item) =>
+                    moment(item.created_at).format("MMMM") === selectedMonth
+            );
+        }
+
+        setCurrentItems(filteredData);
+        setPageCount(Math.ceil(filteredData.length / page));
+    };
+
+    const handleMonthChange = (e) => {
+        setSelectedMonth(e.target.value); // Update the selected month
+        setItemOffset(0); // Reset pagination
     };
 
     return (
         <Layout>
-            <div className="bg-white flex flex-col gap-5 rounded-xl ">
+            <div className="bg-white flex flex-col gap-5 rounded-xl">
                 <div className="flex justify-between">
-                    <div className="flex px-5 py-3 gap-2">
+                    <div className="flex px-5 py-3 gap-10">
                         <div className="flex flex-row items-center justify-center gap-2">
-                            <span className="font-bold">show :</span>
+                            <span className="font-bold">Show:</span>
                             <select
                                 className="select"
                                 value={page}
                                 onChange={(e) => setPage(e.target.value)}
                             >
                                 {[5, 10, 15, 20].map((item, index) => (
+                                    <option key={index} value={item}>
+                                        {item}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="flex flex-row items-center justify-center gap-2">
+                            <span className="font-bold">Month:</span>
+                            <select
+                                className="select"
+                                value={selectedMonth}
+                                onChange={handleMonthChange}
+                            >
+                                <option value="">All</option>
+                                {bulan.map((item, index) => (
                                     <option key={index} value={item}>
                                         {item}
                                     </option>
@@ -94,69 +146,40 @@ export default function IdentifikasiWajah({ data, auth }) {
                         </div>
                     </div>
                 </div>
-                <div className="overflow-x-auto overflow-table ">
+                <div className="overflow-x-auto overflow-table">
                     <table className="table lg:table-xs 2xl:table-md ">
                         <thead>
                             <tr className="font-bold text-lg text-black">
-                                <th className=" uppercase text-[10px] text-center ">
-                                    Tgl Proses
+                                <th className="uppercase text-sm text-center">
+                                    Foto Depan
                                 </th>
-                                <th className=" uppercase text-[10px] text-center ">
-                                    Dasar Rujukan
+                                <th className="uppercase text-sm text-center">
+                                    Foto Kanan
                                 </th>
-                                <th className=" uppercase text-[10px] text-center ">
-                                    Polda Res
+                                <th className="uppercase text-sm text-center">
+                                    Foto Kiri
                                 </th>
-                                <th className=" uppercase text-[10px] text-center ">
-                                    Operator
-                                </th>
-                                <th className=" uppercase text-[10px] text-center ">
-                                    Perkara
-                                </th>
-                                <th className=" uppercase text-[10px] text-center ">
-                                    Target
-                                </th>
-                                <th className=" uppercase text-[10px] text-center ">
-                                    Hasil FR
-                                </th>
-                                <th className=" uppercase text-[10px] text-center ">
+                                <th className="uppercase text-sm text-center">
                                     Nama
                                 </th>
-                                <th className=" uppercase text-[10px] text-center ">
-                                    NIK
-                                </th>
-                                <th className=" uppercase text-[10px] text-center ">
+                                <th className="uppercase text-sm text-center">
                                     TTL
                                 </th>
-                                <th className=" uppercase text-[10px] text-center ">
+                                <th className="uppercase text-sm text-center">
                                     Alamat
                                 </th>
-                                <th className=" uppercase text-[10px] text-center ">
-                                    Action
+                                <th className="uppercase text-sm text-center">
+                                    Perkara
+                                </th>
+                                <th className="uppercase text-sm text-center">
+                                    Tgl Upload
                                 </th>
                             </tr>
                         </thead>
                         <tbody className="border-b">
                             {currentItems.map((item, index) => (
                                 <tr key={index}>
-                                    <td className="text-center text-xs max-w-[6rem]">
-                                        {moment(item?.tanggal_proses).format(
-                                            "LL"
-                                        )}
-                                    </td>
-                                    <td className="text-center text-xs max-w-[6rem] max-h-[6rem] break-words">
-                                        {item?.dasar_rujukan}
-                                    </td>
-                                    <td className="text-center text-xs max-w-[6rem]">
-                                        {item?.ident_polda_res}
-                                    </td>
-                                    <td className="text-center text-xs max-w-[6rem]">
-                                        {item?.operator}
-                                    </td>
-                                    <td className="text-center text-xs max-w-[6rem]">
-                                        {item?.perkara}
-                                    </td>
-                                    <td className="text-center text-xs ">
+                                    <td className="text-center">
                                         <PhotoView
                                             speed={() => 800}
                                             easing={(type) =>
@@ -165,24 +188,23 @@ export default function IdentifikasiWajah({ data, auth }) {
                                                     : "cubic-bezier(0.34, 1.56, 0.64, 1)"
                                             }
                                             src={route("file.get", {
-                                                direktori: "identifikasi-wajah",
-                                                disk: "foto-target",
-                                                filename: item?.foto_target,
+                                                direktori: "tersangka",
+                                                disk: "foto-depan",
+                                                filename: item?.foto_depan,
                                             })}
                                         >
                                             <img
                                                 src={route("file.get", {
-                                                    direktori:
-                                                        "identifikasi-wajah",
-                                                    disk: "foto-target",
-                                                    filename: item?.foto_target,
+                                                    direktori: "tersangka",
+                                                    disk: "foto-depan",
+                                                    filename: item?.foto_depan,
                                                 })}
-                                                alt="Foto Target"
-                                                className="w-[6rem] max-h-[6rem] object-cover rounded mx-auto"
+                                                alt="Foto Depan"
+                                                className="w-[8rem] h-[8rem] bg-cover rounded mx-auto"
                                             />
                                         </PhotoView>
                                     </td>
-                                    <td className="text-center text-xs">
+                                    <td className="text-center">
                                         <PhotoView
                                             speed={() => 800}
                                             easing={(type) =>
@@ -191,55 +213,59 @@ export default function IdentifikasiWajah({ data, auth }) {
                                                     : "cubic-bezier(0.34, 1.56, 0.64, 1)"
                                             }
                                             src={route("file.get", {
-                                                direktori: "identifikasi-wajah",
-                                                disk: "foto-hasil-fr",
-                                                filename: item?.foto_hasil_fr,
+                                                direktori: "tersangka",
+                                                disk: "foto-kanan",
+                                                filename: item?.foto_kanan,
                                             })}
                                         >
                                             <img
                                                 src={route("file.get", {
-                                                    direktori:
-                                                        "identifikasi-wajah",
-                                                    disk: "foto-hasil-fr",
-                                                    filename:
-                                                        item?.foto_hasil_fr,
+                                                    direktori: "tersangka",
+                                                    disk: "foto-kanan",
+                                                    filename: item?.foto_kanan,
                                                 })}
-                                                alt="Foto Hasil FR"
-                                                className="w-[6rem] max-h-[6rem] object-cover rounded mx-auto"
+                                                alt="Foto Kanan"
+                                                className="w-[8rem] h-[8rem] bg-cover rounded mx-auto"
                                             />
                                         </PhotoView>
                                     </td>
-                                    <td className="text-center text-xs max-w-[6rem] max-h-[6rem] break-words">
+                                    <td className="text-center">
+                                        <PhotoView
+                                            speed={() => 800}
+                                            easing={(type) =>
+                                                type === 2
+                                                    ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+                                                    : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+                                            }
+                                            src={route("file.get", {
+                                                direktori: "tersangka",
+                                                disk: "foto-kiri",
+                                                filename: item?.foto_kiri,
+                                            })}
+                                        >
+                                            <img
+                                                src={route("file.get", {
+                                                    direktori: "tersangka",
+                                                    disk: "foto-kiri",
+                                                    filename: item?.foto_kiri,
+                                                })}
+                                                alt="Foto Kiri"
+                                                className="w-[8rem] h-[8rem] bg-cover rounded mx-auto"
+                                            />
+                                        </PhotoView>
+                                    </td>
+                                    <td className="text-center">
                                         {item?.nama}
                                     </td>
-                                    <td className="text-center text-xs">
-                                        {item?.nik}
-                                    </td>
-                                    <td className="text-center text-xs">
-                                        {item?.ttl}
-                                    </td>
-                                    <td className="text-center text-xs">
+                                    <td className="text-center">{item?.ttl}</td>
+                                    <td className="text-center">
                                         {item?.alamat}
                                     </td>
-                                    <td>
-                                        <button
-                                            className="btn btn-ghost btn-md"
-                                            onClick={() => {
-                                                setResultModal(item);
-                                                window.my_modal_2.show();
-                                            }}
-                                        >
-                                            <i className="text-indigo-500 text-xl fas fa-edit"></i>
-                                        </button>
-                                        <button
-                                            className="btn btn-ghost btn-md"
-                                            onClick={() => {
-                                                setResultModal(item);
-                                                window.my_modal_3.show();
-                                            }}
-                                        >
-                                            <i className="text-red-500 text-xl fas fa-trash-alt"></i>
-                                        </button>
+                                    <td className="text-center">
+                                        {item?.perkara}
+                                    </td>
+                                    <td className="text-center text-xs max-w-[6rem]">
+                                        {moment(item?.created_at).format("LL")}
                                     </td>
                                 </tr>
                             ))}
@@ -270,8 +296,6 @@ export default function IdentifikasiWajah({ data, auth }) {
                     </div>
                 </div>
             </div>
-            <Update title={"Update Identifikasi Wajah"} result={resultModal} />
-            <Delete title={"Delete Identifikasi Wajah"} result={resultModal} />
         </Layout>
     );
 }
