@@ -18,11 +18,18 @@ const Sidebar = ({ isSidebarOpen, user }) => {
         >
             <div className="lg:w-full md:w-[40%] w-[75%] bg-white h-full ">
                 <div className="pt-5 flex flex-col justify-between h-full">
-                    <div className="w-full flex justify-center items-center flex-col gap-4 lg:mt-0 mt-12 mb-6">
-                        <h1 className="font-extrabold text-indigo-400 text-4xl text-shadow">
+                    <div className="w-full flex justify-center items-center flex-col gap-4 lg:mt-0 mt-12 mb-6 px-5">
+                        <h1 className="font-extrabold text-indigo-400 text-4xl text-shadow flex items-center gap-2">
+                            <img
+                                src="https://akpol.ac.id/wp-content/uploads/2020/10/pusinafis.png"
+                                alt=""
+                                className="w-8 h-8"
+                            />{" "}
                             INDAH
                         </h1>
+                        <hr className="border-t-2 border-gray-300 w-full" />
                     </div>
+                    {/* divider */}
                     <div className=" overflow-y-auto overflow_type h-screen px-5  flex flex-col justify-between gap-10">
                         <ul className="flex flex-col gap-2 w-full">
                             {MenuDashboard &&

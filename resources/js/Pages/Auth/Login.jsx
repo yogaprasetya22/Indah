@@ -37,7 +37,12 @@ export default function Login({ status, canResetPassword }) {
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 flex items-center justify-center">
                     <div className="lg:w-3/6 lg:pr-0 pr-0 -mt-[8.5rem]">
-                        <h1 className="font-extrabold text-5xl text-indigo-500 text-shadow">
+                        <h1 className="font-extrabold text-5xl text-indigo-500 text-shadow flex items-center gap-2">
+                            <img
+                                src="https://akpol.ac.id/wp-content/uploads/2020/10/pusinafis.png"
+                                alt=""
+                                className="w-12 h-12"
+                            />{" "}
                             INDAH
                         </h1>
                         <p className="leading-relaxed mt-4 text-indigo-500 text-shadow">
