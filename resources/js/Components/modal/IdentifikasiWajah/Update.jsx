@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { PhotoView } from "react-photo-view";
 
 export default function Update({ result, title }) {
-    const { auth } = usePage().props;
+    const { role, uuid } = usePage().props.auth.user;
     const { data, setData, post, processing, errors, reset } = useForm({
         uuid: result?.uuid,
         tanggal_proses: "",
@@ -46,6 +46,8 @@ export default function Update({ result, title }) {
                 setFotoTargetPreview(
                     route("file.get", {
                         direktori: "identifikasi-wajah",
+                        role: role.name_role,
+                        uuid: uuid,
                         disk: "foto-target",
                         filename: result.foto_target, // gunakan result.foto_target
                     })
@@ -58,6 +60,8 @@ export default function Update({ result, title }) {
                 setFotoHasilFrPreview(
                     route("file.get", {
                         direktori: "identifikasi-wajah",
+                        role: role.name_role,
+                        uuid: uuid,
                         disk: "foto-hasil-fr",
                         filename: result.foto_hasil_fr, // gunakan result.foto_hasil_fr
                     })

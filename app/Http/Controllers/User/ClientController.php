@@ -25,9 +25,18 @@ class ClientController extends Controller
     public function index()
     {
         $user = User::with(['role'])->latest()->get();
+        $identifikasi_wajah =
+            IdentifikasiWajah::with(['user.wilayah'])->whereHas('user', function ($query) {
+                $query->where('wilayah_id', Auth::user()->wilayah_id);
+            })->latest()->get();
+        $tersangka = Tersangka::with(['user.wilayah'])->whereHas('user', function ($query) {
+            $query->where('wilayah_id', Auth::user()->wilayah_id);
+        })->latest()->get();
         return Inertia::render('client/Index', [
             'title' => "Dashboard",
             'data' => $user,
+            'identifikasi_wajah' => $identifikasi_wajah,
+            'tersangka' => $tersangka
         ]);
     }
 
@@ -81,8 +90,11 @@ class ClientController extends Controller
         $foto_target_name = Uuid::uuid4()->toString() . '_' . $foto_target->getClientOriginalName();
         $foto_hasil_fr_name = Uuid::uuid4()->toString() . '_' . $foto_hasil_fr->getClientOriginalName();
 
-        $foto_target->storeAs('private/identifikasi-wajah/foto-target', $foto_target_name);
-        $foto_hasil_fr->storeAs('private/identifikasi-wajah/foto-hasil-fr', $foto_hasil_fr_name);
+        $role = Auth::user()->role->name_role;
+        $my_uuid = Auth::user()->uuid;
+
+        $foto_target->storeAs('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'foto-target', $foto_target_name);
+        $foto_hasil_fr->storeAs('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'foto-hasil-fr', $foto_hasil_fr_name);
 
         $data = [
             'uuid' => str()->uuid(),
@@ -128,6 +140,9 @@ class ClientController extends Controller
             'ttl.required' => 'TTL harus diisi',
             'alamat.required' => 'Alamat harus diisi',
         ]);
+        $role = Auth::user()->role->name_role;
+        $my_uuid = Auth::user()->uuid;
+
 
         // Temukan data yang akan diupdate
         $data = IdentifikasiWajah::where('uuid', $request->uuid)->firstOrFail();
@@ -136,13 +151,13 @@ class ClientController extends Controller
         if ($request->hasFile('foto_target') && $request->file('foto_target')->isValid()) {
             // Hapus file lama jika ada
             if ($data->foto_target) {
-                Storage::delete('private/identifikasi-wajah/foto-target/' . $data->foto_target);
+                Storage::delete('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'foto-target/' . $data->foto_target);
             }
 
             // Upload file baru
             $foto_target = $request->file('foto_target');
             $foto_target_name = Uuid::uuid4()->toString() . '_' . $foto_target->getClientOriginalName();
-            $foto_target->storeAs('private/identifikasi-wajah/foto-target', $foto_target_name);
+            $foto_target->storeAs('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'foto-target', $foto_target_name);
             $data->foto_target = $foto_target_name;
         }
 
@@ -150,13 +165,13 @@ class ClientController extends Controller
         if ($request->hasFile('foto_hasil_fr') && $request->file('foto_hasil_fr')->isValid()) {
             // Hapus file lama jika ada
             if ($data->foto_hasil_fr) {
-                Storage::delete('private/identifikasi-wajah/foto-hasil-fr/' . $data->foto_hasil_fr);
+                Storage::delete('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'foto-hasil-fr/' . $data->foto_hasil_fr);
             }
 
             // Upload file baru
             $foto_hasil_fr = $request->file('foto_hasil_fr');
             $foto_hasil_fr_name = Uuid::uuid4()->toString() . '_' . $foto_hasil_fr->getClientOriginalName();
-            $foto_hasil_fr->storeAs('private/identifikasi-wajah/foto-hasil-fr', $foto_hasil_fr_name);
+            $foto_hasil_fr->storeAs('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'foto-hasil-fr', $foto_hasil_fr_name);
             $data->foto_hasil_fr = $foto_hasil_fr_name;
         }
 
@@ -177,16 +192,19 @@ class ClientController extends Controller
 
     public function deleteIdentifikasiWajah(Request $request)
     {
+        $role = Auth::user()->role->name_role;
+        $my_uuid = Auth::user()->uuid;
+
         $data = IdentifikasiWajah::where('uuid', $request->uuid)->first();
 
         // Hapus file foto_target jika ada
         if ($data->foto_target) {
-            Storage::delete('private/identifikasi-wajah/foto-target/' . $data->foto_target);
+            Storage::delete('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'foto-target/' . $data->foto_target);
         }
 
         // Hapus file foto_hasil_fr jika ada
         if ($data->foto_hasil_fr) {
-            Storage::delete('private/identifikasi-wajah/foto-hasil-fr/' . $data->foto_hasil_fr);
+            Storage::delete('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'foto-hasil-fr/' . $data->foto_hasil_fr);
         }
 
         $data->delete();
@@ -239,9 +257,12 @@ class ClientController extends Controller
         $foto_kanan_name = Uuid::uuid4()->toString() . '_' . $foto_kanan->getClientOriginalName();
         $foto_kiri_name = Uuid::uuid4()->toString() . '_' . $foto_kiri->getClientOriginalName();
 
-        $foto_depan->storeAs('private/tersangka/foto-depan', $foto_depan_name);
-        $foto_kanan->storeAs('private/tersangka/foto-kanan', $foto_kanan_name);
-        $foto_kiri->storeAs('private/tersangka/foto-kiri', $foto_kiri_name);
+        $role = Auth::user()->role->name_role;
+        $my_uuid = Auth::user()->uuid;
+
+        $foto_depan->storeAs('private/tersangka/' . $role . '/' . $my_uuid . '/foto-depan', $foto_depan_name);
+        $foto_kanan->storeAs('private/tersangka/' . $role . '/' . $my_uuid . '/foto-kanan', $foto_kanan_name);
+        $foto_kiri->storeAs('private/tersangka/' . $role . '/' . $my_uuid . '/foto-kiri', $foto_kiri_name);
 
         $data = [
             'uuid' => str()->uuid(),
@@ -274,6 +295,9 @@ class ClientController extends Controller
             'perkara.required' => 'Perkara harus diisi',
         ]);
 
+        $role = Auth::user()->role->name_role;
+        $my_uuid = Auth::user()->uuid;
+
         // Temukan data yang akan diupdate
         $data = Tersangka::where('uuid', $request->uuid)->firstOrFail();
 
@@ -281,13 +305,13 @@ class ClientController extends Controller
         if ($request->hasFile('foto_depan') && $request->file('foto_depan')->isValid()) {
             // Hapus file lama jika ada
             if ($data->foto_depan) {
-                Storage::delete('private/tersangka/foto-depan/' . $data->foto_depan);
+                Storage::delete('private/tersangka/' . $role . '/' . $my_uuid . '/' . 'foto-depan/' . $data->foto_depan);
             }
 
             // Upload file baru
             $foto_depan = $request->file('foto_depan');
             $foto_depan_name = Uuid::uuid4()->toString() . '_' . $foto_depan->getClientOriginalName();
-            $foto_depan->storeAs('private/tersangka/foto-depan', $foto_depan_name);
+            $foto_depan->storeAs('private/tersangka/' . $role . '/' . $my_uuid . '/' . 'foto-depan', $foto_depan_name);
             $data->foto_depan = $foto_depan_name;
         }
 
@@ -295,13 +319,13 @@ class ClientController extends Controller
         if ($request->hasFile('foto_kanan') && $request->file('foto_kanan')->isValid()) {
             // Hapus file lama jika ada
             if ($data->foto_kanan) {
-                Storage::delete('private/tersangka/foto-kanan/' . $data->foto_kanan);
+                Storage::delete('private/tersangka/' . $role . '/' . $my_uuid . '/' . 'foto-kanan/' . $data->foto_kanan);
             }
 
             // Upload file baru
             $foto_kanan = $request->file('foto_kanan');
             $foto_kanan_name = Uuid::uuid4()->toString() . '_' . $foto_kanan->getClientOriginalName();
-            $foto_kanan->storeAs('private/tersangka/foto-kanan', $foto_kanan_name);
+            $foto_kanan->storeAs('private/tersangka/' . $role . '/' . $my_uuid . '/' . 'foto-kanan', $foto_kanan_name);
             $data->foto_kanan = $foto_kanan_name;
         }
 
@@ -309,13 +333,13 @@ class ClientController extends Controller
         if ($request->hasFile('foto_kiri') && $request->file('foto_kiri')->isValid()) {
             // Hapus file lama jika ada
             if ($data->foto_kiri) {
-                Storage::delete('private/tersangka/foto-kiri/' . $data->foto_kiri);
+                Storage::delete('private/tersangka/' . $role . '/' . $my_uuid . '/' . 'foto-kiri/' . $data->foto_kiri);
             }
 
             // Upload file baru
             $foto_kiri = $request->file('foto_kiri');
             $foto_kiri_name = Uuid::uuid4()->toString() . '_' . $foto_kiri->getClientOriginalName();
-            $foto_kiri->storeAs('private/tersangka/foto-kiri', $foto_kiri_name);
+            $foto_kiri->storeAs('private/tersangka/' . $role . '/' . $my_uuid . '/' . 'foto-kiri', $foto_kiri_name);
             $data->foto_kiri = $foto_kiri_name;
         }
 
@@ -331,21 +355,23 @@ class ClientController extends Controller
 
     public function deleteTersangka(Request $request)
     {
+        $role = Auth::user()->role->name_role;
+        $my_uuid = Auth::user()->uuid;
         $data = Tersangka::where('uuid', $request->uuid)->first();
 
         // Hapus file foto_depan jika ada
         if ($data->foto_depan) {
-            Storage::delete('private/tersangka/foto-depan/' . $data->foto_depan);
+            Storage::delete('private/tersangka/' . $role . '/' . $my_uuid . '/' . 'foto-depan/' . $data->foto_depan);
         }
 
         // Hapus file foto_kanan jika ada
         if ($data->foto_kanan) {
-            Storage::delete('private/tersangka/foto-kanan/' . $data->foto_kanan);
+            Storage::delete('private/tersangka/' . $role . '/' . $my_uuid . '/' . 'foto-kanan/' . $data->foto_kanan);
         }
 
         // Hapus file foto_kiri jika ada
         if ($data->foto_kiri) {
-            Storage::delete('private/tersangka/foto-kiri/' . $data->foto_kiri);
+            Storage::delete('private/tersangka/' . $role . '/' . $my_uuid . '/' . 'foto-kiri/' . $data->foto_kiri);
         }
 
         $data->delete();

@@ -27,7 +27,7 @@ export default function Login({ status, canResetPassword }) {
 
     return (
         <>
-            <Head title="Contact Us" />
+            <Head title="Login" />
 
             <section
                 className="w-full text-gray-900 py-36 bg-center bg-cover bg-no-repeat h-screen"
@@ -35,7 +35,7 @@ export default function Login({ status, canResetPassword }) {
                     backgroundImage: "url('bg.jpg')",
                 }}
             >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 flex items-center justify-center">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 flex md:flex-row flex-col items-center justify-center">
                     <div className="lg:w-3/6 lg:pr-0 pr-0 -mt-[8.5rem]">
                         <h1 className="font-extrabold text-5xl text-indigo-500 text-shadow flex items-center gap-2">
                             <img

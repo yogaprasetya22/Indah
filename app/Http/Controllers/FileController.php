@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FileController extends Controller
 {
-    public function getFile($direktori, $disk, $filename)
+    public function getFile($direktori, $role, $uuid, $disk, $filename)
     {
         // Verifikasi autentikasi
         if (!Auth::check()) {
@@ -17,7 +17,7 @@ class FileController extends Controller
         }
 
         // Path file di direktori 'storage/app/private/identitas-wajah'
-        $path = storage_path('app/private/' . $direktori . '/' . $disk . '/' . $filename);
+        $path = storage_path('app/private/' . $direktori . '/' . $role . '/' . $uuid . '/' . $disk . '/' . $filename);
 
         // // Cek apakah file ada
         // if (!Storage::disk('local')->exists('private/' . $direktori . '/' . $disk . '/' . $filename)) {

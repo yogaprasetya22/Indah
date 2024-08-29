@@ -27,7 +27,12 @@ export default function Add({ title }) {
     const handleAddRecord = (e) => {
         e.preventDefault();
         post(route("create-identifikasi-wajah.store"), {
-            onSuccess: () => window.my_modal_1.close(),
+            onSuccess: () => {
+                window.my_modal_1.close();
+                setFotoTargetPreview(null);
+                setFotoHasilFrPreview(null);
+                reset();
+            },
             onError: (e) => {
                 console.log(e);
             },
@@ -330,7 +335,7 @@ export default function Add({ title }) {
                                             <img
                                                 src={fotoTargetPreview}
                                                 alt="Foto Target Preview"
-                                               className="mt-2 w-[15rem] object-cover"
+                                                className="mt-2 w-[15rem] object-cover"
                                             />
                                         </PhotoView>
                                     )}
@@ -357,7 +362,7 @@ export default function Add({ title }) {
                                             <img
                                                 src={fotoHasilFrPreview}
                                                 alt="Foto Hasil FR Preview"
-                                               className="mt-2 w-[15rem] object-cover"
+                                                className="mt-2 w-[15rem] object-cover"
                                             />
                                         </PhotoView>
                                     )}

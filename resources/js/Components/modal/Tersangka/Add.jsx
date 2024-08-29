@@ -24,7 +24,13 @@ export default function Add({ title }) {
     const handleAddRecord = (e) => {
         e.preventDefault();
         post(route("create-tersangka.store"), {
-            onSuccess: () => window.my_modal_1.close(),
+            onSuccess: () => {
+                window.my_modal_1.close();
+                setFotoDepanPreview(null)
+                setFotoKananPreview(null)
+                setFotoKiriPreview(null)
+                reset();
+            },
             onError: (e) => console.log(e),
         });
     };

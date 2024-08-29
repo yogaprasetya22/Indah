@@ -8,8 +8,10 @@ import moment from "moment/moment";
 moment.locale("id");
 import "moment/locale/id";
 import Delete from "@/Components/modal/IdentifikasiWajah/Delete";
+import { usePage } from "@inertiajs/react";
 
 export default function IdentifikasiWajah({ data, auth }) {
+    const { role, uuid } = usePage().props.auth.user;
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
@@ -191,6 +193,8 @@ export default function IdentifikasiWajah({ data, auth }) {
                                             }
                                             src={route("file.get", {
                                                 direktori: "identifikasi-wajah",
+                                                role: role.name_role,
+                                                uuid: uuid,
                                                 disk: "foto-target",
                                                 filename: item?.foto_target,
                                             })}
@@ -199,6 +203,8 @@ export default function IdentifikasiWajah({ data, auth }) {
                                                 src={route("file.get", {
                                                     direktori:
                                                         "identifikasi-wajah",
+                                                    role: role.name_role,
+                                                    uuid: uuid,
                                                     disk: "foto-target",
                                                     filename: item?.foto_target,
                                                 })}
@@ -217,6 +223,8 @@ export default function IdentifikasiWajah({ data, auth }) {
                                             }
                                             src={route("file.get", {
                                                 direktori: "identifikasi-wajah",
+                                                role: role.name_role,
+                                                uuid: uuid,
                                                 disk: "foto-hasil-fr",
                                                 filename: item?.foto_hasil_fr,
                                             })}
@@ -225,6 +233,8 @@ export default function IdentifikasiWajah({ data, auth }) {
                                                 src={route("file.get", {
                                                     direktori:
                                                         "identifikasi-wajah",
+                                                    role: role.name_role,
+                                                    uuid: uuid,
                                                     disk: "foto-hasil-fr",
                                                     filename:
                                                         item?.foto_hasil_fr,

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::create([
+            'uuid' => str()->uuid(),
             'name' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('asdasdasd'),
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::create([
+            'uuid' => str()->uuid(),
             'name' => 'pusinafis',
             'email' => 'pusinafis@gmail.com',
             'password' => bcrypt('asdasdasd'),
@@ -38,6 +40,7 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
         ]);
         User::create([
+            'uuid' => str()->uuid(),
             'name' => 'polda',
             'email' => 'polda@gmail.com',
             'password' => bcrypt('asdasdasd'),
@@ -46,6 +49,7 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
         ]);
         User::create([
+            'uuid' => str()->uuid(),
             'name' => 'polres',
             'email' => 'polres@gmail.com',
             'password' => bcrypt('asdasdasd'),
@@ -60,6 +64,7 @@ class DatabaseSeeder extends Seeder
         foreach ($wilayah as $key => $value) {
             for ($i = 0; $i < 5; $i++) {
                 $data_user_per_wilayah[] = [
+                    'uuid' => str()->uuid(),
                     'wilayah_id' => $value->id,
                     'name' => $value->wilayah_hukum,
                     'email' => str_replace(' ', '_', strtolower($value->wilayah_hukum)) . $i + 1 . '@gmail.com',
