@@ -21,8 +21,8 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $identifikasi_wajah = IdentifikasiWajah::with(['user.wilayah'])->latest()->get();
-        $tersangka = Tersangka::with(['user.wilayah'])->latest()->get();
+        $identifikasi_wajah = IdentifikasiWajah::with(['user.wilayah', 'user.role'])->latest()->get();
+        $tersangka = Tersangka::with(['user.wilayah', 'user.role'])->latest()->get();
         return Inertia::render('admin/Admin', [
             'title' => 'Dashboard',
             'identifikasi_wajah' => $identifikasi_wajah,
@@ -44,7 +44,7 @@ class AdminController extends Controller
 
     public function Identifikasiwajah()
     {
-        $data = IdentifikasiWajah::with(['user.wilayah'])->latest()->get();
+        $data = IdentifikasiWajah::with(['user.wilayah', 'user.role'])->latest()->get();
         return Inertia::render('admin/IdentifikasiWajah', [
             'title' => 'Identifikasi Wajah',
             'data' => $data,
@@ -52,7 +52,7 @@ class AdminController extends Controller
     }
     public function DhasboardIdentifikasiwajah($tahun)
     {
-        $data = IdentifikasiWajah::with(['user.wilayah'])->where('created_at', 'like', '%' . $tahun . '%')->latest()->get();
+        $data = IdentifikasiWajah::with(['user.wilayah', 'user.role'])->where('created_at', 'like', '%' . $tahun . '%')->latest()->get();
         return Inertia::render('admin/detail/DashboardIdentifikasiWajah', [
             'title' => 'Identifikasi Wajah',
             'data' => $data,
@@ -61,7 +61,7 @@ class AdminController extends Controller
 
     public function Tersangka()
     {
-        $data = Tersangka::with(['user.wilayah'])->latest()->get();
+        $data = Tersangka::with(['user.wilayah', 'user.role'])->latest()->get();
         return Inertia::render('admin/Tersangka', [
             'title' => 'Tersangka',
             'data' => $data,
@@ -70,7 +70,7 @@ class AdminController extends Controller
 
     public function DhasboardTersangka($tahun)
     {
-        $data = Tersangka::with(['user.wilayah'])->where('created_at', 'like', '%' . $tahun . '%')->latest()->get();
+        $data = Tersangka::with(['user.wilayah', 'user.role'])->where('created_at', 'like', '%' . $tahun . '%')->latest()->get();
         return Inertia::render('admin/detail/DashboardTersangka', [
             'title' => 'Tersangka',
             'data' => $data,

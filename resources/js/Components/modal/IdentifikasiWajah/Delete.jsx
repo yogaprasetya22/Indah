@@ -11,10 +11,12 @@ export default function Delete({ title, result }) {
         errors,
     } = useForm({
         uuid: result?.uuid,
+        user_id: result?.user_id,
     });
     useEffect(() => {
         setData({
             uuid: result?.uuid,
+            user_id: result?.user_id,
         });
     }, [result]);
 

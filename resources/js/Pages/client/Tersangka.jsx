@@ -8,7 +8,6 @@ import Delete from "@/Components/modal/Tersangka/Delete";
 import { usePage } from "@inertiajs/react";
 
 export default function Tersangka({ data, auth }) {
-    const { role, uuid } = usePage().props.auth.user;
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
@@ -153,8 +152,8 @@ export default function Tersangka({ data, auth }) {
                                             }
                                             src={route("file.get", {
                                                 direktori: "tersangka",
-                                                role: role.name_role,
-                                                uuid: uuid,
+                                                role: item.user.role.name_role,
+                                                uuid: item.user.uuid,
                                                 disk: "foto-depan",
                                                 filename: item?.foto_depan,
                                             })}
@@ -162,8 +161,9 @@ export default function Tersangka({ data, auth }) {
                                             <img
                                                 src={route("file.get", {
                                                     direktori: "tersangka",
-                                                    role: role.name_role,
-                                                    uuid: uuid,
+                                                    role: item.user.role
+                                                        .name_role,
+                                                    uuid: item.user.uuid,
                                                     disk: "foto-depan",
                                                     filename: item?.foto_depan,
                                                 })}
@@ -182,8 +182,8 @@ export default function Tersangka({ data, auth }) {
                                             }
                                             src={route("file.get", {
                                                 direktori: "tersangka",
-                                                role: role.name_role,
-                                                uuid: uuid,
+                                                role: item.user.role.name_role,
+                                                uuid: item.user.uuid,
                                                 disk: "foto-kanan",
                                                 filename: item?.foto_kanan,
                                             })}
@@ -191,8 +191,9 @@ export default function Tersangka({ data, auth }) {
                                             <img
                                                 src={route("file.get", {
                                                     direktori: "tersangka",
-                                                    role: role.name_role,
-                                                    uuid: uuid,
+                                                    role: item.user.role
+                                                        .name_role,
+                                                    uuid: item.user.uuid,
                                                     disk: "foto-kanan",
                                                     filename: item?.foto_kanan,
                                                 })}
@@ -211,8 +212,8 @@ export default function Tersangka({ data, auth }) {
                                             }
                                             src={route("file.get", {
                                                 direktori: "tersangka",
-                                                role: role.name_role,
-                                                uuid: uuid,
+                                                role: item.user.role.name_role,
+                                                uuid: item.user.uuid,
                                                 disk: "foto-kiri",
                                                 filename: item?.foto_kiri,
                                             })}
@@ -220,8 +221,9 @@ export default function Tersangka({ data, auth }) {
                                             <img
                                                 src={route("file.get", {
                                                     direktori: "tersangka",
-                                                    role: role.name_role,
-                                                    uuid: uuid,
+                                                    role: item.user.role
+                                                        .name_role,
+                                                    uuid: item.user.uuid,
                                                     disk: "foto-kiri",
                                                     filename: item?.foto_kiri,
                                                 })}

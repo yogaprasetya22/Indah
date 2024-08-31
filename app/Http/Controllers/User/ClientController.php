@@ -26,10 +26,10 @@ class ClientController extends Controller
     {
         $user = User::with(['role'])->latest()->get();
         $identifikasi_wajah =
-            IdentifikasiWajah::with(['user.wilayah'])->whereHas('user', function ($query) {
+            IdentifikasiWajah::with(['user.wilayah', 'user.role'])->whereHas('user', function ($query) {
                 $query->where('wilayah_id', Auth::user()->wilayah_id);
             })->latest()->get();
-        $tersangka = Tersangka::with(['user.wilayah'])->whereHas('user', function ($query) {
+        $tersangka = Tersangka::with(['user.wilayah', 'user.role'])->whereHas('user', function ($query) {
             $query->where('wilayah_id', Auth::user()->wilayah_id);
         })->latest()->get();
         return Inertia::render('client/Index', [
@@ -43,7 +43,7 @@ class ClientController extends Controller
     // Identifikasi Wajah
     public function IdentifikasiWajah()
     {
-        $data = IdentifikasiWajah::with(['user.wilayah'])->whereHas('user', function ($query) {
+        $data = IdentifikasiWajah::with(['user.wilayah', 'user.role'])->whereHas('user', function ($query) {
             $query->where('wilayah_id', Auth::user()->wilayah_id);
         })->latest()->get();
         return Inertia::render('client/IdentifikasiWajah', [
@@ -140,9 +140,8 @@ class ClientController extends Controller
             'ttl.required' => 'TTL harus diisi',
             'alamat.required' => 'Alamat harus diisi',
         ]);
-        $role = Auth::user()->role->name_role;
-        $my_uuid = Auth::user()->uuid;
-
+        $role = User::with(['role'])->where('id', $request->user_id)->first()->role->name_role;
+        $my_uuid = User::where('id', $request->user_id)->first()->uuid;
 
         // Temukan data yang akan diupdate
         $data = IdentifikasiWajah::where('uuid', $request->uuid)->firstOrFail();
@@ -192,8 +191,8 @@ class ClientController extends Controller
 
     public function deleteIdentifikasiWajah(Request $request)
     {
-        $role = Auth::user()->role->name_role;
-        $my_uuid = Auth::user()->uuid;
+        $role = User::with(['role'])->where('id', $request->user_id)->first()->role->name_role;
+        $my_uuid = User::where('id', $request->user_id)->first()->uuid;
 
         $data = IdentifikasiWajah::where('uuid', $request->uuid)->first();
 
@@ -215,7 +214,7 @@ class ClientController extends Controller
     // Tersangka
     public function Tersangka()
     {
-        $data = Tersangka::with(['user.wilayah'])->whereHas('user', function ($query) {
+        $data = Tersangka::with(['user.wilayah', 'user.role'])->whereHas('user', function ($query) {
             $query->where('wilayah_id', Auth::user()->wilayah_id);
         })->latest()->get();
         return Inertia::render('client/Tersangka', [
@@ -295,8 +294,8 @@ class ClientController extends Controller
             'perkara.required' => 'Perkara harus diisi',
         ]);
 
-        $role = Auth::user()->role->name_role;
-        $my_uuid = Auth::user()->uuid;
+        $role = User::with(['role'])->where('id', $request->user_id)->first()->role->name_role;
+        $my_uuid = User::where('id', $request->user_id)->first()->uuid;
 
         // Temukan data yang akan diupdate
         $data = Tersangka::where('uuid', $request->uuid)->firstOrFail();
@@ -355,8 +354,8 @@ class ClientController extends Controller
 
     public function deleteTersangka(Request $request)
     {
-        $role = Auth::user()->role->name_role;
-        $my_uuid = Auth::user()->uuid;
+        $role = User::with(['role'])->where('id', $request->user_id)->first()->role->name_role;
+        $my_uuid = User::where('id', $request->user_id)->first()->uuid;
         $data = Tersangka::where('uuid', $request->uuid)->first();
 
         // Hapus file foto_depan jika ada

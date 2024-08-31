@@ -6,9 +6,9 @@ import { useForm, usePage } from "@inertiajs/react";
 import { PhotoView } from "react-photo-view";
 
 export default function UpdateTersangka({ result, title }) {
-    const { role, uuid } = usePage().props.auth.user;
     const { data, setData, post, processing, errors, reset } = useForm({
         uuid: result?.uuid,
+        user_id: result?.user_id,
         foto_depan: "",
         foto_kanan: "",
         foto_kiri: "",
@@ -25,6 +25,7 @@ export default function UpdateTersangka({ result, title }) {
         if (result) {
             setData({
                 uuid: result.uuid,
+                user_id: result?.user_id,
                 foto_depan: null,
                 foto_kanan: null,
                 foto_kiri: null,
@@ -37,8 +38,8 @@ export default function UpdateTersangka({ result, title }) {
                 setFotoDepanPreview(
                     route("file.get", {
                         direktori: "tersangka",
-                        role: role.name_role,
-                        uuid: uuid,
+                        role: result.user.role.name_role,
+                        uuid: result.user.uuid,
                         disk: "foto-depan",
                         filename: result.foto_depan,
                     })
@@ -51,8 +52,8 @@ export default function UpdateTersangka({ result, title }) {
                 setFotoKananPreview(
                     route("file.get", {
                         direktori: "tersangka",
-                        role: role.name_role,
-                        uuid: uuid,
+                        role: result.user.role.name_role,
+                        uuid: result.user.uuid,
                         disk: "foto-kanan",
                         filename: result.foto_kanan,
                     })
@@ -65,8 +66,8 @@ export default function UpdateTersangka({ result, title }) {
                 setFotoKiriPreview(
                     route("file.get", {
                         direktori: "tersangka",
-                        role: role.name_role,
-                        uuid: uuid,
+                        role: result.user.role.name_role,
+                        uuid: result.user.uuid,
                         disk: "foto-kiri",
                         filename: result.foto_kiri,
                     })

@@ -212,6 +212,8 @@ export default function DashboardIdentifikasiWajah({ data, auth }) {
                                             }
                                             src={route("file.get", {
                                                 direktori: "identifikasi-wajah",
+                                                role: item.user.role.name_role,
+                                                uuid: item.user.uuid,
                                                 disk: "foto-target",
                                                 filename: item?.foto_target,
                                             })}
@@ -220,6 +222,9 @@ export default function DashboardIdentifikasiWajah({ data, auth }) {
                                                 src={route("file.get", {
                                                     direktori:
                                                         "identifikasi-wajah",
+                                                    role: item.user.role
+                                                        .name_role,
+                                                    uuid: item.user.uuid,
                                                     disk: "foto-target",
                                                     filename: item?.foto_target,
                                                 })}
@@ -238,6 +243,8 @@ export default function DashboardIdentifikasiWajah({ data, auth }) {
                                             }
                                             src={route("file.get", {
                                                 direktori: "identifikasi-wajah",
+                                                role: item.user.role.name_role,
+                                                uuid: item.user.uuid,
                                                 disk: "foto-hasil-fr",
                                                 filename: item?.foto_hasil_fr,
                                             })}
@@ -246,6 +253,9 @@ export default function DashboardIdentifikasiWajah({ data, auth }) {
                                                 src={route("file.get", {
                                                     direktori:
                                                         "identifikasi-wajah",
+                                                    role: item.user.role
+                                                        .name_role,
+                                                    uuid: item.user.uuid,
                                                     disk: "foto-hasil-fr",
                                                     filename:
                                                         item?.foto_hasil_fr,

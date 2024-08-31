@@ -2,15 +2,15 @@ import InputError from "@/Components/ui/InputError";
 import InputLabel from "@/Components/ui/InputLabel";
 import TextInput from "@/Components/ui/TextInput";
 import React from "react";
-import { useForm, usePage } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { PhotoView } from "react-photo-view";
 
 export default function Update({ result, title }) {
-    const { role, uuid } = usePage().props.auth.user;
     const { data, setData, post, processing, errors, reset } = useForm({
         uuid: result?.uuid,
+        user_id: result?.user_id,
         tanggal_proses: "",
         dasar_rujukan: "",
         ident_polda_res: "",
@@ -30,6 +30,7 @@ export default function Update({ result, title }) {
         if (result) {
             setData({
                 uuid: result.uuid,
+                user_id: result?.user_id,
                 tanggal_proses: result.tanggal_proses,
                 dasar_rujukan: result.dasar_rujukan,
                 ident_polda_res: result.ident_polda_res,
@@ -46,8 +47,8 @@ export default function Update({ result, title }) {
                 setFotoTargetPreview(
                     route("file.get", {
                         direktori: "identifikasi-wajah",
-                        role: role.name_role,
-                        uuid: uuid,
+                        role: result.user.role.name_role,
+                        uuid: result.user.uuid,
                         disk: "foto-target",
                         filename: result.foto_target, // gunakan result.foto_target
                     })
@@ -60,8 +61,8 @@ export default function Update({ result, title }) {
                 setFotoHasilFrPreview(
                     route("file.get", {
                         direktori: "identifikasi-wajah",
-                        role: role.name_role,
-                        uuid: uuid,
+                        role: result.user.role.name_role,
+                        uuid: result.user.uuid,
                         disk: "foto-hasil-fr",
                         filename: result.foto_hasil_fr, // gunakan result.foto_hasil_fr
                     })
