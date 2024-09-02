@@ -1,16 +1,23 @@
 import Layout from "@/Layouts/Layout";
-import React from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import parse from "html-react-parser";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import EditorToolbar, { modules, formats } from "@/Components/EditorToolbar";
 import { router, usePage } from "@inertiajs/react";
+import FroalaEditor from "react-froala-wysiwyg";
+import Froalaeditor from "froala-editor";
+// Require Editor CSS files.
+import "froala-editor/css/froala_style.min.css";
+import "froala-editor/css/froala_editor.pkgd.min.css";
+// Require Editor JS files.
+import "froala-editor/js/froala_editor.pkgd.min.js";
+import "froala-editor/js/plugins.pkgd.min.js";
+import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 
 export default function SOPIdentifikasiWajah({ data }) {
     const { title } = usePage().props;
-    const [value, setValue] = React.useState(data?.deskripsi || "");
+    const [model, setModel] = useState(data?.deskripsi || "");
+
     const handleSumbit = () => {
-        router.post(route("admin.create-sop-identifikasi-wajah"), { value });
+        router.post(route("admin.create-sop-identifikasi-wajah"), { value: model });
     };
     return (
         <Layout>
@@ -32,40 +39,84 @@ export default function SOPIdentifikasiWajah({ data }) {
                     ✕
                 </button>
                 <div className="modal-box max-w-7xl overflow rounded-md">
-                    <form method="dialog">
-                        <div className="w-full bg-white rounded-md">
-                            <div className=" sticky -top-6 z-40 bg-white">
-                                <EditorToolbar />
-                                <div className="flex justify-end absolute top-0 right-0 z-50 p-1">
-                                    <button
-                                        className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                        onClick={handleSumbit}
-                                    >
-                                        Simpan ke database
-                                    </button>
-                                </div>
-                            </div>
-                            <ReactQuill
-                                theme="snow"
-                                modules={modules}
-                                formats={formats}
-                                value={value}
-                                onChange={setValue}
-                                placeholder="Tulis SOP Identifikasi Wajah disini..."
-                            />
-                        </div>
+                    <form method="dialog" className="froala-font">
+                        <FroalaEditor
+                            tag="textarea"
+                            model={model}
+                            onModelChange={setModel}
+                            config={{
+                                enter: Froalaeditor.ENTER_BR,
+                                tableStyles: {
+                                    "no-border": "No border",
+                                },
+                                useClasses: false,
+                                attribution: false,
+                                toolbarSticky: false,
+                                charCounterCount: false,
+                                fontFamilySelection: true,
+                                fontSizeSelection: true,
+                                paragraphFormatSelection: true,
+                                heightMin: 100,
+                                heightMax: 350,
+                                linkInsertButtons: [],
+                                toolbarButtons: [
+                                    "bold",
+                                    "italic",
+                                    "underline",
+                                    "strikeThrough",
+                                    "fontFamily",
+                                    "fontSize",
+                                    "textColor",
+                                    "paragraphFormat",
+                                    "lineHeight",
+                                    "align",
+                                    "formatOL",
+                                    "formatUL",
+                                    "outdent",
+                                    "indent",
+                                    "leftToRight",
+                                    "rightToLeft",
+                                    "insertLink",
+                                    "insertImage",
+                                    "insertTable",
+                                    "emoticons",
+                                    "personalize",
+                                    "insertButton",
+                                    "insertHR",
+                                    "undo",
+                                    "redo",
+                                    "fullscreen",
+                                    "html",
+                                ],
+                                linkList: [],
+                                events: {
+                                    initialized: function () {
+                                        replyEditor = this;
+                                    },
+                                    blur: () => {
+                                        console.log(replyEditor.html.get(true));
+                                    },
+                                },
+                            }}
+                        />
+                        <button
+                            className="absolute bottom-2 right-2 bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            onClick={handleSumbit}
+                        >
+                            Simpan ke database
+                        </button>
                     </form>
                 </div>
             </dialog>
 
-            <div className="w-full bg-white rounded-md p-2">
-                <div className="ql-editor ql">
-                    {data?.deskripsi
-                        ? parse(data?.deskripsi)
-                        : parse(
-                              `<p className="text-center text-xl font-semibold">${title} belum di edit</p>`
-                          )}
-                </div>
+            <div className="w-full bg-white rounded-md p-2 px-10">
+                {data?.deskripsi ? (
+                        <FroalaEditorView model={model} />
+                    ) : (
+                        parse(
+                            `<p className="text-center text-xl font-semibold">${title} belum di edit</p>`
+                        )
+                    )}
             </div>
         </Layout>
     );

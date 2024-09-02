@@ -2,10 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+#app,
+#root {
+    height: 100%;
+}
+
+.froala-font h1 {
+    font-weight: 700;
+}
+
+.froala-font h2 {
+    font-weight: 600;
+}
+
+.froala-font h3 {
+    font-weight: 500;
+}
+
+.froala-font h4 {
+    font-weight: 400;
+}
+
+.froala-font h5 {
+    font-weight: 300;
+}
+
+.froala-font h6 {
+    font-size  : 1rem;
+    font-weight: 200;
+}
+
 .tooltip {
     --tooltip-text-color: #fff;
     --tooltip-color     : rgb(59 130 246 / 90%);
 }
+
 .tooltip:before {
     width        : 8rem;
     /* Set fixed width */
