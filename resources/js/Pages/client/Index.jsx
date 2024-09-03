@@ -2,16 +2,18 @@ import Layout from "@/Layouts/Layout";
 import React from "react";
 
 export default function Index({ auth, tersangka, identifikasi_wajah }) {
+    console.log(auth);
     return (
         <Layout>
             <span className="text-extrabold text-2xl">
                 {" "}
-                🙌 Selamat {auth.user.name} datang di dashboard
+                🙌 Selamat datang {auth.user.name} di dashboard
             </span>
             <div className="w-full flex flex-row justify-between gap-5 py-5">
                 <div className="bg-indigo-500/80 w-full flex flex-col rounded p-2 gap-3">
                     <h1 className="text-center font-semibold text-lg text-white">
-                        Identifikasi wajah
+                        Identifikasi wajah hanya{" "}
+                        {auth.user.wilayah.wilayah_hukum}
                     </h1>
                     <div className="border-t border-white"></div>
                     <h2 className="text-center font-semibold text-4xl text-white">
@@ -20,7 +22,7 @@ export default function Index({ auth, tersangka, identifikasi_wajah }) {
                 </div>
                 <div className="bg-indigo-500/80 w-full flex flex-col rounded p-2 gap-3">
                     <h1 className="text-center font-semibold text-lg text-white">
-                        Tersangka
+                        Tersangka hanya {auth.user.wilayah.wilayah_hukum}
                     </h1>
                     <div className="border-t border-white"></div>
                     <h2 className="text-center font-semibold text-4xl text-white">

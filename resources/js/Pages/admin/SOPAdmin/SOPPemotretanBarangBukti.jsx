@@ -59,7 +59,7 @@ export default function SOPPemotretanBarangBukti({ data }) {
                                 fontSizeSelection: true,
                                 paragraphFormatSelection: true,
                                 heightMin: 100,
-                                heightMax: 350,
+                                heightMax: 450,
                                 linkInsertButtons: [],
                                 toolbarButtons: [
                                     "bold",
@@ -97,6 +97,28 @@ export default function SOPPemotretanBarangBukti({ data }) {
                                     },
                                     blur: () => {
                                         console.log(replyEditor.html.get(true));
+                                    },
+                                    "image.beforeUpload": function (files) {
+                                        var editor = this;
+                                        if (files.length) {
+                                            // Create a File Reader.
+                                            var reader = new FileReader();
+                                            // Set the reader to insert images when they are loaded.
+                                            reader.onload = function (e) {
+                                                var result = e.target.result;
+                                                editor.image.insert(
+                                                    result,
+                                                    null,
+                                                    null,
+                                                    editor.image.get()
+                                                );
+                                            };
+                                            // Read image as base64.
+                                            reader.readAsDataURL(files[0]);
+                                        }
+                                        editor.popups.hideAll();
+                                        // Stop default upload chain.
+                                        return false;
                                     },
                                 },
                             }}
