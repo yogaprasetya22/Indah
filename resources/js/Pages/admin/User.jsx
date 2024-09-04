@@ -5,7 +5,8 @@ import Layout from "@/Layouts/Layout";
 import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 
-export default function User({ data }) {
+export default function User({ data: datas }) {
+    const [data, setData] = useState(datas);
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
@@ -15,11 +16,15 @@ export default function User({ data }) {
     const [search, setSearch] = useState("");
 
     useEffect(() => {
+        setData(datas);
+    }, [datas]);
+
+    useEffect(() => {
         setLoading(true);
         const endOffset = parseInt(itemOffset) + parseInt(page);
         const sortData = data
             .sort((a, b) => {
-                return a.id - b.id;
+                return b.id - a.id;
             })
             .slice(itemOffset, endOffset);
         setCurrentItems(sortData);
@@ -38,9 +43,10 @@ export default function User({ data }) {
         setItemOffset(newOffset);
     };
 
-    const handleSearch = () => {
+    const handleSearch = (e) => {
+        e.preventDefault();
         if (search) {
-            const searchItem = data.filter((item) => {
+            const searchResult = datas.filter((item) => {
                 return (
                     item.name.toLowerCase().includes(search.toLowerCase()) ||
                     item.email.toLowerCase().includes(search.toLowerCase()) ||
@@ -52,14 +58,32 @@ export default function User({ data }) {
                         .includes(search.toLowerCase())
                 );
             });
-            setCurrentItems(searchItem);
-            setPageCount(Math.ceil(searchItem.length / page));
+            setData(searchResult);
+            const endOffset = parseInt(itemOffset) + parseInt(page);
+            const sortData = searchResult
+                .sort((a, b) => {
+                    return b.id - a.id;
+                })
+                .slice(itemOffset, endOffset);
+
+            setCurrentItems(sortData);
+            setPageCount(Math.ceil(searchResult.length / page));
+            setItemOffset(0);
         } else {
-            setCurrentItems(data);
-            setPageCount(Math.ceil(data.length / page));
+            const filteredData = datas;
+            const endOffset = parseInt(itemOffset) + parseInt(page);
+            const sortData = filteredData
+                .sort((a, b) => {
+                    return b.id - a.id;
+                })
+                .slice(itemOffset, endOffset);
+            setData(filteredData);
+            setCurrentItems(sortData);
+            setPageCount(Math.ceil(filteredData.length / page));
+            setItemOffset(0);
+            setSearch("");
         }
     };
-
     return (
         <Layout>
             <div className="bg-white flex flex-col gap-5 rounded-xl ">
@@ -79,7 +103,10 @@ export default function User({ data }) {
                                 ))}
                             </select>
                         </div>
-                        <div className="flex flex-row items-center justify-center gap-2">
+                        <form
+                            className="flex flex-row items-center justify-center gap-2"
+                            onSubmit={handleSearch}
+                        >
                             <input
                                 type="text"
                                 className="input input-bordered"
@@ -87,10 +114,10 @@ export default function User({ data }) {
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
-                            <button className="btn" onClick={handleSearch}>
+                            <button className="btn" type="sumbit">
                                 <i className="fas fa-search"></i>
                             </button>
-                        </div>
+                        </form>
                     </div>
                     <div className="flex items-center gap-2 px-5 py-3">
                         <button

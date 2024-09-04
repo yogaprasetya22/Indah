@@ -17,7 +17,7 @@ export default function SOPPemotretanTKP({ data }) {
             <div className="w-full bg-white rounded-md p-2">
                 <div className="ql-editor ql">
                     {data?.deskripsi ? (
-                        <FroalaEditorView model={model} />
+                        <FroalaEditorView model={data?.deskripsi} />
                     ) : (
                         parse(
                             `<p className="text-center text-xl font-semibold">${title} belum di edit</p>`

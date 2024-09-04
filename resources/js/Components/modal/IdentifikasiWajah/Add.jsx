@@ -16,13 +16,13 @@ export default function Add({ title }) {
         perkara: "",
         foto_target: "",
         foto_hasil_fr: "",
+        demo_grafi: "",
         nama: "",
         nik: "",
-        ttl: "",
-        alamat: "",
     });
     const [fotoTargetPreview, setFotoTargetPreview] = useState(null);
     const [fotoHasilFrPreview, setFotoHasilFrPreview] = useState(null);
+    const [fotoHasilDemoGrafiPreview, setFotoHasilDemoGrafiPreview] = useState(null);
 
     const handleAddRecord = (e) => {
         e.preventDefault();
@@ -31,6 +31,7 @@ export default function Add({ title }) {
                 window.my_modal_1.close();
                 setFotoTargetPreview(null);
                 setFotoHasilFrPreview(null);
+                setFotoHasilDemoGrafiPreview(null);
                 reset();
             },
             onError: (e) => {
@@ -62,6 +63,20 @@ export default function Add({ title }) {
             reader.readAsDataURL(file);
         } else {
             setFotoHasilFrPreview(null);
+        }
+    };
+
+    const handleDataDemoGrafiChange = (e) => {
+        const file = e.target.files[0];
+        setData("demo_grafi", file);
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) =>
+                setFotoHasilDemoGrafiPreview(e.target.result);
+            reader.readAsDataURL(file);
+        } else {
+            setFotoHasilDemoGrafiPreview(null);
         }
     };
 
@@ -266,55 +281,6 @@ export default function Add({ title }) {
                                         />
                                     </div>
                                 </div>
-                                <div className="flex flex-row gap-5">
-                                    <div className="flex flex-col gap-2 w-full">
-                                        <InputLabel
-                                            htmlFor="ttl"
-                                            value="Tempat/Tanggal Lahir"
-                                        />
-                                        <TextInput
-                                            id="ttl"
-                                            type="text"
-                                            name="ttl"
-                                            value={data.ttl}
-                                            className="mt-1 block w-full"
-                                            autoComplete="ttl"
-                                            isFocused={true}
-                                            onChange={(e) =>
-                                                setData("ttl", e.target.value)
-                                            }
-                                        />
-                                        <InputError
-                                            message={errors.ttl}
-                                            className="mt-2"
-                                        />
-                                    </div>
-                                    <div className="flex flex-col gap-2 w-full">
-                                        <InputLabel
-                                            htmlFor="alamat"
-                                            value="Alamat"
-                                        />
-                                        <TextInput
-                                            id="alamat"
-                                            type="text"
-                                            name="alamat"
-                                            value={data.alamat}
-                                            className="mt-1 block w-full"
-                                            autoComplete="alamat"
-                                            isFocused={true}
-                                            onChange={(e) =>
-                                                setData(
-                                                    "alamat",
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                        <InputError
-                                            message={errors.alamat}
-                                            className="mt-2"
-                                        />
-                                    </div>
-                                </div>
                             </div>
                             <div className="flex flex-row gap-5">
                                 <div className="flex flex-col gap-2 w-full">
@@ -368,6 +334,33 @@ export default function Add({ title }) {
                                     )}
                                     <InputError
                                         message={errors.foto_hasil_fr}
+                                        className="mt-2"
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-2 w-full">
+                                    <InputLabel
+                                        htmlFor="demo_grafi"
+                                        value="Data Demo Grafi"
+                                    />
+                                    <input
+                                        id="demo_grafi"
+                                        type="file"
+                                        accept="image/*"
+                                        name="demo_grafi"
+                                        className="mt-1 block w-full"
+                                        onChange={handleDataDemoGrafiChange}
+                                    />
+                                    {fotoHasilDemoGrafiPreview && (
+                                        <PhotoView src={fotoHasilDemoGrafiPreview}>
+                                            <img
+                                                src={fotoHasilDemoGrafiPreview}
+                                                alt="Data Demo Grafi Preview"
+                                                className="mt-2 w-[15rem] object-cover"
+                                            />
+                                        </PhotoView>
+                                    )}
+                                    <InputError
+                                        message={errors.demo_grafi}
                                         className="mt-2"
                                     />
                                 </div>

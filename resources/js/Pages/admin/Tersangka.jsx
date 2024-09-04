@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Add from "@/Components/modal/Tersangka/Add";
 import Layout from "@/Layouts/Layout";
 import ReactPaginate from "react-paginate";
 import { PhotoView } from "react-photo-view";
 import UpdateTersangka from "@/Components/modal/Tersangka/Update";
 import Delete from "@/Components/modal/Tersangka/Delete";
-import { usePage } from "@inertiajs/react";
+import moment from "moment/moment";
+import "moment/locale/id";
+moment.locale("id");
 
-export default function Tersangka({ data, auth }) {
-    const { role, uuid } = usePage().props.auth.user;
+export default function Tersangka({ data: datas, auth }) {
+    const [data, setData] = useState(datas);
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
@@ -18,11 +19,15 @@ export default function Tersangka({ data, auth }) {
     const [search, setSearch] = useState("");
 
     useEffect(() => {
+        setData(datas);
+    }, [datas]);
+
+    useEffect(() => {
         setLoading(true);
         const filteredData = data;
         const endOffset = parseInt(itemOffset) + parseInt(page);
         const sortData = filteredData
-            .sort((a, b) => a.id - b.id)
+            .sort((a, b) => moment(b.created_at) - moment(a.created_at))
             .slice(itemOffset, endOffset);
 
         setCurrentItems(sortData);
@@ -40,17 +45,38 @@ export default function Tersangka({ data, auth }) {
         setItemOffset(newOffset);
     };
 
-    const handleSearch = () => {
-        const filteredData = data;
-        const searchResult = filteredData.filter(
-            (item) =>
-                item.nama.toLowerCase().includes(search.toLowerCase()) ||
-                item.ttl.toLowerCase().includes(search.toLowerCase()) ||
-                item.alamat.toLowerCase().includes(search.toLowerCase()) ||
-                item.perkara.toLowerCase().includes(search.toLowerCase())
-        );
-        setCurrentItems(searchResult);
-        setPageCount(Math.ceil(searchResult.length / page));
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (search) {
+            const filteredData = datas;
+            const searchResult = filteredData.filter(
+                (item) =>
+                    item.nama.toLowerCase().includes(search.toLowerCase()) ||
+                    item.ttl.toLowerCase().includes(search.toLowerCase()) ||
+                    item.alamat.toLowerCase().includes(search.toLowerCase()) ||
+                    item.perkara.toLowerCase().includes(search.toLowerCase())
+            );
+            setData(searchResult);
+            const endOffset = parseInt(itemOffset) + parseInt(page);
+            const sortData = searchResult
+                 .sort((a, b) => moment(b.created_at) - moment(a.created_at))
+                .slice(itemOffset, endOffset);
+
+            setCurrentItems(sortData);
+            setPageCount(Math.ceil(searchResult.length / page));
+            setItemOffset(0);
+        } else {
+             const filteredData = datas;
+             const endOffset = parseInt(itemOffset) + parseInt(page);
+             const sortData = filteredData
+                 .sort((a, b) => moment(b.created_at) - moment(a.created_at))
+                 .slice(itemOffset, endOffset);
+             setData(filteredData);
+             setCurrentItems(sortData);
+             setPageCount(Math.ceil(filteredData.length / page));
+             setItemOffset(0);
+             setSearch("");
+        }
     };
 
     return (
@@ -72,7 +98,10 @@ export default function Tersangka({ data, auth }) {
                                 ))}
                             </select>
                         </div>
-                        <div className="flex flex-row items-center justify-center gap-2">
+                        <form
+                            className="flex flex-row items-center justify-center gap-2"
+                            onSubmit={handleSearch}
+                        >
                             <input
                                 type="text"
                                 className="input input-bordered"
@@ -80,10 +109,10 @@ export default function Tersangka({ data, auth }) {
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
-                            <button className="btn" onClick={handleSearch}>
+                            <button className="btn" type="sumbit">
                                 <i className="fas fa-search"></i>
                             </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
                 <div className="overflow-x-auto overflow-table">
@@ -145,7 +174,7 @@ export default function Tersangka({ data, auth }) {
                                                     filename: item?.foto_depan,
                                                 })}
                                                 alt="Foto Depan"
-                                                className="w-[8rem] h-[8rem] bg-cover rounded mx-auto"
+                                                className="w-[6rem] h-[6rem] object-cover rounded mx-auto"
                                             />
                                         </PhotoView>
                                     </td>
@@ -175,7 +204,7 @@ export default function Tersangka({ data, auth }) {
                                                     filename: item?.foto_kanan,
                                                 })}
                                                 alt="Foto Kanan"
-                                                className="w-[8rem] h-[8rem] bg-cover rounded mx-auto"
+                                                className="w-[6rem] h-[6rem] object-cover rounded mx-auto"
                                             />
                                         </PhotoView>
                                     </td>
@@ -205,7 +234,7 @@ export default function Tersangka({ data, auth }) {
                                                     filename: item?.foto_kiri,
                                                 })}
                                                 alt="Foto Kiri"
-                                                className="w-[8rem] h-[8rem] bg-cover rounded mx-auto"
+                                                className="w-[6rem] h-[6rem] object-cover rounded mx-auto"
                                             />
                                         </PhotoView>
                                     </td>
@@ -221,7 +250,7 @@ export default function Tersangka({ data, auth }) {
                                     </td>
                                     <td>
                                         <button
-                                            className="btn btn-ghost btn-md"
+                                            className="btn btn-ghost btn-md px-2"
                                             onClick={() => {
                                                 setResultModal(item);
                                                 window.my_modal_2.show();
@@ -230,7 +259,7 @@ export default function Tersangka({ data, auth }) {
                                             <i className="text-indigo-500 text-xl fas fa-edit"></i>
                                         </button>
                                         <button
-                                            className="btn btn-ghost btn-md"
+                                            className="btn btn-ghost btn-md px-2"
                                             onClick={() => {
                                                 setResultModal(item);
                                                 window.my_modal_3.show();

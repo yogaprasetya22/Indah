@@ -29,24 +29,45 @@ export default function UpdateUser({ results, title }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route("update-user.update"), {
-            onStart: () => {
-                if (data.password !== data.password_confirmation) {
-                    errors.password =
-                        "Password dan Password Confirmation tidak sama";
-                    errors.password_confirmation =
-                        "Password dan Password Confirmation tidak sama";
+        if (data.role_id == 1) {
+            post(route("admin.update-user.update"), {
+                onStart: () => {
+                    if (data.password !== data.password_confirmation) {
+                        errors.password =
+                            "Password dan Password Confirmation tidak sama";
+                        errors.password_confirmation =
+                            "Password dan Password Confirmation tidak sama";
 
-                    return () => {
-                        reset("password", "password_confirmation");
-                    };
-                }
-            },
-            onSuccess: () => window.my_modal_2.close(),
-            onError: (e) => {
-                console.log(e);
-            },
-        });
+                        return () => {
+                            reset("password", "password_confirmation");
+                        };
+                    }
+                },
+                onSuccess: () => window.my_modal_1.close(),
+                onError: (e) => {
+                    console.log(e);
+                },
+            });
+        } else {
+            post(route("update-user.update"), {
+                onStart: () => {
+                    if (data.password !== data.password_confirmation) {
+                        errors.password =
+                            "Password dan Password Confirmation tidak sama";
+                        errors.password_confirmation =
+                            "Password dan Password Confirmation tidak sama";
+
+                        return () => {
+                            reset("password", "password_confirmation");
+                        };
+                    }
+                },
+                onSuccess: () => window.my_modal_1.close(),
+                onError: (e) => {
+                    console.log(e);
+                },
+            });
+        }
     };
 
     return (
@@ -178,48 +199,12 @@ export default function UpdateUser({ results, title }) {
                                 <div className="flex flex-row gap-5">
                                     <div className="flex flex-col gap-2 w-full">
                                         <InputLabel
-                                            htmlFor="update_wilayah_id"
-                                            value="Wilayah ID"
+                                            htmlFor="role_id"
+                                            value="Role"
                                         />
                                         {
                                             <select
-                                                id="update_wilayah_id"
-                                                name="wilayah_id"
-                                                value={data.wilayah_id}
-                                                className="mt-1 block w-full"
-                                                onChange={(e) =>
-                                                    setData(
-                                                        "wilayah_id",
-                                                        e.target.value
-                                                    )
-                                                }
-                                            >
-                                                <option value="">
-                                                    Pilih Wilayah
-                                                </option>
-                                                {wilayah.map((item, index) => (
-                                                    <option
-                                                        key={index}
-                                                        value={item.id}
-                                                    >
-                                                        {item.nama}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        }
-                                        <InputError
-                                            message={errors.wilayah_id}
-                                            className="mt-2"
-                                        />
-                                    </div>
-                                    <div className="flex flex-col gap-2 w-full">
-                                        <InputLabel
-                                            htmlFor="update_role_id"
-                                            value="Role ID"
-                                        />
-                                        {
-                                            <select
-                                                id="update_role_id"
+                                                id="role_id"
                                                 name="role_id"
                                                 value={data.role_id}
                                                 className="mt-1 block w-full"
@@ -230,12 +215,12 @@ export default function UpdateUser({ results, title }) {
                                                     )
                                                 }
                                             >
-                                                <option value="">
+                                                <option value="" disabled>
                                                     Pilih Role
                                                 </option>
-                                                {role.map((item, index) => (
+                                                {role.map((item) => (
                                                     <option
-                                                        key={index}
+                                                        key={item.id}
                                                         value={item.id}
                                                     >
                                                         {item.name_role}
@@ -248,6 +233,121 @@ export default function UpdateUser({ results, title }) {
                                             className="mt-2"
                                         />
                                     </div>
+                                    {data?.role_id == 1 ? null : (
+                                        <>
+                                            {data?.role_id == 2 ? (
+                                                <div className="flex flex-col gap-2 w-full">
+                                                    <InputLabel
+                                                        htmlFor="wilayah_id"
+                                                        value="Wilayah"
+                                                    />
+                                                    {
+                                                        <select
+                                                            id="wilayah_id"
+                                                            name="wilayah_id"
+                                                            value={35}
+                                                            className="mt-1 block w-full"
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "wilayah_id",
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                        >
+                                                            {wilayah.map(
+                                                                (item) => (
+                                                                    <option
+                                                                        key={
+                                                                            item.id
+                                                                        }
+                                                                        disabled={
+                                                                            item.id ==
+                                                                            35
+                                                                                ? false
+                                                                                : true
+                                                                        }
+                                                                        value={
+                                                                            item.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            item.nama
+                                                                        }
+                                                                    </option>
+                                                                )
+                                                            )}
+                                                        </select>
+                                                    }
+                                                    <InputError
+                                                        message={
+                                                            errors.wilayah_id
+                                                        }
+                                                        className="mt-2"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div className="flex flex-col gap-2 w-full">
+                                                    <InputLabel
+                                                        htmlFor="wilayah_id"
+                                                        value="Wilayah"
+                                                    />
+                                                    {
+                                                        <select
+                                                            id="wilayah_id"
+                                                            name="wilayah_id"
+                                                            value={
+                                                                data.wilayah_id
+                                                            }
+                                                            className="mt-1 block w-full"
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "wilayah_id",
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                        >
+                                                            <option
+                                                                value=""
+                                                                disabled
+                                                            >
+                                                                Pilih Wilayah
+                                                            </option>
+                                                            {wilayah.map(
+                                                                (item) => (
+                                                                    <option
+                                                                        key={
+                                                                            item.id
+                                                                        }
+                                                                        disabled={
+                                                                            item.id ==
+                                                                            35
+                                                                                ? true
+                                                                                : false
+                                                                        }
+                                                                        value={
+                                                                            item.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            item.nama
+                                                                        }
+                                                                    </option>
+                                                                )
+                                                            )}
+                                                        </select>
+                                                    }
+                                                    <InputError
+                                                        message={
+                                                            errors.wilayah_id
+                                                        }
+                                                        className="mt-2"
+                                                    />
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
                                 </div>
                             </div>
                             <div className="flex justify-end">

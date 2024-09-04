@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\User\AdminController;
 use App\Http\Controllers\User\ClientController;
 use Illuminate\Support\Facades\Route;
 
@@ -57,8 +58,12 @@ Route::middleware('auth')->group(function () {
     // User
     Route::post('create-user', [ClientController::class, 'store'])
         ->name('create-user.store');
+    Route::post('admin-create-user', [AdminController::class, 'store'])
+        ->name('admin.create-user.store');
     Route::post('update-user', [ClientController::class, 'update'])
         ->name('update-user.update');
+    Route::post('admin-update-user', [AdminController::class, 'update'])
+        ->name('admin.update-user.update');
     Route::delete('delete-user', [ClientController::class, 'destroy'])
         ->name('delete-user.destroy');
 

@@ -21,10 +21,11 @@ class IdentifikasiWajah extends Model
         'perkara',
         'foto_target',
         'foto_hasil_fr',
+        'demo_grafi',
         'nama',
         'nik',
-        'ttl',
-        'alamat',
+        'created_at',
+        'updated_at',
     ];
 
     public function user()

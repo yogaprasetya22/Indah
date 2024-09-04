@@ -32,6 +32,7 @@ class ClientController extends Controller
         $tersangka = Tersangka::with(['user.wilayah', 'user.role'])->whereHas('user', function ($query) {
             $query->where('wilayah_id', Auth::user()->wilayah_id);
         })->latest()->get();
+
         return Inertia::render('client/Index', [
             'title' => "Dashboard",
             'data' => $user,
@@ -60,12 +61,11 @@ class ClientController extends Controller
             'ident_polda_res' => 'required',
             'operator' => 'required',
             'perkara' => 'required',
-            'foto_target' => 'required|file|max:2048', // 2 MB
-            'foto_hasil_fr' => 'required|file|max:2048', // 2 MB
+            'foto_target' => 'required|file|max:1000', // 1 mb
+            'foto_hasil_fr' => 'required|file|max:1000', // 1 mb
+            'demo_grafi' => 'required|file|max:1000', // 1 mb
             'nama' => 'required',
             'nik' => 'required',
-            'ttl' => 'required',
-            'alamat' => 'required',
         ], [
             'tanggal_proses.required' => 'Tanggal Proses harus diisi',
             'dasar_rujukan.required' => 'Dasar Rujukan harus diisi',
@@ -73,28 +73,31 @@ class ClientController extends Controller
             'operator.required' => 'Operator harus diisi',
             'perkara.required' => 'Perkara harus diisi',
             'foto_target.required' => 'Foto Target harus diisi',
-            'foto_target.max' => 'Ukuran Foto Target maksimal 2 MB',
+            'foto_target.max' => 'Ukuran Foto Target maksimal 1 MB',
             'foto_hasil_fr.required' => 'Foto Hasil FR harus diisi',
-            'foto_hasil_fr.max' => 'Ukuran Foto Hasil FR maksimal 2 MB',
+            'foto_hasil_fr.max' => 'Ukuran Foto Hasil FR maksimal 1 MB',
+            'demo_grafi.required' => 'Data Demo Grafi harus diisi',
+            'demo_grafi.max' => 'Ukuran Data Demo Grafi maksimal 1 MB',
             'nama.required' => 'Nama harus diisi',
             'nik.required' => 'NIK harus diisi',
-            'ttl.required' => 'TTL harus diisi',
-            'alamat.required' => 'Alamat harus diisi',
         ]);
 
 
         // file upload
         $foto_target = $request->file('foto_target');
         $foto_hasil_fr = $request->file('foto_hasil_fr');
+        $demo_grafi = $request->file('demo_grafi');
 
         $foto_target_name = Uuid::uuid4()->toString() . '_' . $foto_target->getClientOriginalName();
         $foto_hasil_fr_name = Uuid::uuid4()->toString() . '_' . $foto_hasil_fr->getClientOriginalName();
+        $demo_grafi_name = Uuid::uuid4()->toString() . '_' . $demo_grafi->getClientOriginalName();
 
         $role = Auth::user()->role->name_role;
         $my_uuid = Auth::user()->uuid;
 
         $foto_target->storeAs('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'foto-target', $foto_target_name);
         $foto_hasil_fr->storeAs('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'foto-hasil-fr', $foto_hasil_fr_name);
+        $demo_grafi->storeAs('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'demo-grafi', $demo_grafi_name);
 
         $data = [
             'uuid' => str()->uuid(),
@@ -106,6 +109,7 @@ class ClientController extends Controller
             'perkara' => $request->perkara,
             'foto_target' => $foto_target_name,
             'foto_hasil_fr' => $foto_hasil_fr_name,
+            'demo_grafi' => $demo_grafi_name,
             'nama' => $request->nama,
             'nik' => $request->nik,
             'ttl' => $request->ttl,
@@ -127,8 +131,6 @@ class ClientController extends Controller
             'perkara' => 'required',
             'nama' => 'required',
             'nik' => 'required',
-            'ttl' => 'required',
-            'alamat' => 'required',
         ], [
             'tanggal_proses.required' => 'Tanggal Proses harus diisi',
             'dasar_rujukan.required' => 'Dasar Rujukan harus diisi',
@@ -137,8 +139,6 @@ class ClientController extends Controller
             'perkara.required' => 'Perkara harus diisi',
             'nama.required' => 'Nama harus diisi',
             'nik.required' => 'NIK harus diisi',
-            'ttl.required' => 'TTL harus diisi',
-            'alamat.required' => 'Alamat harus diisi',
         ]);
         $role = User::with(['role'])->where('id', $request->user_id)->first()->role->name_role;
         $my_uuid = User::where('id', $request->user_id)->first()->uuid;
@@ -174,6 +174,20 @@ class ClientController extends Controller
             $data->foto_hasil_fr = $foto_hasil_fr_name;
         }
 
+        // Update demo_grafi jika ada file baru
+        if ($request->hasFile('demo_grafi') && $request->file('demo_grafi')->isValid()) {
+            // Hapus file lama jika ada
+            if ($data->demo_grafi) {
+                Storage::delete('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'demo-grafi/' . $data->demo_grafi);
+            }
+
+            // Upload file baru
+            $demo_grafi = $request->file('demo_grafi');
+            $demo_grafi_name = Uuid::uuid4()->toString() . '_' . $demo_grafi->getClientOriginalName();
+            $demo_grafi->storeAs('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'demo-grafi', $demo_grafi_name);
+            $data->demo_grafi = $demo_grafi_name;
+        }
+
         // Update data lainnya
         $data->tanggal_proses = date('Y-m-d', strtotime($request->tanggal_proses));
         $data->dasar_rujukan = $request->dasar_rujukan;
@@ -182,8 +196,6 @@ class ClientController extends Controller
         $data->perkara = $request->perkara;
         $data->nama = $request->nama;
         $data->nik = $request->nik;
-        $data->ttl = $request->ttl;
-        $data->alamat = $request->alamat;
         $data->save();
 
         return redirect()->back()->with('success', 'Data Identifikasi Wajah berhasil diupdate');
@@ -206,6 +218,11 @@ class ClientController extends Controller
             Storage::delete('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'foto-hasil-fr/' . $data->foto_hasil_fr);
         }
 
+        // Hapus file demo_grafi jika ada
+        if ($data->demo_grafi) {
+            Storage::delete('private/identifikasi-wajah/' . $role . '/' . $my_uuid . '/' . 'demo-grafi/' . $data->demo_grafi);
+        }
+
         $data->delete();
 
         return redirect()->back()->with('success', 'Data Identifikasi Wajah berhasil dihapus');
@@ -226,20 +243,20 @@ class ClientController extends Controller
     public function createTersangka(Request $request)
     {
         $request->validate([
-            'foto_depan' => 'required|file|max:2048', // 2 MB
-            'foto_kanan' => 'required|file|max:2048', // 2 MB
-            'foto_kiri' => 'required|file|max:2048',  // 2 MB
+            'foto_depan' => 'required|file|max:1000', // 1 mb
+            'foto_kanan' => 'required|file|max:1000', // 1 mb
+            'foto_kiri' => 'required|file|max:2048',  // 1 MB
             'nama' => 'required',
             'ttl' => 'required',
             'alamat' => 'required',
             'perkara' => 'required',
         ], [
             'foto_depan.required' => 'Foto Depan harus diisi',
-            'foto_depan.max' => 'Ukuran Foto Depan maksimal 2 MB',
+            'foto_depan.max' => 'Ukuran Foto Depan maksimal 1 MB',
             'foto_kanan.required' => 'Foto Kanan harus diisi',
-            'foto_kanan.max' => 'Ukuran Foto Kanan maksimal 2 MB',
+            'foto_kanan.max' => 'Ukuran Foto Kanan maksimal 1 MB',
             'foto_kiri.required' => 'Foto Kiri harus diisi',
-            'foto_kiri.max' => 'Ukuran Foto Kiri maksimal 2 MB',
+            'foto_kiri.max' => 'Ukuran Foto Kiri maksimal 1 MB',
             'nama.required' => 'Nama harus diisi',
             'ttl.required' => 'TTL harus diisi',
             'alamat.required' => 'Alamat harus diisi',
@@ -459,6 +476,7 @@ class ClientController extends Controller
 
         // create user
         User::create([
+            'uuid' => str()->uuid(),
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
@@ -467,22 +485,6 @@ class ClientController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'User berhasil ditambahkan');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -509,6 +511,7 @@ class ClientController extends Controller
             'email' => $request->email,
             'role_id' => (int)$request->role_id,
             'wilayah_id' => (int)$request->wilayah_id,
+            'password' => bcrypt($request->password),
         ]);
 
         return redirect()->back()->with('success', 'User berhasil diupdate');

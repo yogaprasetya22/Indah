@@ -2,11 +2,9 @@ import Layout from "@/Layouts/Layout";
 import React from "react";
 
 export default function Index({ auth, tersangka, identifikasi_wajah }) {
-    console.log(auth);
     return (
         <Layout>
             <span className="text-extrabold text-2xl">
-                {" "}
                 🙌 Selamat datang {auth.user.name} di dashboard
             </span>
             <div className="w-full flex flex-row justify-between gap-5 py-5">

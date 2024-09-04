@@ -58,7 +58,7 @@ export default function SOPRekontruksiWajah({ data }) {
                                 fontFamilySelection: true,
                                 fontSizeSelection: true,
                                 paragraphFormatSelection: true,
-                                heightMin: 100,
+                                heightMin: 300,
                                 heightMax: 450,
                                 linkInsertButtons: [],
                                 toolbarButtons: [

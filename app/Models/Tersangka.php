@@ -21,6 +21,8 @@ class Tersangka extends Model
         'ttl',
         'alamat',
         'perkara',
+        'created_at',
+        'updated_at',
     ];
 
     public function user()

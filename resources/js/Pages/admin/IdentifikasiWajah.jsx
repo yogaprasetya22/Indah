@@ -7,9 +7,9 @@ import moment from "moment/moment";
 moment.locale("id");
 import "moment/locale/id";
 import Delete from "@/Components/modal/IdentifikasiWajah/Delete";
-import { usePage } from "@inertiajs/react";
 
-export default function IdentifikasiWajah({ data, auth }) {
+export default function IdentifikasiWajah({ data: datas, auth }) {
+    const [data, setData] = useState(datas);
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
@@ -19,11 +19,15 @@ export default function IdentifikasiWajah({ data, auth }) {
     const [search, setSearch] = useState("");
 
     useEffect(() => {
+        setData(datas);
+    }, [datas]);
+
+    useEffect(() => {
         setLoading(true);
         const filteredData = data;
         const endOffset = parseInt(itemOffset) + parseInt(page);
         const sortData = filteredData
-            .sort((a, b) => a.id - b.id)
+            .sort((a, b) => moment(b.created_at) - moment(a.created_at))
             .slice(itemOffset, endOffset);
 
         setCurrentItems(sortData);
@@ -40,26 +44,50 @@ export default function IdentifikasiWajah({ data, auth }) {
         setItemOffset(newOffset);
     };
 
-    const handleSearch = () => {
-        const filteredData = data;
-        const searchResult = filteredData.filter(
-            (item) =>
-                item.nama.toLowerCase().includes(search.toLowerCase()) ||
-                item.nik.toLowerCase().includes(search.toLowerCase()) ||
-                item.ttl.toLowerCase().includes(search.toLowerCase()) ||
-                item.alamat.toLowerCase().includes(search.toLowerCase()) ||
-                item.perkara.toLowerCase().includes(search.toLowerCase()) ||
-                item.dasar_rujukan
-                    .toLowerCase()
-                    .includes(search.toLowerCase()) ||
-                item.operator.toLowerCase().includes(search.toLowerCase()) ||
-                moment(item.tanggal_proses)
-                    .format("LL")
-                    .toLowerCase()
-                    .includes(search.toLowerCase())
-        );
-        setCurrentItems(searchResult);
-        setPageCount(Math.ceil(searchResult.length / page));
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (search) {
+            const filteredData = datas;
+            const searchResult = filteredData.filter(
+                (item) =>
+                    item.nama.toLowerCase().includes(search.toLowerCase()) ||
+                    item.nik.toLowerCase().includes(search.toLowerCase()) ||
+                    item.perkara.toLowerCase().includes(search.toLowerCase()) ||
+                    item.ident_polda_res
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
+                    item.dasar_rujukan
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
+                    item.operator
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
+                    moment(item.tanggal_proses)
+                        .format("LL")
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
+            );
+            setData(searchResult);
+            const endOffset = parseInt(itemOffset) + parseInt(page);
+            const sortData = searchResult
+                .sort((a, b) => moment(b.created_at) - moment(a.created_at))
+                .slice(itemOffset, endOffset);
+
+            setCurrentItems(sortData);
+            setPageCount(Math.ceil(searchResult.length / page));
+            setItemOffset(0);
+        } else {
+            const filteredData = datas;
+            const endOffset = parseInt(itemOffset) + parseInt(page);
+            const sortData = filteredData
+                .sort((a, b) => moment(b.created_at) - moment(a.created_at))
+                .slice(itemOffset, endOffset);
+            setData(filteredData);
+            setCurrentItems(sortData);
+            setPageCount(Math.ceil(filteredData.length / page));
+            setItemOffset(0);
+            setSearch("");
+        }
     };
 
     return (
@@ -81,7 +109,10 @@ export default function IdentifikasiWajah({ data, auth }) {
                                 ))}
                             </select>
                         </div>
-                        <div className="flex flex-row items-center justify-center gap-2">
+                        <form
+                            className="flex flex-row items-center justify-center gap-2"
+                            onSubmit={handleSearch}
+                        >
                             <input
                                 type="text"
                                 className="input input-bordered"
@@ -89,10 +120,10 @@ export default function IdentifikasiWajah({ data, auth }) {
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
-                            <button className="btn" onClick={handleSearch}>
+                            <button className="btn" type="sumbit">
                                 <i className="fas fa-search"></i>
                             </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
                 <div className="overflow-x-auto overflow-table ">
@@ -115,22 +146,21 @@ export default function IdentifikasiWajah({ data, auth }) {
                                     Perkara
                                 </th>
                                 <th className=" uppercase text-[10px] text-center ">
+                                    Terduga &
+                                    <br />
+                                    Tersangka
+                                </th>
+                                <th className=" uppercase text-[10px] text-center ">
+                                    NIK
+                                </th>
+                                <th className=" uppercase text-[10px] text-center ">
                                     Target
                                 </th>
                                 <th className=" uppercase text-[10px] text-center ">
                                     Hasil FR
                                 </th>
                                 <th className=" uppercase text-[10px] text-center ">
-                                    Nama
-                                </th>
-                                <th className=" uppercase text-[10px] text-center ">
-                                    NIK
-                                </th>
-                                <th className=" uppercase text-[10px] text-center ">
-                                    TTL
-                                </th>
-                                <th className=" uppercase text-[10px] text-center ">
-                                    Alamat
+                                    Demo Grafi
                                 </th>
                                 <th className=" uppercase text-[10px] text-center ">
                                     Action
@@ -156,6 +186,12 @@ export default function IdentifikasiWajah({ data, auth }) {
                                     </td>
                                     <td className="text-center text-xs max-w-[6rem]">
                                         {item?.perkara}
+                                    </td>
+                                    <td className="text-center text-xs max-w-[6rem] max-h-[6rem] break-words">
+                                        {item?.nama}
+                                    </td>
+                                    <td className="text-center text-xs">
+                                        {item?.nik}
                                     </td>
                                     <td className="text-center text-xs ">
                                         <PhotoView
@@ -220,21 +256,40 @@ export default function IdentifikasiWajah({ data, auth }) {
                                             />
                                         </PhotoView>
                                     </td>
-                                    <td className="text-center text-xs max-w-[6rem] max-h-[6rem] break-words">
-                                        {item?.nama}
-                                    </td>
                                     <td className="text-center text-xs">
-                                        {item?.nik}
-                                    </td>
-                                    <td className="text-center text-xs">
-                                        {item?.ttl}
-                                    </td>
-                                    <td className="text-center text-xs">
-                                        {item?.alamat}
+                                        <PhotoView
+                                            speed={() => 800}
+                                            easing={(type) =>
+                                                type === 2
+                                                    ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+                                                    : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+                                            }
+                                            src={route("file.get", {
+                                                direktori: "identifikasi-wajah",
+                                                role: item.user.role.name_role,
+                                                uuid: item.user.uuid,
+                                                disk: "demo-grafi",
+                                                filename: item?.demo_grafi,
+                                            })}
+                                        >
+                                            <img
+                                                src={route("file.get", {
+                                                    direktori:
+                                                        "identifikasi-wajah",
+                                                    role: item.user.role
+                                                        .name_role,
+                                                    uuid: item.user.uuid,
+                                                    disk: "demo-grafi",
+                                                    filename: item?.demo_grafi,
+                                                })}
+                                                alt="Foto Hasil FR"
+                                                className="w-[6rem] max-h-[6rem] object-cover rounded mx-auto"
+                                            />
+                                        </PhotoView>
                                     </td>
                                     <td>
                                         <button
-                                            className="btn btn-ghost btn-md"
+                                            className="btn btn-ghost btn-md px-2"
                                             onClick={() => {
                                                 setResultModal(item);
                                                 window.my_modal_2.show();
@@ -243,7 +298,7 @@ export default function IdentifikasiWajah({ data, auth }) {
                                             <i className="text-indigo-500 text-xl fas fa-edit"></i>
                                         </button>
                                         <button
-                                            className="btn btn-ghost btn-md"
+                                            className="btn btn-ghost btn-md px-2"
                                             onClick={() => {
                                                 setResultModal(item);
                                                 window.my_modal_3.show();

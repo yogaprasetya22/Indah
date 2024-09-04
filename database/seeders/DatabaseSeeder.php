@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'password' => bcrypt('asdasdasd'),
             'role_id' => '1',
+            'wilayah_id' => '36',
             'created_at' => now(),
         ]);
 

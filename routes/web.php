@@ -88,8 +88,10 @@ Route::prefix('admin')->middleware(['auth', 'role:1', 'verified'])->group(functi
     Route::get('/user', [AdminController::class, 'User'])->name('admin.user');
     Route::get('/identifikasi-wajah', [AdminController::class, 'Identifikasiwajah'])->name('admin.identifikasi-wajah');
     Route::get('/identifikasi-wajah/{tahun}', [AdminController::class, 'DhasboardIdentifikasiwajah'])->name('admin.identifikasi-wajah.tahun');
+    Route::get('/rekap/identifikasi-wajah/{tahun}', [AdminController::class, 'RekapIdentifikasiWajah'])->name('admin.rekap-identifikasi-wajah');
     Route::get('/tersangka', [AdminController::class, 'Tersangka'])->name('admin.tersangka');
     Route::get('/tersangka/{tahun}', [AdminController::class, 'DhasboardTersangka'])->name('admin.tersangka.tahun');
+    Route::get('/rekap/tersangka/{tahun}', [AdminController::class, 'RekapTersangka'])->name('admin.rekap-tersangka');
     Route::get('/sop-pemotretan-barang-bukti', [AdminController::class, 'SOP_Pemotretan_Barang_Bukti'])->name('admin.sop-pemotretan-bb');
     Route::post('/sop-pemotretan-barang-bukti', [AdminController::class, 'createSOP_Pemotretan_Barang_Bukti'])->name('admin.create-sop-pemotretan-bb');
     Route::get('/sop-pemotretan-tkp', [AdminController::class, 'SOP_Pemotretan_TKP'])->name('admin.sop-pemotretan-tkp');

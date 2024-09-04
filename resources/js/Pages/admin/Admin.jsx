@@ -23,15 +23,15 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
     ];
 
     const tahun_identifikasi_wajah = identifikasi_wajah
-        .map((data) => moment(data.created_at).format("YYYY"))
-        .filter((value, index, self) => self.indexOf(value) === index);
+        ?.map((data) => moment(data.created_at).format("YYYY"))
+        ?.filter((value, index, self) => self.indexOf(value) === index);
     const tahun_trakhir_identifikasi_wajah = Math.max(
         ...tahun_identifikasi_wajah
     );
 
     const tahun_tersangka = tersangka
-        .map((data) => moment(data.created_at).format("YYYY"))
-        .filter((value, index, self) => self.indexOf(value) === index);
+        ?.map((data) => moment(data.created_at).format("YYYY"))
+        ?.filter((value, index, self) => self.indexOf(value) === index);
     const tahun_trakhir_tersangka = Math.max(...tahun_tersangka);
 
     const [selectedTahunIdentifikasiWajah, setSelectedTahunIdentifikasiWajah] =
@@ -57,7 +57,7 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
 
     useEffect(() => {
         setCurrentIdentifikasiWajah(
-            identifikasi_wajah.filter(
+            identifikasi_wajah?.filter(
                 (data) =>
                     moment(data.created_at).format("MMMM") ===
                     selectedBulanIdentifikasiWajah
@@ -67,7 +67,7 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
 
     useEffect(() => {
         setCurrentTersangka(
-            tersangka.filter(
+            tersangka?.filter(
                 (data) =>
                     moment(data.created_at).format("MMMM") ===
                     selectedBulanTersangka
@@ -77,7 +77,7 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
 
     useEffect(() => {
         setCurrentTahunIdentifikasiWajah(
-            identifikasi_wajah.filter(
+            identifikasi_wajah?.filter(
                 (data) =>
                     moment(data.created_at).format("YYYY") ===
                     selectedTahunIdentifikasiWajah
@@ -87,7 +87,7 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
 
     useEffect(() => {
         setCurrentTahunTersangka(
-            tersangka.filter(
+            tersangka?.filter(
                 (data) =>
                     moment(data.created_at).format("YYYY") ===
                     selectedTahunTersangka

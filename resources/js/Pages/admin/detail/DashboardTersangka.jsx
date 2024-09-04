@@ -3,10 +3,17 @@ import Layout from "@/Layouts/Layout";
 import ReactPaginate from "react-paginate";
 import { PhotoView } from "react-photo-view";
 import moment from "moment/moment";
-moment.locale("id");
 import "moment/locale/id";
+import { Link } from "@inertiajs/react";
+moment.locale("id");
 
-export default function DashboardTersangka({ data, auth }) {
+export default function DashboardTersangka({
+    data: datas,
+    wilayah,
+    tahun,
+    auth,
+}) {
+    const [data, setData] = useState(datas);
     const bulan = [
         "Januari",
         "Februari",
@@ -26,15 +33,18 @@ export default function DashboardTersangka({ data, auth }) {
     const [pageCount, setPageCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(5);
-    const [resultModal, setResultModal] = useState([]);
     const [search, setSearch] = useState("");
-    const [selectedMonth, setSelectedMonth] = useState(""); // State for month filter
+    const [selectedMonth, setSelectedMonth] = useState(""); // New state for the selected month
+    const [monthIndex, setMonthIndex] = useState(0);
+    const [wilayahId, setWilayahId] = useState(0);
+
+    useEffect(() => {
+        setData(datas);
+    }, [datas]);
 
     useEffect(() => {
         setLoading(true);
-        let filteredData = data;
-
-        // Filter data by selected month
+        let filteredData = datas; // Filter data by selected month
         if (selectedMonth) {
             filteredData = filteredData.filter(
                 (item) =>
@@ -42,15 +52,20 @@ export default function DashboardTersangka({ data, auth }) {
             );
         }
 
+        if (wilayahId) {
+            filteredData = filteredData.filter(
+                (item) => parseInt(item.user.wilayah_id) === parseInt(wilayahId)
+            );
+        }
         const endOffset = parseInt(itemOffset) + parseInt(page);
         const sortData = filteredData
-            .sort((a, b) => a.id - b.id)
+            .sort((a, b) => moment(b.created_at) - moment(a.created_at))
             .slice(itemOffset, endOffset);
 
         setCurrentItems(sortData);
         setPageCount(Math.ceil(filteredData.length / page));
         setLoading(false);
-    }, [itemOffset, data, page, selectedMonth, auth.user.id]);
+    }, [itemOffset, wilayahId, datas, page, selectedMonth, auth.user.id]);
 
     const handlePageClick = (event) => {
         window.scrollTo({
@@ -62,47 +77,51 @@ export default function DashboardTersangka({ data, auth }) {
         setItemOffset(newOffset);
     };
 
-    const handleSearch = () => {
-        let filteredData = data;
-
-        // Apply search filtering
-        const searchResult = filteredData.filter(
-            (item) =>
-                item.nama.toLowerCase().includes(search.toLowerCase()) ||
-                item.ttl.toLowerCase().includes(search.toLowerCase()) ||
-                item.alamat.toLowerCase().includes(search.toLowerCase()) ||
-                item.perkara.toLowerCase().includes(search.toLowerCase()) ||
-                moment(item.created_at)
-                    .format("LL")
-                    .toLowerCase()
-                    .includes(search.toLowerCase())
-        );
-
-        // Update filtered data with search results
-        filteredData = searchResult;
-
-        // Apply month filter on search results
-        if (selectedMonth) {
-            filteredData = filteredData.filter(
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (search) {
+            const filteredData = datas;
+            const searchResult = filteredData.filter(
                 (item) =>
-                    moment(item.created_at).format("MMMM") === selectedMonth
+                    item.nama.toLowerCase().includes(search.toLowerCase()) ||
+                    item.ttl.toLowerCase().includes(search.toLowerCase()) ||
+                    item.alamat.toLowerCase().includes(search.toLowerCase()) ||
+                    item.perkara.toLowerCase().includes(search.toLowerCase())
             );
-        }
+            setData(searchResult);
+            const endOffset = parseInt(itemOffset) + parseInt(page);
+            const sortData = searchResult
+                .sort((a, b) => moment(b.created_at) - moment(a.created_at))
+                .slice(itemOffset, endOffset);
 
-        setCurrentItems(filteredData);
-        setPageCount(Math.ceil(filteredData.length / page));
+            setCurrentItems(sortData);
+            setPageCount(Math.ceil(searchResult.length / page));
+            setItemOffset(0);
+        } else {
+            const filteredData = datas;
+            const endOffset = parseInt(itemOffset) + parseInt(page);
+            const sortData = filteredData
+                .sort((a, b) => moment(b.created_at) - moment(a.created_at))
+                .slice(itemOffset, endOffset);
+            setData(filteredData);
+            setCurrentItems(sortData);
+            setPageCount(Math.ceil(filteredData.length / page));
+            setItemOffset(0);
+            setSearch("");
+        }
     };
 
     const handleMonthChange = (e) => {
+        setMonthIndex(e.target.selectedIndex); // Update the selected month index
         setSelectedMonth(e.target.value); // Update the selected month
-        setItemOffset(0); // Reset pagination
+        setItemOffset(0); // Reset the pagination to the first page
     };
 
     return (
         <Layout>
             <div className="bg-white flex flex-col gap-5 rounded-xl">
                 <div className="flex justify-between">
-                    <div className="flex px-5 py-3 gap-10">
+                    <div className="flex px-5 py-3 gap-2">
                         <div className="flex flex-row items-center justify-center gap-2">
                             <span className="font-bold">Show:</span>
                             <select
@@ -133,6 +152,31 @@ export default function DashboardTersangka({ data, auth }) {
                             </select>
                         </div>
                         <div className="flex flex-row items-center justify-center gap-2">
+                            <span className="font-bold">Wilayah:</span>
+                            <select
+                                className="select max-w-[10rem]"
+                                value={wilayahId}
+                                onChange={(e) => setWilayahId(e.target.value)}
+                            >
+                                <option value="">All</option>
+                                {wilayah
+                                    ?.sort((a, b) =>
+                                        a.wilayah_hukum.localeCompare(
+                                            b.wilayah_hukum
+                                        )
+                                    )
+                                    .map((item, index) => (
+                                        <option key={index} value={item.id}>
+                                            {item.wilayah_hukum}
+                                        </option>
+                                    ))}
+                            </select>
+                        </div>
+
+                        <form
+                            className="flex flex-row items-center justify-center gap-2"
+                            onSubmit={handleSearch}
+                        >
                             <input
                                 type="text"
                                 className="input input-bordered"
@@ -140,10 +184,38 @@ export default function DashboardTersangka({ data, auth }) {
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
-                            <button className="btn" onClick={handleSearch}>
+                            <button className="btn" type="sumbit">
                                 <i className="fas fa-search"></i>
                             </button>
-                        </div>
+                        </form>
+                    </div>
+                    <div className="p-2">
+                        <Link
+                            href={
+                                wilayahId && monthIndex
+                                    ? route("admin.rekap-tersangka", {
+                                          tahun,
+                                          wilayah: wilayahId,
+                                          bulan: monthIndex,
+                                      })
+                                    : wilayahId
+                                    ? route("admin.rekap-tersangka", {
+                                          tahun,
+                                          wilayah: wilayahId,
+                                      })
+                                    : monthIndex
+                                    ? route("admin.rekap-tersangka", {
+                                          tahun,
+                                          bulan: monthIndex,
+                                      })
+                                    : route("admin.rekap-tersangka", {
+                                          tahun,
+                                      })
+                            }
+                            className="btn bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+                        >
+                            Rekap
+                        </Link>
                     </div>
                 </div>
                 <div className="overflow-x-auto overflow-table">
@@ -172,7 +244,7 @@ export default function DashboardTersangka({ data, auth }) {
                                     Perkara
                                 </th>
                                 <th className="uppercase text-sm text-center">
-                                    Tgl Upload
+                                    TGL UPLOAD{" "}
                                 </th>
                             </tr>
                         </thead>
@@ -205,7 +277,7 @@ export default function DashboardTersangka({ data, auth }) {
                                                     filename: item?.foto_depan,
                                                 })}
                                                 alt="Foto Depan"
-                                                className="w-[8rem] h-[8rem] bg-cover rounded mx-auto"
+                                                className="w-[6rem] h-[6rem] object-cover rounded mx-auto"
                                             />
                                         </PhotoView>
                                     </td>
@@ -235,7 +307,7 @@ export default function DashboardTersangka({ data, auth }) {
                                                     filename: item?.foto_kanan,
                                                 })}
                                                 alt="Foto Kanan"
-                                                className="w-[8rem] h-[8rem] bg-cover rounded mx-auto"
+                                                className="w-[6rem] h-[6rem] object-cover rounded mx-auto"
                                             />
                                         </PhotoView>
                                     </td>
@@ -265,7 +337,7 @@ export default function DashboardTersangka({ data, auth }) {
                                                     filename: item?.foto_kiri,
                                                 })}
                                                 alt="Foto Kiri"
-                                                className="w-[8rem] h-[8rem] bg-cover rounded mx-auto"
+                                                className="w-[6rem] h-[6rem] object-cover rounded mx-auto"
                                             />
                                         </PhotoView>
                                     </td>
@@ -279,8 +351,10 @@ export default function DashboardTersangka({ data, auth }) {
                                     <td className="text-center">
                                         {item?.perkara}
                                     </td>
-                                    <td className="text-center text-xs max-w-[6rem]">
-                                        {moment(item?.created_at).format("LL")}
+                                    <td className="text-center">
+                                        {moment(item.created_at).format(
+                                            "DD MMMM YYYY"
+                                        )}
                                     </td>
                                 </tr>
                             ))}

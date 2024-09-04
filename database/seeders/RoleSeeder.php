@@ -244,7 +244,7 @@ class RoleSeeder extends Seeder
                 "wilayah_hukum" => "Pusinafis",
                 "markas" => "Pusinafis",
                 "gambar" => "https://akpol.ac.id/wp-content/uploads/2020/10/pusinafis.png"
-            ]
+            ],
         ];
 
 

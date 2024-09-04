@@ -21,10 +21,9 @@ return new class extends Migration
             $table->text('perkara');
             $table->string('foto_target');
             $table->string('foto_hasil_fr');
+            $table->string('demo_grafi');
             $table->string('nama')->nullable();
             $table->string('nik')->nullable();
-            $table->string('ttl')->nullable();
-            $table->text('alamat')->nullable();
             $table->timestamps();
         });
     }

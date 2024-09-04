@@ -74,6 +74,34 @@ body,
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
 }
 
+@media print {
+    body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust        : exact;
+    }
+
+    .bg-gray-200 {
+        background-color: #e5e7eb !important;
+        /* Ganti dengan warna yang diinginkan */
+    }
+
+    .bg-gray-300 {
+        background-color: #d1d5db !important;
+        /* Ganti dengan warna yang diinginkan */
+    }
+
+    .btn {
+        display: none;
+        /* Sembunyikan tombol saat cetak */
+    }
+
+    /* Jika Anda menggunakan background image */
+    .your-element {
+        background-image: url('path/to/your/image.png');
+        background-size : cover;
+    }
+}
+
 @layer base {
     .font-outline-2 {
         -webkit-text-stroke: 1px black;
