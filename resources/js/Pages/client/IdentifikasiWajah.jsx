@@ -3,7 +3,7 @@ import Add from "@/Components/modal/IdentifikasiWajah/Add";
 import Update from "@/Components/modal/IdentifikasiWajah/Update";
 import Layout from "@/Layouts/Layout";
 import ReactPaginate from "react-paginate";
-import { PhotoView } from "react-photo-view";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 import moment from "moment/moment";
 moment.locale("id");
 import "moment/locale/id";

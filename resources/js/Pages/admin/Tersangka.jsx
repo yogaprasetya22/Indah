@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@/Layouts/Layout";
 import ReactPaginate from "react-paginate";
-import { PhotoView } from "react-photo-view";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 import UpdateTersangka from "@/Components/modal/Tersangka/Update";
 import Delete from "@/Components/modal/Tersangka/Delete";
 import moment from "moment/moment";
