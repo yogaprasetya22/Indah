@@ -94,12 +94,6 @@ body,
         display: none;
         /* Sembunyikan tombol saat cetak */
     }
-
-    /* Jika Anda menggunakan background image */
-    .your-element {
-        background-image: url('path/to/your/image.png');
-        background-size : cover;
-    }
 }
 
 @layer base {

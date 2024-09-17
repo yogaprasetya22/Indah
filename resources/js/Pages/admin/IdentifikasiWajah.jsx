@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Update from "@/Components/modal/IdentifikasiWajah/Update";
 import Layout from "@/Layouts/Layout";
 import ReactPaginate from "react-paginate";
-import { PhotoView } from "react-photo-view";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 import moment from "moment/moment";
 moment.locale("id");
 import "moment/locale/id";
@@ -194,22 +194,17 @@ export default function IdentifikasiWajah({ data: datas, auth }) {
                                         {item?.nik}
                                     </td>
                                     <td className="text-center text-xs ">
-                                        <PhotoView
-                                            speed={() => 800}
-                                            easing={(type) =>
-                                                type === 2
-                                                    ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
-                                                    : "cubic-bezier(0.34, 1.56, 0.64, 1)"
-                                            }
-                                            src={route("file.get", {
-                                                direktori: "identifikasi-wajah",
-                                                role: item.user.role.name_role,
-                                                uuid: item.user.uuid,
-                                                disk: "foto-target",
-                                                filename: item?.foto_target,
-                                            })}
+                                        <PhotoProvider
+                                            pullClosable={false}
+                                            maskClosable={false}
                                         >
-                                            <img
+                                            <PhotoView
+                                                speed={() => 800}
+                                                easing={(type) =>
+                                                    type === 2
+                                                        ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+                                                        : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+                                                }
                                                 src={route("file.get", {
                                                     direktori:
                                                         "identifikasi-wajah",
@@ -219,28 +214,36 @@ export default function IdentifikasiWajah({ data: datas, auth }) {
                                                     disk: "foto-target",
                                                     filename: item?.foto_target,
                                                 })}
-                                                alt="Foto Target"
-                                                className="w-[6rem] max-h-[6rem] object-cover rounded mx-auto"
-                                            />
-                                        </PhotoView>
+                                            >
+                                                <img
+                                                    src={route("file.get", {
+                                                        direktori:
+                                                            "identifikasi-wajah",
+                                                        role: item.user.role
+                                                            .name_role,
+                                                        uuid: item.user.uuid,
+                                                        disk: "foto-target",
+                                                        filename:
+                                                            item?.foto_target,
+                                                    })}
+                                                    alt="Foto Target"
+                                                    className="w-[6rem] max-h-[6rem] object-cover rounded mx-auto"
+                                                />
+                                            </PhotoView>
+                                        </PhotoProvider>
                                     </td>
                                     <td className="text-center text-xs">
-                                        <PhotoView
-                                            speed={() => 800}
-                                            easing={(type) =>
-                                                type === 2
-                                                    ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
-                                                    : "cubic-bezier(0.34, 1.56, 0.64, 1)"
-                                            }
-                                            src={route("file.get", {
-                                                direktori: "identifikasi-wajah",
-                                                role: item.user.role.name_role,
-                                                uuid: item.user.uuid,
-                                                disk: "foto-hasil-fr",
-                                                filename: item?.foto_hasil_fr,
-                                            })}
+                                        <PhotoProvider
+                                            pullClosable={false}
+                                            maskClosable={false}
                                         >
-                                            <img
+                                            <PhotoView
+                                                speed={() => 800}
+                                                easing={(type) =>
+                                                    type === 2
+                                                        ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+                                                        : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+                                                }
                                                 src={route("file.get", {
                                                     direktori:
                                                         "identifikasi-wajah",
@@ -251,28 +254,36 @@ export default function IdentifikasiWajah({ data: datas, auth }) {
                                                     filename:
                                                         item?.foto_hasil_fr,
                                                 })}
-                                                alt="Foto Hasil FR"
-                                                className="w-[6rem] max-h-[6rem] object-cover rounded mx-auto"
-                                            />
-                                        </PhotoView>
+                                            >
+                                                <img
+                                                    src={route("file.get", {
+                                                        direktori:
+                                                            "identifikasi-wajah",
+                                                        role: item.user.role
+                                                            .name_role,
+                                                        uuid: item.user.uuid,
+                                                        disk: "foto-hasil-fr",
+                                                        filename:
+                                                            item?.foto_hasil_fr,
+                                                    })}
+                                                    alt="Foto Hasil FR"
+                                                    className="w-[6rem] max-h-[6rem] object-cover rounded mx-auto"
+                                                />
+                                            </PhotoView>
+                                        </PhotoProvider>
                                     </td>
                                     <td className="text-center text-xs">
-                                        <PhotoView
-                                            speed={() => 800}
-                                            easing={(type) =>
-                                                type === 2
-                                                    ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
-                                                    : "cubic-bezier(0.34, 1.56, 0.64, 1)"
-                                            }
-                                            src={route("file.get", {
-                                                direktori: "identifikasi-wajah",
-                                                role: item.user.role.name_role,
-                                                uuid: item.user.uuid,
-                                                disk: "demo-grafi",
-                                                filename: item?.demo_grafi,
-                                            })}
+                                        <PhotoProvider
+                                            pullClosable={false}
+                                            maskClosable={false}
                                         >
-                                            <img
+                                            <PhotoView
+                                                speed={() => 800}
+                                                easing={(type) =>
+                                                    type === 2
+                                                        ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+                                                        : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+                                                }
                                                 src={route("file.get", {
                                                     direktori:
                                                         "identifikasi-wajah",
@@ -282,10 +293,23 @@ export default function IdentifikasiWajah({ data: datas, auth }) {
                                                     disk: "demo-grafi",
                                                     filename: item?.demo_grafi,
                                                 })}
-                                                alt="Foto Hasil FR"
-                                                className="w-[6rem] max-h-[6rem] object-cover rounded mx-auto"
-                                            />
-                                        </PhotoView>
+                                            >
+                                                <img
+                                                    src={route("file.get", {
+                                                        direktori:
+                                                            "identifikasi-wajah",
+                                                        role: item.user.role
+                                                            .name_role,
+                                                        uuid: item.user.uuid,
+                                                        disk: "demo-grafi",
+                                                        filename:
+                                                            item?.demo_grafi,
+                                                    })}
+                                                    alt="Foto Hasil FR"
+                                                    className="w-[6rem] max-h-[6rem] object-cover rounded mx-auto"
+                                                />
+                                            </PhotoView>
+                                        </PhotoProvider>
                                     </td>
                                     <td>
                                         <button

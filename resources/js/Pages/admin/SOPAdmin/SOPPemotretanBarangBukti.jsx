@@ -17,7 +17,7 @@ export default function SOPPemotretanBarangBukti({ data }) {
     const [model, setModel] = useState(data?.deskripsi || "");
 
     const handleSumbit = () => {
-        router.post(route("admin.admin.create-sop-pemotretan-bb"), {
+        router.post(route("admin.create-sop-pemotretan-bb"), {
             value: model,
         });
     };

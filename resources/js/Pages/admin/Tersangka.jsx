@@ -59,23 +59,23 @@ export default function Tersangka({ data: datas, auth }) {
             setData(searchResult);
             const endOffset = parseInt(itemOffset) + parseInt(page);
             const sortData = searchResult
-                 .sort((a, b) => moment(b.created_at) - moment(a.created_at))
+                .sort((a, b) => moment(b.created_at) - moment(a.created_at))
                 .slice(itemOffset, endOffset);
 
             setCurrentItems(sortData);
             setPageCount(Math.ceil(searchResult.length / page));
             setItemOffset(0);
         } else {
-             const filteredData = datas;
-             const endOffset = parseInt(itemOffset) + parseInt(page);
-             const sortData = filteredData
-                 .sort((a, b) => moment(b.created_at) - moment(a.created_at))
-                 .slice(itemOffset, endOffset);
-             setData(filteredData);
-             setCurrentItems(sortData);
-             setPageCount(Math.ceil(filteredData.length / page));
-             setItemOffset(0);
-             setSearch("");
+            const filteredData = datas;
+            const endOffset = parseInt(itemOffset) + parseInt(page);
+            const sortData = filteredData
+                .sort((a, b) => moment(b.created_at) - moment(a.created_at))
+                .slice(itemOffset, endOffset);
+            setData(filteredData);
+            setCurrentItems(sortData);
+            setPageCount(Math.ceil(filteredData.length / page));
+            setItemOffset(0);
+            setSearch("");
         }
     };
 
@@ -149,22 +149,17 @@ export default function Tersangka({ data: datas, auth }) {
                             {currentItems.map((item, index) => (
                                 <tr key={index}>
                                     <td className="text-center">
-                                        <PhotoView
-                                            speed={() => 800}
-                                            easing={(type) =>
-                                                type === 2
-                                                    ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
-                                                    : "cubic-bezier(0.34, 1.56, 0.64, 1)"
-                                            }
-                                            src={route("file.get", {
-                                                direktori: "tersangka",
-                                                role: item.user.role.name_role,
-                                                uuid: item.user.uuid,
-                                                disk: "foto-depan",
-                                                filename: item?.foto_depan,
-                                            })}
+                                        <PhotoProvider
+                                            pullClosable={false}
+                                            maskClosable={false}
                                         >
-                                            <img
+                                            <PhotoView
+                                                speed={() => 800}
+                                                easing={(type) =>
+                                                    type === 2
+                                                        ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+                                                        : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+                                                }
                                                 src={route("file.get", {
                                                     direktori: "tersangka",
                                                     role: item.user.role
@@ -173,28 +168,35 @@ export default function Tersangka({ data: datas, auth }) {
                                                     disk: "foto-depan",
                                                     filename: item?.foto_depan,
                                                 })}
-                                                alt="Foto Depan"
-                                                className="w-[6rem] h-[6rem] object-cover rounded mx-auto"
-                                            />
-                                        </PhotoView>
+                                            >
+                                                <img
+                                                    src={route("file.get", {
+                                                        direktori: "tersangka",
+                                                        role: item.user.role
+                                                            .name_role,
+                                                        uuid: item.user.uuid,
+                                                        disk: "foto-depan",
+                                                        filename:
+                                                            item?.foto_depan,
+                                                    })}
+                                                    alt="Foto Depan"
+                                                    className="w-[6rem] h-[6rem] object-cover rounded mx-auto"
+                                                />
+                                            </PhotoView>
+                                        </PhotoProvider>
                                     </td>
                                     <td className="text-center">
-                                        <PhotoView
-                                            speed={() => 800}
-                                            easing={(type) =>
-                                                type === 2
-                                                    ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
-                                                    : "cubic-bezier(0.34, 1.56, 0.64, 1)"
-                                            }
-                                            src={route("file.get", {
-                                                direktori: "tersangka",
-                                                role: item.user.role.name_role,
-                                                uuid: item.user.uuid,
-                                                disk: "foto-kanan",
-                                                filename: item?.foto_kanan,
-                                            })}
+                                        <PhotoProvider
+                                            pullClosable={false}
+                                            maskClosable={false}
                                         >
-                                            <img
+                                            <PhotoView
+                                                speed={() => 800}
+                                                easing={(type) =>
+                                                    type === 2
+                                                        ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+                                                        : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+                                                }
                                                 src={route("file.get", {
                                                     direktori: "tersangka",
                                                     role: item.user.role
@@ -203,28 +205,35 @@ export default function Tersangka({ data: datas, auth }) {
                                                     disk: "foto-kanan",
                                                     filename: item?.foto_kanan,
                                                 })}
-                                                alt="Foto Kanan"
-                                                className="w-[6rem] h-[6rem] object-cover rounded mx-auto"
-                                            />
-                                        </PhotoView>
+                                            >
+                                                <img
+                                                    src={route("file.get", {
+                                                        direktori: "tersangka",
+                                                        role: item.user.role
+                                                            .name_role,
+                                                        uuid: item.user.uuid,
+                                                        disk: "foto-kanan",
+                                                        filename:
+                                                            item?.foto_kanan,
+                                                    })}
+                                                    alt="Foto Kanan"
+                                                    className="w-[6rem] h-[6rem] object-cover rounded mx-auto"
+                                                />
+                                            </PhotoView>
+                                        </PhotoProvider>
                                     </td>
                                     <td className="text-center">
-                                        <PhotoView
-                                            speed={() => 800}
-                                            easing={(type) =>
-                                                type === 2
-                                                    ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
-                                                    : "cubic-bezier(0.34, 1.56, 0.64, 1)"
-                                            }
-                                            src={route("file.get", {
-                                                direktori: "tersangka",
-                                                role: item.user.role.name_role,
-                                                uuid: item.user.uuid,
-                                                disk: "foto-kiri",
-                                                filename: item?.foto_kiri,
-                                            })}
+                                        <PhotoProvider
+                                            pullClosable={false}
+                                            maskClosable={false}
                                         >
-                                            <img
+                                            <PhotoView
+                                                speed={() => 800}
+                                                easing={(type) =>
+                                                    type === 2
+                                                        ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+                                                        : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+                                                }
                                                 src={route("file.get", {
                                                     direktori: "tersangka",
                                                     role: item.user.role
@@ -233,10 +242,22 @@ export default function Tersangka({ data: datas, auth }) {
                                                     disk: "foto-kiri",
                                                     filename: item?.foto_kiri,
                                                 })}
-                                                alt="Foto Kiri"
-                                                className="w-[6rem] h-[6rem] object-cover rounded mx-auto"
-                                            />
-                                        </PhotoView>
+                                            >
+                                                <img
+                                                    src={route("file.get", {
+                                                        direktori: "tersangka",
+                                                        role: item.user.role
+                                                            .name_role,
+                                                        uuid: item.user.uuid,
+                                                        disk: "foto-kiri",
+                                                        filename:
+                                                            item?.foto_kiri,
+                                                    })}
+                                                    alt="Foto Kiri"
+                                                    className="w-[6rem] h-[6rem] object-cover rounded mx-auto"
+                                                />
+                                            </PhotoView>
+                                        </PhotoProvider>
                                     </td>
                                     <td className="text-center">
                                         {item?.nama}
