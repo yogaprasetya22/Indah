@@ -74,27 +74,27 @@ class AdminController extends Controller
 
         if ($request->bulan && $request->wilayah) {
             $data = IdentifikasiWajah::with(['user.wilayah', 'user.role'])
-                ->whereYear('created_at', $tahun)
-                ->whereMonth('created_at', $request->bulan)
+                ->whereYear('tanggal_proses', $tahun)
+                ->whereMonth('tanggal_proses', $request->bulan)
                 ->whereHas('user', function ($query) use ($request) {
                     $query->where('wilayah_id', $request->wilayah);
                 })
                 ->get();
         } else if ($request->bulan) {
             $data = IdentifikasiWajah::with(['user.wilayah', 'user.role'])
-                ->whereYear('created_at', $tahun)
-                ->whereMonth('created_at', $request->bulan)
+                ->whereYear('tanggal_proses', $tahun)
+                ->whereMonth('tanggal_proses', $request->bulan)
                 ->get();
         } else if ($request->wilayah) {
             $data = IdentifikasiWajah::with(['user.wilayah', 'user.role'])
-                ->whereYear('created_at', $tahun)
+                ->whereYear('tanggal_proses', $tahun)
                 ->whereHas('user', function ($query) use ($request) {
                     $query->where('wilayah_id', $request->wilayah);
                 })
                 ->get();
         } else {
             $data = IdentifikasiWajah::with(['user.wilayah', 'user.role'])
-                ->whereYear('created_at', $tahun)
+                ->whereYear('tanggal_proses', $tahun)
                 ->get();
         }
 
