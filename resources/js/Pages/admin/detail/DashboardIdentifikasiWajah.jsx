@@ -50,7 +50,7 @@ export default function DashboardIdentifikasiWajah({
         if (selectedMonth) {
             filteredData = filteredData.filter(
                 (item) =>
-                    moment(item.created_at).format("MMMM") === selectedMonth
+                    moment(item.tanggal_proses).format("MMMM") === selectedMonth
             );
         }
 
@@ -62,7 +62,7 @@ export default function DashboardIdentifikasiWajah({
 
         const endOffset = parseInt(itemOffset) + parseInt(page);
         const sortData = filteredData
-            .sort((a, b) => moment(b.created_at) - moment(a.created_at))
+            .sort((a, b) => moment(b.tanggal_proses) - moment(a.tanggal_proses))
             .slice(itemOffset, endOffset);
 
         setCurrentItems(sortData);
@@ -107,12 +107,12 @@ export default function DashboardIdentifikasiWajah({
             if (selectedMonth) {
                 searchResult.filter(
                     (item) =>
-                        moment(item.created_at).format("MMMM") === selectedMonth
+                        moment(item.tanggal_proses).format("MMMM") === selectedMonth
                 );
             }
             const endOffset = parseInt(itemOffset) + parseInt(page);
             const sortData = searchResult
-                .sort((a, b) => moment(b.created_at) - moment(a.created_at))
+                .sort((a, b) => moment(b.tanggal_proses) - moment(a.tanggal_proses))
                 .slice(itemOffset, endOffset);
 
             setCurrentItems(sortData);
@@ -122,7 +122,7 @@ export default function DashboardIdentifikasiWajah({
             const filteredData = datas;
             const endOffset = parseInt(itemOffset) + parseInt(page);
             const sortData = filteredData
-                .sort((a, b) => moment(b.created_at) - moment(a.created_at))
+                .sort((a, b) => moment(b.tanggal_proses) - moment(a.tanggal_proses))
                 .slice(itemOffset, endOffset);
             setData(filteredData);
             setCurrentItems(sortData);
