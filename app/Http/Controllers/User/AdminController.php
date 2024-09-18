@@ -21,7 +21,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $identifikasi_wajah = IdentifikasiWajah::select('uuid', 'created_at')
+        $identifikasi_wajah = IdentifikasiWajah::select('uuid', 'created_at','tanggal_proses')
             ->with(['user.wilayah', 'user.role'])
             ->latest()
             ->get();

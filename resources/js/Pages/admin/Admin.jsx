@@ -23,7 +23,7 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
     ];
 
     const tahun_identifikasi_wajah = identifikasi_wajah
-        ?.map((data) => moment(data.created_at).format("YYYY"))
+        ?.map((data) => moment(data.tanggal_proses).format("YYYY"))
         ?.filter((value, index, self) => self.indexOf(value) === index);
     const tahun_trakhir_identifikasi_wajah = Math.max(
         ...tahun_identifikasi_wajah
@@ -40,7 +40,6 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
         tahun_trakhir_tersangka.toString()
     );
 
-    
     const [currentTahunIdentifikasiWajah, setCurrentTahunIdentifikasiWajah] =
         React.useState([]);
     const [currentTahunTersangka, setCurrentTahunTersangka] = React.useState(
@@ -59,7 +58,7 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
         setCurrentIdentifikasiWajah(
             identifikasi_wajah?.filter(
                 (data) =>
-                    moment(data.created_at).format("MMMM") ===
+                    moment(data.tanggal_proses).format("MMMM") ===
                     selectedBulanIdentifikasiWajah
             )
         );
@@ -79,7 +78,7 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
         setCurrentTahunIdentifikasiWajah(
             identifikasi_wajah?.filter(
                 (data) =>
-                    moment(data.created_at).format("YYYY") ===
+                    moment(data.tanggal_proses).format("YYYY") ===
                     selectedTahunIdentifikasiWajah
             )
         );
