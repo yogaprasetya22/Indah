@@ -13,15 +13,15 @@ use App\Models\SOPRekontruksiWajah;
 use App\Models\Tersangka;
 use App\Models\User;
 use App\Models\Wilayah;
-use Faker\Core\Number;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
     public function index()
     {
-        $identifikasi_wajah = IdentifikasiWajah::select('uuid', 'created_at','tanggal_proses')
+        $identifikasi_wajah = IdentifikasiWajah::select('uuid', 'created_at', 'tanggal_proses')
             ->with(['user.wilayah', 'user.role'])
             ->latest()
             ->get();
@@ -59,7 +59,7 @@ class AdminController extends Controller
     }
     public function DhasboardIdentifikasiwajah($tahun)
     {
-        $data = IdentifikasiWajah::with(['user.wilayah', 'user.role'])->where('created_at', 'like', '%' . $tahun . '%')->latest()->get();
+        $data = IdentifikasiWajah::with(['user.wilayah', 'user.role'])->whereYear('tanggal_proses', $tahun)->get();
         $wilayah = Wilayah::all();
         return Inertia::render('admin/detail/DashboardIdentifikasiWajah', [
             'title' => 'Identifikasi Wajah',
@@ -118,7 +118,7 @@ class AdminController extends Controller
 
     public function DhasboardTersangka($tahun)
     {
-        $data = Tersangka::with(['user.wilayah', 'user.role'])->where('created_at', 'like', '%' . $tahun . '%')->latest()->get();
+        $data = Tersangka::with(['user.wilayah', 'user.role'])->whereYear('tanggal_proses', $tahun)->get();
         $wilayah = Wilayah::all();
         return Inertia::render('admin/detail/DashboardTersangka', [
             'title' => 'Tersangka',

@@ -24,14 +24,16 @@ export default function Admin({ identifikasi_wajah, tersangka }) {
 
     const tahun_identifikasi_wajah = identifikasi_wajah
         ?.map((data) => moment(data.tanggal_proses).format("YYYY"))
-        ?.filter((value, index, self) => self.indexOf(value) === index);
+        ?.filter((value, index, self) => self.indexOf(value) === index)
+        ?.sort((a, b) => b - a);
     const tahun_trakhir_identifikasi_wajah = Math.max(
         ...tahun_identifikasi_wajah
     );
 
     const tahun_tersangka = tersangka
         ?.map((data) => moment(data.created_at).format("YYYY"))
-        ?.filter((value, index, self) => self.indexOf(value) === index);
+        ?.filter((value, index, self) => self.indexOf(value) === index)
+        ?.sort((a, b) => b - a);
     const tahun_trakhir_tersangka = Math.max(...tahun_tersangka);
 
     const [selectedTahunIdentifikasiWajah, setSelectedTahunIdentifikasiWajah] =
